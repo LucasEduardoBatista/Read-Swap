@@ -26,7 +26,7 @@ class _CadastroState extends State<Cadastro> {
 
                 SizedBox(height: 80),
 
-                // LOGO
+                // LOGO TESTE
                 Container(
                   width: 110,
                   height: 110,
