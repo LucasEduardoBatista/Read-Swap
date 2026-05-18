@@ -1,4 +1,4 @@
-/* Função global (mantida para onclick inline do botão) */
+
 function toggleDarkMode() {
   document.body.classList.toggle('dark-mode');
 
@@ -13,7 +13,7 @@ function toggleDarkMode() {
 }
 
 
-/* ----------- Controle de autenticação na navbar ----------- */
+
 function atualizarNavbar() {
   const logado = sessionStorage.getItem('logado') === 'true';
 
@@ -34,14 +34,13 @@ function atualizarNavbar() {
     if (liPerfil)    liPerfil.style.display    = 'none';
   }
 }
-/* Código que depende do DOM — executa só depois do carregamento */
 document.addEventListener('DOMContentLoaded', () => {
   console.log('javascript.js inicializado');
 
-  /* ----------- Atualiza navbar conforme login ----------- */
+  
   atualizarNavbar();
 
-  /* ----------- Ajusta ícone do botão de modo escuro conforme tema salvo ----------- */
+
   const darkBtn = document.getElementById('darkModeBtn');
   if (localStorage.getItem('theme') === 'dark') {
     document.body.classList.add('dark-mode');
@@ -50,7 +49,7 @@ document.addEventListener('DOMContentLoaded', () => {
     if (darkBtn) darkBtn.innerHTML = '<i class="bi bi-moon-fill"></i>';
   }
 
-  /* ----------- Mostrar/ocultar senha (aplica somente se elementos existirem) ----------- */
+  
   const senhaInput = document.getElementById('senha');
   const toggleBtn = document.getElementById('toggleSenha');
   const icone = document.getElementById('iconeSenha');
@@ -63,11 +62,9 @@ document.addEventListener('DOMContentLoaded', () => {
       icone.classList.toggle('bi-eye-slash');
     });
   } else {
-    // elementos de senha não existem nesta página — ok
-    // console.log('toggleSenha não encontrado nesta página (normal se não houver formulário de login).');
   }
 
-  /* ----------- Validação de formulário (aplica só se houver o form com id needs-validation) ----------- */
+ 
   const form = document.getElementById('needs-validation');
   if (form) {
     (function () {
@@ -92,7 +89,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         form.classList.add('was-validated');
 
-        // Verifica credenciais contra usuários cadastrados
+        
         const emailInput = document.getElementById('login');
         const senhaLoginEl = document.getElementById('senha');
         const emailVal = emailInput ? emailInput.value.trim() : '';
@@ -114,7 +111,7 @@ document.addEventListener('DOMContentLoaded', () => {
     })();
   }
 
-  /* ----------- Validação de formulário de cadastro ----------- */
+ 
 const formCadastro = document.getElementById('form-cadastro');
 if (formCadastro) {
   (function () {
@@ -137,7 +134,7 @@ if (formCadastro) {
         return;
       }
 
-      // Verifica se as senhas coincidem
+
       const senha = document.getElementById('senha');
       const confirma = document.getElementById('confirmaSenha');
       if (senha && confirma && senha.value !== confirma.value) {
@@ -157,7 +154,7 @@ if (formCadastro) {
 
       formCadastro.classList.add('was-validated');
 
-      // Salva usuário na lista e inicia sessão
+     
       const nomeInput  = document.getElementById('nome');
       const emailInput = document.getElementById('email');
       const senhaFinal = document.getElementById('senha');
@@ -165,7 +162,7 @@ if (formCadastro) {
       const emailVal   = emailInput ? emailInput.value.trim() : '';
       const senhaVal   = senhaFinal ? senhaFinal.value        : '';
 
-      // Verifica se e-mail já está cadastrado
+   
       const usuarios = JSON.parse(localStorage.getItem('usuarios') || '[]');
       const jaExiste = usuarios.find(u => u.email === emailVal);
       if (jaExiste) {
@@ -174,11 +171,11 @@ if (formCadastro) {
         return;
       }
 
-      // Adiciona novo usuário à lista
+
       usuarios.push({ nome: nomeVal, email: emailVal, senha: senhaVal });
       localStorage.setItem('usuarios', JSON.stringify(usuarios));
 
-      // Inicia sessão (dura até fechar a aba)
+
       sessionStorage.setItem('logado', 'true');
       sessionStorage.setItem('usuarioEmail', emailVal);
       sessionStorage.setItem('usuarioNome', nomeVal);
@@ -187,7 +184,7 @@ if (formCadastro) {
   })();
 }
 
-/* ----------- Lógica dos Swaps ----------- */
+
 const cardContainer = document.getElementById('swapCardContainer');
 const cardImg = cardContainer ? cardContainer.querySelector('img') : null;
 const cardTitle = document.getElementById('bookTitle');
@@ -283,10 +280,10 @@ if (cardImg && cardTitle && cardDesc && detalhesConteudo && btnCurtir && btnRecu
   btnRecusar.addEventListener("click", () => proximoLivro("dislike"));
 }
 
-}); // fim DOMContentLoaded
+});
 
 
-  /* ----------- Gêneros favoritos no perfil ----------- */
+
   const checkboxesGenero = document.querySelectorAll('.genero-favorito');
   const chaveGenerosFavoritos = 'generosFavoritos';
 
@@ -308,7 +305,7 @@ if (cardImg && cardTitle && cardDesc && detalhesConteudo && btnCurtir && btnRecu
     });
     document.addEventListener("DOMContentLoaded", () => {
 
-  // anima matches em sequência
+
   const itens = document.querySelectorAll(".match-item");
 
   itens.forEach((item, i) => {
@@ -317,7 +314,7 @@ if (cardImg && cardTitle && cardDesc && detalhesConteudo && btnCurtir && btnRecu
     }, i * 120);
   });
 
-  // anima chat inicial
+
   const chatAtivo = document.querySelector(".chat:not(.d-none)");
   if (chatAtivo) {
     setTimeout(() => {
