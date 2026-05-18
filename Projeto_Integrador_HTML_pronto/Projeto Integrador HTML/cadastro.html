@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Read & Swap | O melhor site para troca de livros por região</title>
+  <link rel="icon" href="./Imagens/icon.png">
+
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+
+  <style>@import url('https://fonts.googleapis.com/css2?family=Zalando+Sans:ital,wght@0,200..900;1,200..900&display=swap');</style>
+  
+  <link rel="stylesheet" type="text/css" href="style.css">
+</head>
+
+<body class="d-flex flex-column min-vh-100" id="top">
+
+  <!--inicio navbar-->
+
+  <nav class="navbar navbar-expand-lg bg-light fixed-top" data-bs-theme="light">
+  <div class="container-fluid">
+    <a class="navbar-brand" href="index.html"><img id="logoNav" src="./Imagens/logo_navbar.png" style="width: 8rem"></a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+        <li class="nav-item">
+          <a class="nav-link" href="index.html">Início</a>
+        </li>
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+            Livros
+          </a>
+          <ul class="dropdown-menu">
+            <li><a class="dropdown-item" href="biblioteca.html">Meus Livros</a></li>
+            <li><a class="dropdown-item" href="livros.html">Cadastro de Livros</a></li>
+          </ul>
+        <li class="nav-item">
+          <a class="nav-link" href="swaps.html">Swap</a>
+        </li>
+        <li class="nav-item"><a class="nav-link" href="matches.html">Matches</a></li>
+        <li class="nav-item">
+          <a class="nav-link" href="premium.html">Premium</a>
+        </li>
+      </ul>
+
+      <ul class="navbar-nav mb-2 mb-lg-0">
+        <li class="nav-item">
+          <a href="login.html" aria-current="page" class="nav-link entrar">Entrar</a>
+        </li>
+        <li class="nav-item">
+          <a href="#"><button class="btn btn-danger cadastrar">Cadastrar</button></a>
+        </li>
+        <li style="display:none;">
+          <a href="perfil.html" class="nav-link perfil"><i class="bi bi-person-circle"></i></a>
+        </li>
+        <li>
+          <button id="darkModeBtn" onclick="toggleDarkMode()" class="btn"><i class="bi bi-moon-fill"></i></button>
+        </li>
+      </ul>
+      </form>
+    </div>
+  </div>
+  </nav>
+
+<!-- Cadastro box -->
+<main class="col-md-9 ms-sm-auto col-lg-10 px-md-4 py-4 pt-5 mt-5 main_login">
+  <div id="box">
+    <h1 style="text-align: center;">Cadastrar</h1>
+    <form id="form-cadastro" novalidate>
+
+      <div class="mb-1">
+        <input id="nome" type="text" class="form-control" placeholder="Nome completo" name="nome" required>
+        <div class="invalid-feedback">
+          Insira seu nome completo.
+        </div>
+      </div>
+
+      <div class="mb-1">
+        <input id="email" type="email" class="form-control" placeholder="E-mail" name="email" required>
+        <div class="invalid-feedback">
+          Insira um e-mail válido.
+        </div>
+      </div>
+
+      <div class="input-group has-validation mb-1">
+        <input id="senha" type="password" class="form-control" placeholder="Senha" minlength="6" maxlength="50" required>
+        <button class="btn btn-outline-secondary" type="button" id="toggleSenha">
+          <i class="bi bi-eye" id="iconeSenha"></i>
+        </button>
+        <div class="invalid-feedback">
+          A senha deve ter entre 6 e 50 caracteres.
+        </div>
+      </div>
+
+      <div class="input-group has-validation mb-1">
+        <input id="confirmaSenha" type="password" class="form-control" placeholder="Confirme sua senha" minlength="6" maxlength="50" required>
+        <div class="invalid-feedback">
+          As senhas não coincidem.
+        </div>
+      </div>
+
+      <div class="form-check">
+        <input type="checkbox" class="form-check-input" id="termos" required>
+        <label class="form-check-label" for="termos">Aceito os <a href="#">Termos de Uso</a> e a <a href="#">Política de Privacidade</a>.</label>
+        <div class="invalid-feedback">
+          Você precisa aceitar os termos para se cadastrar.
+        </div>
+      </div>
+
+      <input type="submit" value="Cadastrar" id="submitCadastro">
+
+      <div id="textos-entrar">
+        <p align="center">Já tem uma conta? <a href="login.html">Entrar</a></p>
+      </div>
+    </form>
+  </div>
+</main>
+
+  <!-- Footer -->
+  <footer class="py-5 mt-5 mt-auto" style="background-color: #ECCCAF;">
+    <div class="container d-flex justify-content-between align-items-center">
+      <a href="#top"><img src="./Imagens/logo.png" style="height: 10rem;"></a>
+      <div class="justify-content-center">
+        <a href="" class="footer-link">Guia de Usuário</a> <br>
+        <a href="" class="footer-link">Termos de Uso</a> <br>
+        <a href="" class="footer-link">Dicas de Segurança</a> <br>
+        <a href="" class="footer-link">Política de Privacidade</a>
+      </div>
+      <div>
+        &copy; 2025 - Diogo da Costa Pires<br>
+        Eduardo Hipocreme de Sá<br>
+        Lucas Eduardo Batista<br>
+        Willian Ribeiro<br><br>
+        Colégio Técnico de Limeira - Unicamp.
+      </div>
+    </div>
+  </footer>
+
+  <!-- Scripts -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
+
+
+<script src="javascript.js"></script>
+</body>
+</html>

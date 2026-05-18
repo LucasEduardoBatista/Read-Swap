@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Read & Swap | Mensagens</title>
+  <link rel="icon" href="./Imagens/icon.png">
+
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Zalando+Sans:ital,wght@0,200..900;1,200..900&display=swap');
+    body { background-color: #edeae1; font-family: "Zalando Sans", sans-serif; }
+
+    .chat-card { background: #fff; border-radius: 12px; padding: 1rem; }
+    .msg-box { max-height: 380px; overflow-y: auto; padding-right: 5px; }
+
+    .msg {
+      max-width: 75%; padding: .6rem .9rem; border-radius: 12px; margin-bottom: .4rem;
+    }
+    .msg.received { background: #e5e5e5; align-self: flex-start; }
+    .msg.sent { background: #d93838; color: #fff; align-self: flex-end; }
+
+    .send-area { position: sticky; bottom: 0; }
+
+    .book-mini {
+      width: 45px; height: 60px; object-fit: cover; border-radius: 6px; margin-right: .7rem;
+    }
+
+  </style>
+
+  <link rel="stylesheet" type="text/css" href="style.css">
+</head>
+
+<body class="d-flex flex-column min-vh-100" id="top">
+
+<!-- NAVBAR -->
+<nav class="navbar navbar-expand-lg bg-light fixed-top" data-bs-theme="light">
+  <div class="container-fluid">
+    <a class="navbar-brand" href="index.html"><img id="logoNav" src="./Imagens/logo_navbar.png" style="width: 8rem"></a>
+
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+
+      <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown">Livros</a>
+          <ul class="dropdown-menu">
+            <li><a class="dropdown-item" href="biblioteca.html">Meus Livros</a></li>
+            <li><a class="dropdown-item" href="livros.html">Cadastro de Livros</a></li>
+          </ul>
+        </li>
+
+        <li class="nav-item"><a class="nav-link" href="swaps.html">Swap</a></li>
+        <li class="nav-item"><a class="nav-link active" href="#">Matches</a></li>
+        <li class="nav-item"><a class="nav-link" href="premium.html">Premium</a></li>
+      </ul>
+
+      <ul class="navbar-nav mb-2 mb-lg-0">
+        <li class="nav-item"><a href="login.html" class="nav-link entrar">Entrar</a></li>
+        <li class="nav-item"><a href="cadastro.html"><button class="btn btn-danger cadastrar">Cadastrar</button></a></li>
+        <li style="display:none;"><a href="perfil.html" class="nav-link perfil"><i class="bi bi-person-circle"></i></a></li>
+        <li><button id="darkModeBtn" onclick="toggleDarkMode()" class="btn"><i class="bi bi-moon-fill"></i></button></li>
+      </ul>
+
+    </div>
+  </div>
+</nav>
+
+<!-- MAIN -->
+<main class="container" style="margin-top: 7rem; margin-bottom: 4rem; max-width: 650px;">
+  <h1 class="text-center">Seus matches</h1>
+  <h6 class="mb-3 text-center">Livros que você curtiu e deram match!</h6>
+
+  <!-- LISTA DE MATCHES -->
+  <div class="matches-box shadow-sm mb-3">
+
+    <div class="match-item active" onclick="selectChat(this, 'chat1')">
+      <img src="./Imagens/livro2.jpg" class="match-cover" style="width: 10%;">
+      <div>
+        <strong>A Revolução dos Bichos</strong><br>
+        <small><i class="bi bi-person"></i> José A. • <i class="bi bi-geo-alt"></i> 5.1 km</small>
+      </div>
+    </div>
+
+    <div class="match-item" onclick="selectChat(this, 'chat2')">
+      <img src="./Imagens/livro3.jpg" class="match-cover" style="width: 10%;">
+      <div>
+        <strong>Percy Jackson</strong><br>
+        <small><i class="bi bi-person"></i> Diogo P. • <i class="bi bi-geo-alt"></i> 3.4 km</small>
+      </div>
+    </div>
+
+    <div class="match-item" onclick="selectChat(this, 'chat3')">
+      <img src="./Imagens/livro1.jpg" class="match-cover" style="width: 10%;">
+      <div>
+        <strong>Diário de um Zumbi</strong><br>
+        <small><i class="bi bi-person"></i> Carlos B. • <i class="bi bi-geo-alt"></i> 1.7 km</small>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- CHAT -->
+  <div id="chatContainer">
+
+    <div class="chat-card shadow-sm chat" id="chat1">
+
+      <div class="d-flex align-items-center mb-3">
+        <img src="./Imagens/livro2.jpg" class="book-mini">
+        <div>
+          <strong>José A.</strong> • A Revolução dos Bichos<br>
+          <span class="text-muted small"><i class="bi bi-geo-alt"></i>5.1 km</span>
+        </div>
+      </div>
+
+      <hr>
+
+      <div class="d-flex flex-column msg-box">
+        <div class="msg received">Oi! Achei seu livro interessante.</div>
+        <div class="msg sent">Boa! Tenho interesse sim.</div>
+        <div class="msg received">Depois das 18h?</div>
+      </div>
+
+      <div class="send-area mt-3 d-flex gap-2">
+        <input type="text" class="form-control" placeholder="Digite sua mensagem">
+        <button class="btn btn-danger"><i class="bi bi-send-fill"></i></button>
+      </div>
+
+    </div>
+
+    <div class="chat-card shadow-sm chat d-none" id="chat2">
+      <h6>Percy Jackson</h6>
+      <hr>
+      <div class="msg-box"></div>
+    </div>
+
+    <div class="chat-card shadow-sm chat d-none" id="chat3">
+      <h6>Diário de um Zumbi</h6>
+      <hr>
+      <div class="msg-box"></div>
+    </div>
+
+  </div>
+
+</main>
+
+<!-- FOOTER -->
+<footer class="py-5 mt-auto" style="background-color: #ECCCAF;">
+  <div class="container d-flex justify-content-between align-items-center">
+    <a href="#top"><img src="./Imagens/logo.png" style="height: 10rem;"></a>
+    <div class="justify-content-center">
+      <a href="" class="footer-link">Guia de Usuário</a> <br>
+      <a href="" class="footer-link">Termos de Uso</a> <br>
+      <a href="" class="footer-link">Dicas de Segurança</a> <br>
+      <a href="" class="footer-link">Política de Privacidade</a>
+    </div>
+    <div class="text-end">
+      &copy; 2025 - Diogo da Costa Pires<br>
+      Eduardo Hipocreme de Sá<br>
+      Lucas Eduardo Batista<br>
+      Willian Ribeiro<br><br>
+      Colégio Técnico de Limeira - Unicamp.
+    </div>
+  </div>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+<script>
+function selectChat(el, chatId) {
+  document.querySelectorAll('.match-item').forEach(i => i.classList.remove('active'));
+  el.classList.add('active');
+
+  document.querySelectorAll('.chat').forEach(c => c.classList.add('d-none'));
+  document.getElementById(chatId).classList.remove('d-none');
+}
+</script>
+
+<script src="javascript.js"></script>
+
+</body>
+</html>

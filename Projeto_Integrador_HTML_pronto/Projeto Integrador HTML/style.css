@@ -1,0 +1,1072 @@
+   body {
+    background-color: #FFE8D4;
+    font-family: Zalando Sans, sans-serif;
+   }
+   .book-img, .card-img-top, #previewFinal {
+      aspect-ratio: 3/4 !important;
+      object-fit: cover !important;
+      border-radius: 10px;
+    }
+   main {
+    padding-top: 70px;
+   }
+
+   h1 {
+    font-weight: 900;
+   }
+
+   hr {
+    height: 2px;
+    background-color: white;
+   }
+
+   .container-fluid {
+    margin-left: 15%;
+    margin-right: 15%;
+    font-family: arial;
+   }
+
+    .myContainer {
+      margin-top: 15px;
+      color: black;
+      padding-top: 5px;
+      padding-bottom: 15px;
+    }
+
+    .alinhaJustificado {
+      text-align: justify;
+    }
+
+    .myContainerCarrossel {
+      margin: 0 auto;
+      width: 80%;
+    }
+
+    @media (min-width: 320px) and (max-width: 480px) {
+      .myContainerCarrossel {
+        width: 100%;
+      }
+    }
+
+    .asterisco {
+      color: red;
+    }
+
+    #enviar {
+      width: 25%;
+      height: 100%;
+    }
+
+    .img-fluid {
+      border-radius: 50px;
+    }
+
+    .contatos {
+      color: white;
+    }
+
+    .comece {
+      width: 400px;
+      font-size: 20px;
+    }
+
+    a {
+      text-decoration: none;
+    }
+
+    .sobre {
+      margin-top: 50px;
+    }
+
+    .bi-instagram {
+    font-size: 20px;
+    }
+
+    .bi-youtube {
+    font-size: 20px;
+    }
+
+    .bi-facebook {
+    font-size: 20px;
+    }
+
+    #toggleSenha {
+      height: 50px;
+      margin-top: 5px;
+    }
+
+    .card {
+    transition: transform 0.3s ease;
+    border-radius: 10%;
+    }
+
+    .card-premium {
+      transition: transform 0.3s ease;
+      border-radius: 5%;
+    }
+
+    .card-title {
+      text-align: center;
+    }
+
+    .titulo_card {
+      color: #023E7D;
+    }
+    .titulo_card:hover {
+      text-decoration: underline;
+    }
+
+    .card:hover {
+        transform: scale(1.05);
+    }
+    
+    .titulo {
+      font-size: 4rem;
+    }
+    .cadastrar {
+      background-color: #F08080;
+      border: 0;
+    }
+    .cadastrar:hover {
+      background-color: #c76b6b;
+      border: 0;
+    }
+    .entrar {
+      color: #ff5757;
+    }
+    .entrar:hover {
+      text-decoration: underline;
+      color: #bf4141;
+    }
+
+    .main_login {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: calc(100vh - 136px);
+      width: 100vw;
+      padding: 2rem;
+      box-sizing: border-box;
+    }
+
+    .perfil {
+      color: black;
+    }
+
+    #box {
+      width: 100%;
+      max-width: 400px;
+      background-color: white;
+      padding: 40px 30px;
+      border-radius: 10px;
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+    }
+
+    #lembrarsenha {
+      margin-bottom: 1%;
+    }
+
+    input[type="text"], input[type="email"], input[type="password"] {
+      width: 100%;
+      height: 50px;
+      margin-top: 5px;
+      border: 0;
+      border: 1.5px solid rgb(100, 100, 100);
+      border-radius: 5px;
+      background-color: white;
+    }
+    #submitLogin {
+      width: 100%;
+      height: 40px;
+      background-color: #F08080;
+      color: white;
+      padding: 10px;
+      border-radius: 5px;
+      margin-top: 10px;
+      margin-bottom: 10px;
+      font-weight: bold;
+      border: 0;
+    }
+    #submitCadastro {
+      width: 100%;
+      height: 40px;
+      background-color: #F08080;
+      color: white;
+      padding: 10px;
+      border-radius: 5px;
+      margin-bottom: 10px;
+      font-weight: bold;
+      border: 0;
+    }
+    #submitLogin:hover, #submitCadastro:hover {
+      background-color: #c76b6b;
+    }
+    .codigo_acesso {
+      width: 100%;
+      height: 40px;
+      background-color: rgba(180, 180, 180, 0.25);
+      padding: 10px;
+      border-radius: 5px;
+      margin-bottom: 10px;
+      font-weight: bold;
+      border: 0;
+    }
+    button:hover {
+      background-color: rgba(150, 150, 150, 0.25);
+    }
+
+    a.btn-outline-danger:hover {
+      color: white !important;
+    }
+
+    .invalid-feedback {
+    min-height: 1.5rem; /* ou ajuste conforme necessário */
+    visibility: hidden;
+    display: block; /* necessário porque Bootstrap usa display: none */
+    font-size: 0.875rem;
+    margin-top: 0.25rem;
+  }
+
+    .was-validated .form-control:invalid ~ .invalid-feedback,
+    .form-control.is-invalid ~ .invalid-feedback {
+      visibility: visible;
+  }
+
+    @keyframes fadeInDown {
+      0% {
+        opacity: 0;
+        transform: translateY(-10px);
+      }
+      100% {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @keyframes slideInRight {
+      from {
+        transform: translateX(50%);
+        opacity: 0;
+      }
+      to {
+        transform: translateX(0);
+        opacity: 1;
+      }
+    }
+
+    .imgHeader {
+      animation: slideInRight 0.8s ease-out both;
+    }
+
+    .invalid-feedback.animated {
+      animation: fadeInDown 0.4s ease-out;
+    }
+
+    .feedbackCard {
+      border-radius: 100%;
+    }
+
+    .sidebar {
+      position: fixed;
+      top: 69px;
+      left: 0;
+      height: calc(100vh - 56px);
+      width: 250px;
+      z-index: 1040;
+      overflow-y: auto;
+      transition: transform 0.3s ease;
+    }
+
+    #main {
+      margin-left: 250px;
+      transition: margin-left 0.3s ease;
+    }
+
+    .sidebar:not(.show) {
+      transform: translateX(-100%);
+    }
+
+    .sidebar.show {
+      transform: translateX(0);
+    }
+
+    /* Estilo do modo escuro */
+    .dark-mode {
+      background-color: #121212 !important;
+      color: #f1f1f1 !important;
+    }
+
+    .dark-mode .sidebar,
+    .dark-mode .bi-brightness-high-fill,
+    .dark-mode #box {
+      background-color: #121212 !important;
+      color: white !important;
+    }
+    .dark-mode #header-index {
+      background-color: black !important;
+      color: white !important;
+    }
+
+    .dark-mode input[type="text"], .dark-mode input[type="email"], .dark-mode input[type="password"], .dark-mode input[type="file"], .dark-mode input[type="number"], .dark-mode select, .dark-mode textarea {
+      background-color: #292929 !important;
+      color: white !important;
+    }
+
+    .dark-mode input[type="text"]::placeholder, .dark-mode input[type="email"]::placeholder, .dark-mode input[type="password"]::placeholder, .darkmode textarea::placeholder {
+      color: grey;
+    }
+
+    .dark-mode .navbar {
+      background-color: black !important;
+      color: white !important;
+    }
+
+    .dark-mode .nav-link {
+      color: white !important;
+    }
+
+    .dark-mode .textos-entrar p {
+      color: white !important;
+    }
+
+    .dark-mode h1, .text-uppercase{
+      background: none;
+      color: white !important;
+    }
+
+    .dark-mode #box,
+    .dark-mode .divFormLivro {
+      background-color: #0a0a0a !important;
+      border-color: #0a0a0a !important;
+    }
+
+    .dark-mode footer {
+      color: white !important;
+      background-color: black !important;
+    }
+
+    .dark-mode #logoNav {
+      content: url("./Imagens/logo_navbarEscura.png");
+    }
+
+    .dark-mode .form-text, .dark-mode .feedbackNota {
+      color: white !important;
+    }
+
+    .dark-mode .card {
+      background-color: #292929 !important;
+      color: white !important;
+    }
+    .dark-mode .perfil {
+      color: white !important;
+    }
+
+    .dark-mode .footer-link {
+      color: white !important;
+    }
+    .dark-mode .matches-box {
+      background-color: black !important;
+    }
+    .dark-mode #chatContainer {
+      background-color: black !important;
+    }
+
+    .dark-mode .chat-card {
+      background-color: black !important;
+    }
+    .dark-mode .received {
+      background-color: grey !important;
+    }
+    .dark-mode .match-item:hover {
+      background-color: grey !important;
+    }
+    .dark-mode .match-item.active {
+      background: #733030 !important;
+    }
+    .dark-mode .perfil-header {
+      background-color: #733030 !important;
+    }
+    .dark-mode .editarPerfil {
+      background-color: grey !important;
+      border-color: grey !important;
+    }
+    .dark-mode .configuracoes {
+      background-color: grey !important;
+      border-color: grey !important;
+    }
+
+/* Estilo para seção de swaps */
+.swap-card {
+  border-radius: 10px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+  transition: transform 0.3s ease;
+}
+
+#swapCardContainer {
+  border-radius: 15px !important;
+}
+
+.swap-card:hover {
+  transform: scale(1.02);
+}
+
+.swap-buttons {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+}
+
+.swap-buttons button {
+  width: 140px;
+  font-weight: 600;
+}
+
+#bibliotecaContainer .card {
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  border-radius: 15px;
+}
+
+#bibliotecaContainer .card:hover {
+  transform: scale(1.03);
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.2);
+}
+
+#bibliotecaContainer img {
+  aspect-ratio: 3/4;
+  object-fit: cover;
+  border-radius: 15px 15px 0 0;
+}
+
+#bibliotecaContainer .btn-danger {
+  background-color: #ff5757;
+  border: none;
+}
+
+#bibliotecaContainer .btn-danger:hover {
+  background-color: #bf4141;
+}
+
+#bibliotecaContainer .btn-outline-secondary {
+  border-color: #6c757d;
+  color: #6c757d;
+}
+
+#bibliotecaContainer .btn-outline-secondary:hover {
+  background-color: #6c757d;
+  color: white;
+}
+
+/* Container geral */
+.perfil-header {
+  background: #ff8989;
+  width: 100%;
+  padding: 50px 20px 40px;
+  text-align: center;
+  border-radius:15px;
+  color: white;
+}
+
+/* Foto de perfil */
+.perfil-foto-container {
+  width: 130px;
+  height: 130px;
+  margin: 0 auto;
+  border-radius: 100%;
+  border: 4px solid white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: white;
+}
+
+.perfil-foto {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 100%;
+}
+
+/* Estatísticas */
+.perfil-stats {
+  margin-top: 20px;
+}
+
+.stat-item {
+  background: white;
+  padding: 15px 20px;
+  border-radius: 20px;
+  width: 90px;
+  text-align: center;
+  color: black;
+  box-shadow: 0px 2px 8px rgba(0,0,0,0.1);
+}
+
+.stat-icon {
+  width: 40px;
+  height: 40px;
+  border-radius: 12px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 0 auto 5px;
+  font-size: 20px;
+}
+
+.stat-num {
+  margin: 0;
+  font-size: 18px;
+  font-weight: bold;
+}
+
+.stat-label {
+  margin: 0;
+  font-size: 13px;
+}
+
+@media (max-width: 480px) {
+  .stat-item {
+    width: 80px;
+    padding: 12px;
+  }
+
+  .perfil-foto-container {
+    width: 110px;
+    height: 110px;
+  }
+}
+
+.match-item {
+  display: flex;
+  gap: .7rem;
+  padding: .6rem;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: background .2s;
+}
+
+.match-item:hover {
+  background: #f1f1f1;
+}
+
+.match-item.active {
+  background: #ffe1e1;
+}
+
+.match-cover {
+  width: 45px;
+  height: 60px;
+  object-fit: cover;
+  border-radius: 6px;
+}
+
+.matches-box {
+  background: #fff;
+  border-radius: 12px;
+  padding: .8rem;
+  margin-bottom: 1rem;
+}
+
+.footer-link {
+  color: black;
+}
+
+
+
+
+.como-card {
+  max-width: 400px;
+  border-radius: 15px;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.15);
+}
+
+.como-img {
+  height: 180px;
+  object-fit: cover;
+  border-radius: 10px;
+}
+
+.numero {
+  color: #ff5757;
+  font-weight: bold;
+}
+
+/* setas visíveis */
+.custom-arrow {
+  background-color: rgba(0,0,0,0.6);
+  border-radius: 50%;
+  padding: 15px;
+}
+
+/* bolinhas */
+.carousel-indicators [data-bs-target] {
+  background-color: #ff5757;
+}
+
+/* modo escuro */
+.dark-mode .custom-arrow {
+  background-color: rgba(255,255,255,0.6);
+}
+
+.dark-mode .como-card {
+  background-color: #1e1e1e;
+  color: white;
+}
+
+/* setas sem fundo */
+.custom-arrow {
+  background-color: transparent;
+  padding: 0;
+}
+
+/* aproximar as setas do card */
+.carousel-control-prev,
+.carousel-control-next {
+  width: 5%; /* diminui a área clicável lateral */
+}
+
+.carousel-control-prev {
+  left: -10px; /* aproxima da esquerda */
+}
+
+.carousel-control-next {
+  right: -10px; /* aproxima da direita */
+}
+
+.perfil-generos-box {
+  background: rgba(255, 255, 255, 0.2);
+  padding: 20px;
+  border-radius: 15px;
+  color: white;
+  margin-top: 20px;
+}
+
+.perfil-generos-box .form-check-label {
+  cursor: pointer;
+  font-size: 0.95rem;
+}
+
+.perfil-generos-box .form-check-input:checked {
+  background-color: #dc3545;
+  border-color: #dc3545;
+}
+
+.dark-mode .perfil-generos-box {
+  background: rgba(255, 255, 255, 0.08);
+  color: white;
+}
+
+.generos-favoritos {
+  margin-top: 10px;
+  text-align: center;
+}
+
+.titulo-generos {
+  color: white;
+  margin-bottom: 8px;
+}
+
+#listaGeneros {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 8px;
+}
+
+.genero-tag {
+  padding: 6px 12px;
+  border: 1px solid #999;
+  border-radius: 20px;
+  color: black;
+  background-color: white;
+  font-size: 14px;
+}
+
+/* modo escuro */
+.dark-mode .genero-tag {
+  border-color: #ccc;
+}
+
+.dark-mode .dropdown-menu {
+  background-color: black;
+}
+.dark-mode .dropdown-item {
+  color: white;
+}
+.dark-mode .dropdown-item:hover {
+  color: black;
+}
+
+.cards-index {
+  background-color: white;
+}
+
+.dark-mode .cards-index {
+  background-color: #292929 !important;
+}
+
+.refEditarPerfil {
+  color: black !important;
+}
+.btn-danger {
+  background-color: #F08080;
+  border: 0;
+}
+
+.btn-danger:hover {
+  background-color: #c76b6b;
+}
+.btn-outline-danger {
+  border-color: #F08080;
+}
+.btn-outline-danger:hover {
+  background-color: #F08080;
+}
+
+
+
+#comoFuncionaCarousel .card:hover {
+  transform: none !important;
+}
+
+#comoFuncionaCarousel .como-card {
+  border: 0;
+  border-radius: 22px;
+  overflow: hidden;
+  box-shadow: 0 10px 25px rgba(0,0,0,0.10);
+  background: white;
+}
+
+#comoFuncionaCarousel .como-img {
+  width: 100%;
+  height: 220px;
+  object-fit: cover;
+  border-radius: 0;
+}
+
+/* Feedbacks mais estéticos */
+.feedback-card {
+  border: 0;
+  border-radius: 20px;
+  overflow: hidden;
+  box-shadow: 0 10px 25px rgba(0,0,0,0.12);
+  transition: transform .2s ease, box-shadow .2s ease;
+  background: white;
+}
+
+.feedback-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 14px 30px rgba(0,0,0,0.16);
+}
+
+.feedback-card .card-title {
+  text-align: left;
+  font-weight: 800;
+  margin-bottom: .35rem;
+}
+
+.feedback-img-top {
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  object-fit: cover;
+}
+
+.feedback-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: .35rem;
+  padding: .25rem .7rem;
+  border-radius: 999px;
+  background: #ffe1e1;
+  color: #9b2121;
+  font-size: .8rem;
+  font-weight: 700;
+}
+
+.feedbackNota {
+  color: #ff5757 !important;
+  font-weight: 700;
+}
+
+
+.swap-card {
+  width: min(100%, 22rem);
+  border-radius: 24px;
+  overflow: hidden;
+  border: 0;
+  box-shadow: 0 12px 28px rgba(0,0,0,0.14);
+  background: white;
+}
+
+.swap-cover {
+  width: 100%;
+  aspect-ratio: 3 / 4;
+  object-fit: cover;
+  border-radius: 0;
+}
+
+.swap-body {
+  text-align: left;
+  padding: 1rem 1.25rem 1.25rem;
+}
+
+#swapCardContainer:hover {
+  transform: none !important;
+  box-shadow: 0 12px 28px rgba(0,0,0,0.14);
+}
+
+.swap-actions {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 1.5rem;
+  margin-top: 1.5rem;
+}
+
+.swap-btn {
+  width: 74px;
+  height: 74px;
+  border-radius: 50%;
+  border: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 8px 18px rgba(0,0,0,0.12);
+  transition: transform .15s ease, box-shadow .15s ease, background .15s ease;
+}
+
+.swap-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 12px 22px rgba(0,0,0,0.16);
+}
+
+.swap-btn i {
+  font-size: 2rem;
+  line-height: 1;
+}
+
+.swap-btn-recusar {
+  background: #e9e9e9;
+  color: #222;
+}
+
+.swap-btn-curtir {
+  background: #ff6b6b;
+  color: white;
+}
+
+.swap-location {
+  color: #333;
+  font-weight: 500;
+}
+
+.detalhes-livro summary {
+  cursor: pointer;
+  list-style: none;
+  font-weight: 600;
+  color: #222;
+}
+
+.detalhes-livro summary::-webkit-details-marker {
+  display: none;
+}
+
+.detalhes-livro[open] summary {
+  margin-bottom: .5rem;
+}
+
+.swap-genres {
+  display: flex;
+  flex-wrap: wrap;
+  gap: .5rem;
+}
+
+.swap-genre-chip {
+  padding: .35rem .7rem;
+  border: 1px solid #b3b3b3;
+  border-radius: 999px;
+  background: #fff;
+  font-size: .92rem;
+  color: #333;
+}
+
+.dark-mode .swap-card {
+  background: #1e1e1e;
+  color: white;
+}
+
+.dark-mode .swap-btn-recusar {
+  background: #d0d0d0;
+  color: #111;
+}
+
+.dark-mode .swap-btn-curtir {
+  background: #f06b6b;
+  color: white;
+}
+
+.dark-mode .swap-genre-chip {
+  background: #292929;
+  color: white;
+  border-color: #555;
+}
+
+.dark-mode .detalhes-livro summary,
+.dark-mode .swap-location {
+  color: white;
+}
+#swapCardContainer {
+  transition: transform 0.4s ease, opacity 0.4s ease;
+}
+
+.slide-out-right {
+  transform: translateX(300px) rotate(15deg);
+  opacity: 0;
+}
+
+.slide-out-left {
+  transform: translateX(-300px) rotate(-15deg);
+  opacity: 0;
+}
+
+.slide-in-right {
+  animation: entrarDireita 0.4s ease;
+}
+
+@keyframes entrarDireita {
+  from {
+    transform: translateX(150px);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+#bookDesc {
+  color: #333;
+}
+
+.dark-mode #bookDesc {
+  color: #fff !important;
+}
+
+/* ─── Dark mode — correções de textos sumindo ─── */
+
+/* text-muted do Bootstrap vira cinza claro */
+.dark-mode .text-muted {
+  color: #aaaaaa !important;
+}
+
+/* Parágrafos e textos soltos dentro do body */
+.dark-mode p,
+.dark-mode h2,
+.dark-mode h3,
+.dark-mode h4,
+.dark-mode h5,
+.dark-mode h6,
+.dark-mode span,
+.dark-mode label,
+.dark-mode small,
+.dark-mode li,
+.dark-mode b,
+.dark-mode strong {
+  color: inherit;
+}
+
+/* Cards — títulos e textos */
+.dark-mode .card-title,
+.dark-mode .card-text,
+.dark-mode .card p,
+.dark-mode .card h5,
+.dark-mode .card h6,
+.dark-mode .card span,
+.dark-mode .card small {
+  color: #f1f1f1 !important;
+}
+
+/* Carrossel "Como funciona" — card branco com texto preto */
+.dark-mode .como-card p,
+.dark-mode .como-card h5 {
+  color: #f1f1f1 !important;
+}
+
+/* Cards da seção index ("Troque sem gastar" etc) */
+.dark-mode .cards-index p,
+.dark-mode .cards-index h5 {
+  color: #f1f1f1 !important;
+}
+
+/* Stat items do perfil */
+.dark-mode .stat-item {
+  background: #2a2a2a !important;
+  color: #f1f1f1 !important;
+}
+.dark-mode .stat-num,
+.dark-mode .stat-label {
+  color: #f1f1f1 !important;
+}
+
+/* Modal — título e corpo */
+.dark-mode .modal-content {
+  background-color: #1e1e1e !important;
+  color: #f1f1f1 !important;
+}
+.dark-mode .modal-title {
+  color: #f1f1f1 !important;
+}
+.dark-mode .modal-body,
+.dark-mode .modal-footer {
+  color: #f1f1f1 !important;
+}
+.dark-mode .modal-header {
+  border-color: #444 !important;
+}
+.dark-mode .btn-close {
+  filter: invert(1);
+}
+
+/* Feedback cards (depoimentos) */
+.dark-mode .feedback-card {
+  background: #1e1e1e !important;
+  color: #f1f1f1 !important;
+}
+.dark-mode .feedback-card .card-title,
+.dark-mode .feedback-card p {
+  color: #f1f1f1 !important;
+}
+
+/* Ícone de engrenagem no perfil */
+.dark-mode .configuracoes a {
+  color: #f1f1f1 !important;
+}
+
+/* Links gerais no dark mode */
+.dark-mode a:not(.btn):not(.nav-link):not(.navbar-brand):not(.footer-link):not(.dropdown-item) {
+  color: #ff9090;
+}
+
+/* Form-check labels */
+.dark-mode .form-check-label {
+  color: #f1f1f1 !important;
+}
+
+/* Textos dentro do box de login/cadastro */
+.dark-mode #box p,
+.dark-mode #box a,
+.dark-mode #box label {
+  color: #f1f1f1 !important;
+}
+
+/* Detalhes/summary do swap */
+.dark-mode .detalhes-livro {
+  color: #f1f1f1 !important;
+}
+
+/* Biblioteca — nome do autor */
+.dark-mode .card .text-muted {
+  color: #aaaaaa !important;
+}
+
+.dark-mode .refEditarPerfil {
+  color: #f1f1f1 !important;
+}
