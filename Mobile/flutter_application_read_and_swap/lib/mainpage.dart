@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'dados.dart';
 import 'matches.dart';
 import 'perfil.dart';
 
@@ -10,11 +11,13 @@ class Mainpage extends StatefulWidget {
 }
 
 class _MainpageState extends State<Mainpage> {
-
   @override
   Widget build(BuildContext context) {
+    bool localizacaoAtiva =
+        DadosApp.usuarioLogado?.localizacao ?? false;
+
     return Scaffold(
-      backgroundColor: Color.fromARGB(255, 255, 232, 212),
+      backgroundColor: const Color.fromARGB(255, 255, 232, 212),
 
       appBar: AppBar(
         backgroundColor: Colors.transparent,
@@ -33,218 +36,298 @@ class _MainpageState extends State<Mainpage> {
               fit: BoxFit.cover,
             ),
 
-            SizedBox(width: 5),
+            const SizedBox(width: 5),
 
-            Text(
+            const Text(
               "Read&Swap",
               style: TextStyle(
                 fontSize: 40,
                 color: Color(0xFFFF6B6B),
                 fontWeight: FontWeight.bold,
                 fontFamily: "Estonia",
-                ),
-              ),
-              ],
-            ),
-          ),
-            body: SingleChildScrollView(
-            child: Column(
-            children: [
-
-            SizedBox(height: 10),
-
-            Text(
-              "Swaps",
-              style: TextStyle(
-                fontSize: 35,
-                fontWeight: FontWeight.bold,
-                fontFamily: "Zalando",
               ),
             ),
-
-            SizedBox(height: 10),
-
-            // CARD LIVRO
-            Container(
-              width: 320,
-              decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.circular(25),
-              ),
-              child: Column(
-                children: [
-
-                  // IMAGEM
-                  Container(
-                    height: 350,
-                    width: double.infinity,
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.vertical(
-                        top: Radius.circular(25),
-                      ),
-                      image: DecorationImage(
-                        image: AssetImage(
-                          "assets/images/RainhaVermelha.jpg",
-                        ),
-                        fit: BoxFit.cover,
-                      ),
-                    ),
-                  ),
-
-                  Padding(
-                    padding: EdgeInsets.all(15),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-
-                        Text(
-                          "A Rainha Vermelha",
-                          style: TextStyle(
-                            fontSize: 22,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-
-                        SizedBox(height: 5),
-
-                        Text(
-                          "Victoria Aveyard",
-                          style: TextStyle(
-                            color: Colors.grey,
-                            fontSize: 16,
-                          ),
-                        ),
-
-                        SizedBox(height: 15),
-
-                        Text(
-                          "▼ Ver detalhes",
-                          style: TextStyle(fontSize: 16),
-                        ),
-
-                        SizedBox(height: 15),
-
-                        // TAGS
-                        Row(
-                          children: [
-
-                            Container(
-                              padding: EdgeInsets.all(7),
-                              decoration: BoxDecoration(
-                                border: Border.all(color: Colors.grey),
-                                borderRadius: BorderRadius.circular(10),
-                              ),
-                              child: Text("Fantasia"),
-                            ),
-
-                            SizedBox(width: 8),
-
-                            Container(
-                              padding: EdgeInsets.all(7),
-                              decoration: BoxDecoration(
-                                border: Border.all(color: Colors.grey),
-                                borderRadius: BorderRadius.circular(10),
-                              ),
-                              child: Text("Romance"),
-                            ),
-
-                            SizedBox(width: 8),
-
-                            Container(
-                              padding: EdgeInsets.all(7),
-                              decoration: BoxDecoration(
-                                border: Border.all(color: Colors.grey),
-                                borderRadius: BorderRadius.circular(10),
-                              ),
-                              child: Text("Aventura"),
-                            ),
-                          ],
-                        ),
-
-                        SizedBox(height: 5),
-
-                        Row(
-                          children: [
-                            Icon(Icons.location_on, size: 18),
-                            Text(
-                              "2 Km de você",
-                              style: TextStyle(fontSize: 15),
-                            ),
-                          ],
-                        ),
-                      ],
-                    ),
-                  ),
-                ],
-              ),
-            ),
-
-            SizedBox(height: 15),
-
-            // BOTÕES
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-
-                Container(
-                  width: 75,
-                  height: 75,
-                  decoration: BoxDecoration(
-                    color: Colors.grey[300],
-                    shape: BoxShape.circle,
-                  ),
-                  child: Icon(
-                    Icons.close,
-                    size: 40,
-                  ),
-                ),
-
-                SizedBox(width: 45),
-
-                Container(
-                  width: 75,
-                  height: 75,
-                  decoration: BoxDecoration(
-                    color: Color(0xFFFF6B6B),
-                    shape: BoxShape.circle,
-                  ),
-                  child: Icon(
-                    Icons.favorite,
-                    size: 40,
-                    color: Colors.white,
-                  ),
-                ),
-              ],
-            ),
-
-            SizedBox(height: 20),
-
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Icon(Icons.location_on, size: 18),
-                Text(
-                  " Mostrando livros perto de você",
-                  style: TextStyle(fontSize: 15),
-                ),
-              ],
-            ),
-
-            SizedBox(height: 20),
           ],
         ),
       ),
 
-      // BOTTOM BAR
+      body: localizacaoAtiva
+
+          ? SingleChildScrollView(
+              child: Column(
+                children: [
+
+                  const SizedBox(height: 10),
+
+                  const Text(
+                    "Swaps",
+                    style: TextStyle(
+                      fontSize: 35,
+                      fontWeight: FontWeight.bold,
+                      fontFamily: "Zalando",
+                    ),
+                  ),
+
+                  const SizedBox(height: 10),
+
+                  Container(
+                    width: 320,
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(25),
+                    ),
+                    child: Column(
+                      children: [
+
+                        Container(
+                          height: 350,
+                          width: double.infinity,
+                          decoration: const BoxDecoration(
+                            borderRadius: BorderRadius.vertical(
+                              top: Radius.circular(25),
+                            ),
+                            image: DecorationImage(
+                              image: AssetImage(
+                                "assets/images/RainhaVermelha.jpg",
+                              ),
+                              fit: BoxFit.cover,
+                            ),
+                          ),
+                        ),
+
+                        Padding(
+                          padding: const EdgeInsets.all(15),
+                          child: Column(
+                            crossAxisAlignment:
+                                CrossAxisAlignment.start,
+                            children: [
+
+                              const Text(
+                                "A Rainha Vermelha",
+                                style: TextStyle(
+                                  fontSize: 22,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+
+                              const SizedBox(height: 5),
+
+                              const Text(
+                                "Victoria Aveyard",
+                                style: TextStyle(
+                                  color: Colors.grey,
+                                  fontSize: 16,
+                                ),
+                              ),
+
+                              const SizedBox(height: 15),
+
+                              const Text(
+                                "▼ Ver detalhes",
+                                style: TextStyle(fontSize: 16),
+                              ),
+
+                              const SizedBox(height: 15),
+
+                              Row(
+                                children: [
+
+                                  Container(
+                                    padding:
+                                        const EdgeInsets.all(7),
+                                    decoration: BoxDecoration(
+                                      border: Border.all(
+                                        color: Colors.grey,
+                                      ),
+                                      borderRadius:
+                                          BorderRadius.circular(10),
+                                    ),
+                                    child:
+                                        const Text("Fantasia"),
+                                  ),
+
+                                  const SizedBox(width: 8),
+
+                                  Container(
+                                    padding:
+                                        const EdgeInsets.all(7),
+                                    decoration: BoxDecoration(
+                                      border: Border.all(
+                                        color: Colors.grey,
+                                      ),
+                                      borderRadius:
+                                          BorderRadius.circular(10),
+                                    ),
+                                    child:
+                                        const Text("Romance"),
+                                  ),
+
+                                  const SizedBox(width: 8),
+
+                                  Container(
+                                    padding:
+                                        const EdgeInsets.all(7),
+                                    decoration: BoxDecoration(
+                                      border: Border.all(
+                                        color: Colors.grey,
+                                      ),
+                                      borderRadius:
+                                          BorderRadius.circular(10),
+                                    ),
+                                    child:
+                                        const Text("Aventura"),
+                                  ),
+                                ],
+                              ),
+
+                              const SizedBox(height: 5),
+
+                              const Row(
+                                children: [
+                                  Icon(
+                                    Icons.location_on,
+                                    size: 18,
+                                  ),
+                                  Text(
+                                    "2 Km de você",
+                                    style:
+                                        TextStyle(fontSize: 15),
+                                  ),
+                                ],
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+
+                  const SizedBox(height: 15),
+
+                  Row(
+                    mainAxisAlignment:
+                        MainAxisAlignment.center,
+                    children: [
+
+                      Container(
+                        width: 75,
+                        height: 75,
+                        decoration: BoxDecoration(
+                          color: Colors.grey[300],
+                          shape: BoxShape.circle,
+                        ),
+                        child: const Icon(
+                          Icons.close,
+                          size: 40,
+                        ),
+                      ),
+
+                      const SizedBox(width: 45),
+
+                      Container(
+                        width: 75,
+                        height: 75,
+                        decoration: const BoxDecoration(
+                          color: Color(0xFFFF6B6B),
+                          shape: BoxShape.circle,
+                        ),
+                        child: const Icon(
+                          Icons.favorite,
+                          size: 40,
+                          color: Colors.white,
+                        ),
+                      ),
+                    ],
+                  ),
+
+                  const SizedBox(height: 20),
+
+                  const Row(
+                    mainAxisAlignment:
+                        MainAxisAlignment.center,
+                    children: [
+                      Icon(Icons.location_on, size: 18),
+                      Text(
+                        " Mostrando livros perto de você",
+                        style: TextStyle(fontSize: 15),
+                      ),
+                    ],
+                  ),
+
+                  const SizedBox(height: 20),
+                ],
+              ),
+            )
+
+          : Center(
+              child: Padding(
+                padding: const EdgeInsets.all(25),
+                child: Column(
+                  mainAxisAlignment:
+                      MainAxisAlignment.center,
+                  children: [
+
+                    const Icon(
+                      Icons.location_off,
+                      size: 100,
+                      color: Color(0xFFFF6B6B),
+                    ),
+
+                    const SizedBox(height: 20),
+
+                    const Text(
+                      "Ative sua localização",
+                      style: TextStyle(
+                        fontSize: 28,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+
+                    const SizedBox(height: 10),
+
+                    const Text(
+                      "Para visualizar livros próximos e realizar trocas.",
+                      textAlign: TextAlign.center,
+                    ),
+
+                    const SizedBox(height: 30),
+
+                    ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor:
+                            const Color(0xFFFF6B6B),
+                      ),
+                      onPressed: () {
+
+                        setState(() {
+                          DadosApp.usuarioLogado!
+                              .localizacao = true;
+                        });
+
+                      },
+                      child: const Text(
+                        "Ativar localização",
+                        style: TextStyle(
+                          color: Colors.white,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+
       bottomNavigationBar: Container(
         height: 90,
         color: Colors.white,
         child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          mainAxisAlignment:
+              MainAxisAlignment.spaceEvenly,
           children: [
 
-            Column(
-              mainAxisAlignment: MainAxisAlignment.center,
+            const Column(
+              mainAxisAlignment:
+                  MainAxisAlignment.center,
               children: [
                 Icon(
                   Icons.book,
@@ -264,12 +347,13 @@ class _MainpageState extends State<Mainpage> {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (_) => Matches(),
+                    builder: (_) => const Matches(),
                   ),
                 );
               },
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
+              child: const Column(
+                mainAxisAlignment:
+                    MainAxisAlignment.center,
                 children: [
                   Icon(Icons.chat_bubble_outline),
                   Text("Matches"),
@@ -282,12 +366,13 @@ class _MainpageState extends State<Mainpage> {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (_) => Perfil(),
+                    builder: (_) => const Perfil(),
                   ),
                 );
               },
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
+              child: const Column(
+                mainAxisAlignment:
+                    MainAxisAlignment.center,
                 children: [
                   Icon(Icons.person_outline),
                   Text("Perfil"),

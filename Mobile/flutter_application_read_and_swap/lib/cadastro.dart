@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'login.dart';
+import 'dados.dart';
 
 class Cadastro extends StatefulWidget {
   Cadastro({super.key});
@@ -9,6 +10,12 @@ class Cadastro extends StatefulWidget {
 }
 
 class _CadastroState extends State<Cadastro> {
+
+  TextEditingController nomeController = TextEditingController();
+  TextEditingController emailController = TextEditingController();
+  TextEditingController senhaController = TextEditingController();
+
+  bool mostrarSenha = false;
 
   @override
   Widget build(BuildContext context) {
@@ -26,7 +33,6 @@ class _CadastroState extends State<Cadastro> {
 
                 SizedBox(height: 80),
 
-                // LOGO
                 Container(
                   width: 110,
                   height: 110,
@@ -60,7 +66,6 @@ class _CadastroState extends State<Cadastro> {
 
                 SizedBox(height: 30),
 
-                // CADASTRO
                 Expanded(
                   child: Container(
                     width: double.infinity,
@@ -85,17 +90,14 @@ class _CadastroState extends State<Cadastro> {
 
                         SizedBox(height: 20),
 
-                        // NOME
-                        Text(
-                          "Nome",
-                          style: TextStyle(fontSize: 16),
-                        ),
+                        Text("Nome"),
 
                         SizedBox(height: 5),
 
                         TextField(
+                          controller: nomeController,
                           decoration: InputDecoration(
-                            hintText: "Digite seu nome completo",
+                            hintText: "Digite seu nome",
                             filled: true,
                             fillColor: Colors.grey[200],
                             border: OutlineInputBorder(
@@ -107,15 +109,12 @@ class _CadastroState extends State<Cadastro> {
 
                         SizedBox(height: 20),
 
-                        // EMAIL
-                        Text(
-                          "E-mail",
-                          style: TextStyle(fontSize: 16),
-                        ),
+                        Text("E-mail"),
 
                         SizedBox(height: 5),
 
                         TextField(
+                          controller: emailController,
                           decoration: InputDecoration(
                             hintText: "Digite seu e-mail",
                             filled: true,
@@ -129,19 +128,27 @@ class _CadastroState extends State<Cadastro> {
 
                         SizedBox(height: 20),
 
-                        // SENHA
-                        Text(
-                          "Senha",
-                          style: TextStyle(fontSize: 16),
-                        ),
+                        Text("Senha"),
 
                         SizedBox(height: 5),
 
                         TextField(
-                          obscureText: true,
+                          controller: senhaController,
+                          obscureText: !mostrarSenha,
                           decoration: InputDecoration(
                             hintText: "Digite uma senha",
-                            suffixIcon: Icon(Icons.visibility_off),
+                            suffixIcon: IconButton(
+                              icon: Icon(
+                                mostrarSenha
+                                    ? Icons.visibility
+                                    : Icons.visibility_off,
+                              ),
+                              onPressed: () {
+                                setState(() {
+                                  mostrarSenha = !mostrarSenha;
+                                });
+                              },
+                            ),
                             filled: true,
                             fillColor: Colors.grey[200],
                             border: OutlineInputBorder(
@@ -151,20 +158,41 @@ class _CadastroState extends State<Cadastro> {
                           ),
                         ),
 
-                        SizedBox(height: 30),
+                        SizedBox(height: 20),
 
-                        // BOTÃO
                         SizedBox(
                           width: double.infinity,
                           height: 55,
                           child: ElevatedButton(
                             style: ElevatedButton.styleFrom(
                               backgroundColor: Color(0xFFFF6B6B),
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(15),
-                              ),
                             ),
                             onPressed: () {
+
+                              if (nomeController.text.isEmpty ||
+                                  emailController.text.isEmpty ||
+                                  senhaController.text.isEmpty) {
+
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  SnackBar(
+                                    content: Text(
+                                      "Preencha todos os campos",
+                                    ),
+                                  ),
+                                );
+
+                                return;
+                              }
+
+                              DadosApp.usuarios.add(
+                                Usuario(
+                                  nome: nomeController.text,
+                                  email: emailController.text,
+                                  senha: senhaController.text,
+                                  localizacao: false,
+                                ),
+                              );
+
                               Navigator.pushReplacement(
                                 context,
                                 MaterialPageRoute(
@@ -173,10 +201,9 @@ class _CadastroState extends State<Cadastro> {
                               );
                             },
                             child: Text(
-                              "Cadastrar →",
+                              "Cadastrar",
                               style: TextStyle(
                                 color: Colors.white,
-                                fontSize: 18,
                               ),
                             ),
                           ),
@@ -184,7 +211,6 @@ class _CadastroState extends State<Cadastro> {
 
                         SizedBox(height: 20),
 
-                        // LOGIN
                         Center(
                           child: GestureDetector(
                             onTap: () {
@@ -200,13 +226,10 @@ class _CadastroState extends State<Cadastro> {
                               style: TextStyle(
                                 color: Color(0xFFFF6B6B),
                                 fontWeight: FontWeight.bold,
-                                fontSize: 15,
                               ),
                             ),
                           ),
                         ),
-
-                        SizedBox(height: 20),
                       ],
                     ),
                   ),

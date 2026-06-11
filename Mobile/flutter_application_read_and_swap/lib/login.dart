@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'cadastro.dart';
 import 'mainpage.dart';
+import 'dados.dart';
 
 class Login extends StatefulWidget {
   Login({super.key});
@@ -10,6 +11,12 @@ class Login extends StatefulWidget {
 }
 
 class _LoginState extends State<Login> {
+
+  TextEditingController emailController = TextEditingController();
+  TextEditingController senhaController = TextEditingController();
+
+  bool mostrarSenha = false;
+  bool localizacao = false;
 
   @override
   Widget build(BuildContext context) {
@@ -27,7 +34,6 @@ class _LoginState extends State<Login> {
 
                 SizedBox(height: 80),
 
-                // LOGO
                 Container(
                   width: 110,
                   height: 110,
@@ -61,7 +67,6 @@ class _LoginState extends State<Login> {
 
                 SizedBox(height: 30),
 
-                // LOGIN
                 Expanded(
                   child: Container(
                     width: double.infinity,
@@ -86,15 +91,12 @@ class _LoginState extends State<Login> {
 
                         SizedBox(height: 20),
 
-                        // EMAIL
-                        Text(
-                          "E-mail",
-                          style: TextStyle(fontSize: 16),
-                        ),
+                        Text("E-mail"),
 
                         SizedBox(height: 5),
 
                         TextField(
+                          controller: emailController,
                           decoration: InputDecoration(
                             hintText: "Digite seu e-mail",
                             filled: true,
@@ -108,19 +110,27 @@ class _LoginState extends State<Login> {
 
                         SizedBox(height: 20),
 
-                        // SENHA
-                        Text(
-                          "Senha",
-                          style: TextStyle(fontSize: 16),
-                        ),
+                        Text("Senha"),
 
                         SizedBox(height: 5),
 
                         TextField(
-                          obscureText: true,
+                          controller: senhaController,
+                          obscureText: !mostrarSenha,
                           decoration: InputDecoration(
                             hintText: "Digite sua senha",
-                            suffixIcon: Icon(Icons.visibility_off),
+                            suffixIcon: IconButton(
+                              icon: Icon(
+                                mostrarSenha
+                                    ? Icons.visibility
+                                    : Icons.visibility_off,
+                              ),
+                              onPressed: () {
+                                setState(() {
+                                  mostrarSenha = !mostrarSenha;
+                                });
+                              },
+                            ),
                             filled: true,
                             fillColor: Colors.grey[200],
                             border: OutlineInputBorder(
@@ -130,9 +140,23 @@ class _LoginState extends State<Login> {
                           ),
                         ),
 
-                        SizedBox(height: 30),
+                        SizedBox(height: 15),
 
-                        // BOTÃO
+                        CheckboxListTile(
+                          value: localizacao,
+                          activeColor: Color(0xFFFF6B6B),
+                          title: Text("Ativar localização"),
+                          controlAffinity:
+                              ListTileControlAffinity.leading,
+                          onChanged: (value) {
+                            setState(() {
+                              localizacao = value!;
+                            });
+                          },
+                        ),
+
+                        SizedBox(height: 20),
+
                         SizedBox(
                           width: double.infinity,
                           height: 55,
@@ -144,6 +168,54 @@ class _LoginState extends State<Login> {
                               ),
                             ),
                             onPressed: () {
+
+                              if (emailController.text.isEmpty ||
+                                  senhaController.text.isEmpty) {
+
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  SnackBar(
+                                    content: Text(
+                                      "Preencha todos os campos",
+                                    ),
+                                  ),
+                                );
+
+                                return;
+                              }
+
+                              Usuario? usuarioEncontrado;
+
+                              for (var usuario in DadosApp.usuarios) {
+
+                                if (usuario.email ==
+                                        emailController.text &&
+                                    usuario.senha ==
+                                        senhaController.text) {
+
+                                  usuarioEncontrado = usuario;
+                                  break;
+                                }
+                              }
+
+                              if (usuarioEncontrado == null) {
+
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  SnackBar(
+                                    content: Text(
+                                      "Email ou senha incorretos",
+                                    ),
+                                  ),
+                                );
+
+                                return;
+                              }
+
+                              usuarioEncontrado.localizacao =
+                                  localizacao;
+
+                              DadosApp.usuarioLogado =
+                                  usuarioEncontrado;
+
                               Navigator.pushReplacement(
                                 context,
                                 MaterialPageRoute(
@@ -163,7 +235,6 @@ class _LoginState extends State<Login> {
 
                         SizedBox(height: 20),
 
-                        // CADASTRO
                         Center(
                           child: GestureDetector(
                             onTap: () {

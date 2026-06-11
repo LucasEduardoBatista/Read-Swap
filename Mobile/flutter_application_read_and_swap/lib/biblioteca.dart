@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_application_read_and_swap/cadastrolivro.dart';
+import 'package:flutter_application_read_and_swap/dados.dart';
 import 'package:flutter_application_read_and_swap/perfil.dart';
 
 class Biblioteca extends StatefulWidget {
@@ -11,312 +12,499 @@ class Biblioteca extends StatefulWidget {
 
 class _BibliotecaState extends State<Biblioteca> {
 
+  TextEditingController buscaController = TextEditingController();
+
+  String busca = "";
+
   @override
   Widget build(BuildContext context) {
+
+    List<Livro> livrosFiltrados =
+        DadosApp.livros.where((livro) {
+
+      return livro.nome
+              .toLowerCase()
+              .contains(busca) ||
+
+          livro.autor
+              .toLowerCase()
+              .contains(busca) ||
+
+          livro.genero
+              .toLowerCase()
+              .contains(busca);
+
+    }).toList();
+
     return Scaffold(
-      backgroundColor: Color.fromARGB(255, 255, 232, 212),
+      backgroundColor:
+          const Color.fromARGB(
+            255,
+            255,
+            232,
+            212,
+          ),
 
       appBar: AppBar(
-        backgroundColor: Colors.transparent,
-        surfaceTintColor: Colors.transparent,
-        shadowColor: Colors.transparent,
+        backgroundColor:
+            Colors.transparent,
         elevation: 0,
-        automaticallyImplyLeading: false,
 
-        title: Row(
-          children: [
-
-            Image.asset(
-              "images/Read&SwapLOGOfundo.png",
-              width: 40,
-              height: 40,
-              fit: BoxFit.cover,
-            ),
-
-            SizedBox(width: 5),
-
-            Text(
-              "Read&Swap",
-              style: TextStyle(
-                fontSize: 40,
-                color: Color(0xFFFF6B6B),
-                fontWeight: FontWeight.bold,
-                fontFamily: "Estonia",
-                ),
-              ),
-              ],
-            ),
+        leading: IconButton(
+          icon: const Icon(
+            Icons.arrow_back,
+            color: Color(0xFFFF6B6B),
           ),
-            body: SingleChildScrollView(
-            child: Column(
-            children: [
-
-            SizedBox(height: 10),
-
-            // VOLTAR
-            Container(
-              padding: EdgeInsets.all(10),
-              color: Colors.white,
-              child: Align(
-                alignment: Alignment.centerLeft,
-                child: GestureDetector(
-                  onTap: () {
-                    Navigator.pushReplacement(
-                      context,
-                      MaterialPageRoute(
-                        builder: (_) => Perfil(),
-                      ),
-                    );
-                  },
-                  child: Text(
-                    "← Voltar",
-                    style: TextStyle(
-                      fontSize: 25,
-                      color: Color(0xFFFF6B6B),
-                      fontFamily: "Zalando",
-                    ),
-                  ),
-                ),
+          onPressed: () {
+            Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(
+                builder: (_) =>
+                    const Perfil(),
               ),
-            ),
-
-            SizedBox(height: 20),
-
-            // TÍTULO
-            Text(
-              "Meus Livros",
-              style: TextStyle(
-                fontSize: 35,
-                fontWeight: FontWeight.bold,
-                fontFamily: "Zalando",
-              ),
-            ),
-
-            SizedBox(height: 10),
-
-            // LIVROS
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-
-                // LIVRO 1
-                Container(
-                  width: 180,
-                  margin: EdgeInsets.all(10),
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.circular(15),
-                  ),
-                  child: Column(
-                    children: [
-
-                      // IMAGEM
-                      Container(
-                        height: 220,
-                        width: double.infinity,
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.vertical(
-                            top: Radius.circular(15),
-                          ),
-                          image: DecorationImage(
-                            image: AssetImage("images/MangaBocchi.jpg"),
-                            fit: BoxFit.cover,
-                          ),
-                        ),
-                      ),
-
-                      SizedBox(height: 10),
-
-                      // TÍTULO
-                      Text(
-                        "Bocchi the Rock Vol. 1",
-                        style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                        ),
-                        textAlign: TextAlign.center,
-                      ),
-
-                      SizedBox(height: 5),
-
-                      // AUTOR
-                      Text(
-                        "Aki Hamaji",
-                        style: TextStyle(
-                          color: Colors.grey,
-                          fontSize: 12,
-                        ),
-                      ),
-
-                      SizedBox(height: 10),
-
-                      // BOTÕES
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-
-                          Container(
-                            padding: EdgeInsets.symmetric(
-                              horizontal: 12,
-                              vertical: 6,
-                            ),
-                            decoration: BoxDecoration(
-                              color: Color(0xFFFF6B6B),
-                              borderRadius: BorderRadius.circular(8),
-                            ),
-                            child: Text(
-                              "Editar",
-                              style: TextStyle(color: Colors.white),
-                            ),
-                          ),
-
-                          SizedBox(width: 10),
-
-                          Container(
-                            padding: EdgeInsets.symmetric(
-                              horizontal: 12,
-                              vertical: 6,
-                            ),
-                            decoration: BoxDecoration(
-                              border: Border.all(color: Colors.grey),
-                              borderRadius: BorderRadius.circular(8),
-                            ),
-                            child: Text("Remover"),
-                          ),
-                        ],
-                      ),
-
-                      SizedBox(height: 10),
-                    ],
-                  ),
-                ),
-
-                // LIVRO 2
-                Container(
-                  width: 180,
-                  margin: EdgeInsets.all(10),
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.circular(15),
-                  ),
-                  child: Column(
-                    children: [
-
-                      // IMAGEM
-                      Container(
-                        height: 220,
-                        width: double.infinity,
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.vertical(
-                            top: Radius.circular(15),
-                          ),
-                          image: DecorationImage(
-                            image: AssetImage("images/BoaNoitePUNPUN.png"),
-                            fit: BoxFit.cover,
-                          ),
-                        ),
-                      ),
-
-                      SizedBox(height: 10),
-
-                      // TÍTULO
-                      Text(
-                        "Boa Noite, Punpun",
-                        style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                        ),
-                        textAlign: TextAlign.center,
-                      ),
-
-                      SizedBox(height: 5),
-
-                      // AUTOR
-                      Text(
-                        "Inio Asano",
-                        style: TextStyle(
-                          color: Colors.grey,
-                          fontSize: 12,
-                        ),
-                      ),
-
-                      SizedBox(height: 10),
-
-                      // BOTÕES
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-
-                          Container(
-                            padding: EdgeInsets.symmetric(
-                              horizontal: 12,
-                              vertical: 6,
-                            ),
-                            decoration: BoxDecoration(
-                              color: Color(0xFFFF6B6B),
-                              borderRadius: BorderRadius.circular(8),
-                            ),
-                            child: Text(
-                              "Editar",
-                              style: TextStyle(color: Colors.white),
-                            ),
-                          ),
-
-                          SizedBox(width: 10),
-
-                          Container(
-                            padding: EdgeInsets.symmetric(
-                              horizontal: 12,
-                              vertical: 6,
-                            ),
-                            decoration: BoxDecoration(
-                              border: Border.all(color: Colors.grey),
-                              borderRadius: BorderRadius.circular(8),
-                            ),
-                            child: Text("Remover"),
-                          ),
-                        ],
-                      ),
-
-                      SizedBox(height: 10),
-                    ],
-                  ),
-                ),
-              ],
-            ),
-
-            SizedBox(height: 20),
-          ],
+            );
+          },
         ),
+
+        title: const Text(
+          "Minha Biblioteca",
+          style: TextStyle(
+            color: Color(0xFFFF6B6B),
+            fontWeight:
+                FontWeight.bold,
+          ),
+        ),
+
+        centerTitle: true,
       ),
 
-      // BOTÃO ADICIONAR
-      bottomNavigationBar: Container(
-        height: 90,
-        padding: EdgeInsets.all(15),
-        child: SizedBox(
-          width: double.infinity,
-          height: 55,
-          child: ElevatedButton(
-            style: ElevatedButton.styleFrom(
-              backgroundColor: Color(0xFFFF6B6B),
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(15),
+      body: Column(
+        children: [
+
+          Padding(
+            padding:
+                const EdgeInsets.all(15),
+            child: TextField(
+              controller:
+                  buscaController,
+              onChanged: (value) {
+                setState(() {
+                  busca =
+                      value.toLowerCase();
+                });
+              },
+              decoration:
+                  InputDecoration(
+                hintText:
+                    "Buscar livro, autor ou gênero...",
+                prefixIcon:
+                    const Icon(
+                  Icons.search,
+                ),
+                filled: true,
+                fillColor:
+                    Colors.white,
+                border:
+                    OutlineInputBorder(
+                  borderRadius:
+                      BorderRadius.circular(
+                        20,
+                      ),
+                ),
               ),
             ),
+          ),
+
+          Expanded(
+            child:
+                livrosFiltrados
+                        .isEmpty
+                    ? const Center(
+                        child: Text(
+                          "Nenhum livro encontrado",
+                          style:
+                              TextStyle(
+                            fontSize:
+                                20,
+                            fontWeight:
+                                FontWeight
+                                    .bold,
+                          ),
+                        ),
+                      )
+                    : ListView.builder(
+                        padding:
+                            const EdgeInsets
+                                .all(
+                                15),
+                        itemCount:
+                            livrosFiltrados
+                                .length,
+                        itemBuilder:
+                            (
+                              context,
+                              index,
+                            ) {
+
+                          Livro livro =
+                              livrosFiltrados[
+                                  index];
+
+                          return Container(
+                            margin:
+                                const EdgeInsets
+                                    .only(
+                              bottom:
+                                  15,
+                            ),
+
+                            padding:
+                                const EdgeInsets
+                                    .all(
+                              15,
+                            ),
+
+                            decoration:
+                                BoxDecoration(
+                              color:
+                                  Colors
+                                      .white,
+                              borderRadius:
+                                  BorderRadius.circular(
+                                20,
+                              ),
+                            ),
+
+                            child:
+                                Column(
+                              crossAxisAlignment:
+                                  CrossAxisAlignment
+                                      .start,
+                              children: [
+
+                                Row(
+                                  children: [
+
+                                    Container(
+                                      width:
+                                          70,
+                                      height:
+                                          100,
+
+                                      decoration:
+                                          BoxDecoration(
+                                        color:
+                                            Colors.grey.shade300,
+                                        borderRadius:
+                                            BorderRadius.circular(
+                                          10,
+                                        ),
+                                      ),
+
+                                      child:
+                                          const Icon(
+                                        Icons
+                                            .menu_book,
+                                        size:
+                                            40,
+                                      ),
+                                    ),
+
+                                    const SizedBox(
+                                      width:
+                                          15,
+                                    ),
+
+                                    Expanded(
+                                      child:
+                                          Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+
+                                          Text(
+                                            livro
+                                                .nome,
+                                            style:
+                                                const TextStyle(
+                                              fontSize:
+                                                  20,
+                                              fontWeight:
+                                                  FontWeight.bold,
+                                            ),
+                                          ),
+
+                                          const SizedBox(
+                                            height:
+                                                5,
+                                          ),
+
+                                          Text(
+                                            livro
+                                                .autor,
+                                            style:
+                                                const TextStyle(
+                                              color:
+                                                  Colors.grey,
+                                            ),
+                                          ),
+
+                                          const SizedBox(
+                                            height:
+                                                5,
+                                          ),
+
+                                          Text(
+                                            "Editora: ${livro.editora}",
+                                          ),
+
+                                          Text(
+                                            "Lançado em ${livro.ano}",
+                                          ),
+
+                                          Text(
+                                            "Conservação: ${livro.conservacao}",
+                                          ),
+
+                                          Text(
+                                            "Gênero: ${livro.genero}",
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  ],
+                                ),
+
+                                if (livro
+                                    .observacoes
+                                    .isNotEmpty)
+
+                                  Padding(
+                                    padding:
+                                        const EdgeInsets.only(
+                                      top:
+                                          10,
+                                    ),
+
+                                    child:
+                                        Text(
+                                      "Obs: ${livro.observacoes}",
+                                    ),
+                                  ),
+
+                                const SizedBox(
+                                  height:
+                                      15,
+                                ),
+
+                                Row(
+                                  children: [
+
+                                    Expanded(
+                                      child:
+                                          ElevatedButton.icon(
+                                        icon:
+                                            const Icon(
+                                          Icons
+                                              .edit,
+                                        ),
+
+                                        label:
+                                            const Text(
+                                          "Editar",
+                                        ),
+
+                                        style:
+                                            ElevatedButton.styleFrom(
+                                          backgroundColor:
+                                              const Color(
+                                            0xFFFF6B6B,
+                                          ),
+                                          foregroundColor:
+                                              Colors.white,
+                                        ),
+
+                                        onPressed:
+                                            () {
+
+                                          int indiceReal =
+                                              DadosApp.livros.indexOf(
+                                            livro,
+                                          );
+
+                                          Navigator.push(
+                                            context,
+                                            MaterialPageRoute(
+                                              builder:
+                                                  (
+                                                    _,
+                                                  ) =>
+                                                      CadastrolivroEditar(
+                                                indice:
+                                                    indiceReal,
+                                              ),
+                                            ),
+                                          ).then(
+                                            (
+                                              _,
+                                            ) {
+                                              setState(
+                                                () {},
+                                              );
+                                            },
+                                          );
+                                        },
+                                      ),
+                                    ),
+
+                                    const SizedBox(
+                                      width:
+                                          10,
+                                    ),
+
+                                    Expanded(
+                                      child:
+                                          ElevatedButton.icon(
+                                        icon:
+                                            const Icon(
+                                          Icons
+                                              .delete,
+                                        ),
+
+                                        label:
+                                            const Text(
+                                          "Remover",
+                                        ),
+
+                                        style:
+                                            ElevatedButton.styleFrom(
+                                          backgroundColor:
+                                              Colors.grey.shade300,
+                                          foregroundColor:
+                                              Colors.black,
+                                        ),
+
+                                        onPressed: () async {
+
+                                        bool? confirmar =
+                                            await showDialog<bool>(
+                                          context: context,
+                                          builder: (context) {
+                                            return AlertDialog(
+                                              title: const Text(
+                                                "Remover Livro",
+                                              ),
+                                              content: const Text(
+                                                "Você tem certeza que deseja remover este livro?",
+                                              ),
+                                              actions: [
+
+                                                TextButton(
+                                                  onPressed: () {
+                                                    Navigator.pop(
+                                                      context,
+                                                      false,
+                                                    );
+                                                  },
+                                                  child: const Text(
+                                                    "Cancelar",
+                                                  ),
+                                                ),
+
+                                                ElevatedButton(
+                                                  style: ElevatedButton.styleFrom(
+                                                    backgroundColor: Colors.red,
+                                                  ),
+                                                  onPressed: () {
+                                                    Navigator.pop(
+                                                      context,
+                                                      true,
+                                                    );
+                                                  },
+                                                  child: const Text(
+                                                    "Remover",
+                                                  ),
+                                                ),
+                                              ],
+                                            );
+                                          },
+                                        );
+
+                                        if (confirmar == true) {
+
+                                          setState(() {
+
+                                            DadosApp.livros.remove(
+                                              livro,
+                                            );
+
+                                          });
+
+                                          ScaffoldMessenger.of(context)
+                                              .showSnackBar(
+                                            const SnackBar(
+                                              content: Text(
+                                                "Livro removido com sucesso!",
+                                              ),
+                                            ),
+                                          );
+                                        }
+                                      },
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ],
+                            ),
+                          );
+                        },
+                      ),
+          ),
+        ],
+      ),
+
+      bottomNavigationBar:
+          Padding(
+        padding:
+            const EdgeInsets.all(
+          15,
+        ),
+
+        child: SizedBox(
+          height: 55,
+
+          child:
+              ElevatedButton.icon(
+            icon: const Icon(
+              Icons.add,
+            ),
+
+            label: const Text(
+              "Adicionar Livro",
+            ),
+
+            style:
+                ElevatedButton.styleFrom(
+              backgroundColor:
+                  const Color(
+                0xFFFF6B6B,
+              ),
+              foregroundColor:
+                  Colors.white,
+            ),
+
             onPressed: () {
+
               Navigator.pushReplacement(
                 context,
                 MaterialPageRoute(
-                  builder: (_) => Cadastrolivro(),
+                  builder:
+                      (_) =>
+                          const Cadastrolivro(),
                 ),
               );
+
             },
-            child: Text(
-              "Adicionar Livro →",
-              style: TextStyle(
-                color: Colors.white,
-                fontSize: 18,
-              ),
-            ),
           ),
         ),
       ),
