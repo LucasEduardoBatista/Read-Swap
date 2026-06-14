@@ -1,7 +1,6 @@
    body {
     background-color: #FFE8D4;
     font-family: Zalando Sans, sans-serif;
-    overflow: hidden;
    }
    .book-img, .card-img-top, #previewFinal {
       aspect-ratio: 3/4 !important;
