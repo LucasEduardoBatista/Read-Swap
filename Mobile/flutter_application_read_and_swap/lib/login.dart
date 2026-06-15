@@ -168,7 +168,6 @@ class _LoginState extends State<Login> {
                               ),
                             ),
                             onPressed: () {
-
                               if (emailController.text.isEmpty ||
                                   senhaController.text.isEmpty) {
 
@@ -183,14 +182,32 @@ class _LoginState extends State<Login> {
                                 return;
                               }
 
+                              if (!emailController.text.contains("@")) {
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  SnackBar(
+                                    content: Text("O e-mail deve conter @"),
+                                  ),
+                                );
+                                return;
+                              }
+
+                              if (senhaController.text.length < 8) {
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  SnackBar(
+                                    content: Text(
+                                      "A senha deve ter no mínimo 8 caracteres",
+                                    ),
+                                  ),
+                                );
+                                return;
+                              }
+
                               Usuario? usuarioEncontrado;
 
                               for (var usuario in DadosApp.usuarios) {
 
-                                if (usuario.email ==
-                                        emailController.text &&
-                                    usuario.senha ==
-                                        senhaController.text) {
+                                if (usuario.email == emailController.text &&
+                                    usuario.senha == senhaController.text) {
 
                                   usuarioEncontrado = usuario;
                                   break;
@@ -210,11 +227,9 @@ class _LoginState extends State<Login> {
                                 return;
                               }
 
-                              usuarioEncontrado.localizacao =
-                                  localizacao;
+                              usuarioEncontrado.localizacao = localizacao;
 
-                              DadosApp.usuarioLogado =
-                                  usuarioEncontrado;
+                              DadosApp.usuarioLogado = usuarioEncontrado;
 
                               Navigator.pushReplacement(
                                 context,

@@ -168,7 +168,6 @@ class _CadastroState extends State<Cadastro> {
                               backgroundColor: Color(0xFFFF6B6B),
                             ),
                             onPressed: () {
-
                               if (nomeController.text.isEmpty ||
                                   emailController.text.isEmpty ||
                                   senhaController.text.isEmpty) {
@@ -182,6 +181,39 @@ class _CadastroState extends State<Cadastro> {
                                 );
 
                                 return;
+                              }
+
+                              if (!emailController.text.contains("@")) {
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  SnackBar(
+                                    content: Text("O e-mail deve conter @"),
+                                  ),
+                                );
+                                return;
+                              }
+
+                              if (senhaController.text.length < 8) {
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  SnackBar(
+                                    content: Text(
+                                      "A senha deve ter no mínimo 8 caracteres",
+                                    ),
+                                  ),
+                                );
+                                return;
+                              }
+
+                              for (var usuario in DadosApp.usuarios) {
+                                if (usuario.email == emailController.text) {
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                    SnackBar(
+                                      content: Text(
+                                        "Este e-mail já está cadastrado",
+                                      ),
+                                    ),
+                                  );
+                                  return;
+                                }
                               }
 
                               DadosApp.usuarios.add(
