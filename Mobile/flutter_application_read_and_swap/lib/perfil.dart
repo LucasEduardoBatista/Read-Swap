@@ -69,7 +69,7 @@ class _PerfilState extends State<Perfil> {
                 const CircleAvatar(
                   radius: 70,
                   backgroundImage: AssetImage(
-                    "assets/images/pfp.jpg",
+                    "assets/images/pfp.jfif",
                   ),
                 ),
 
