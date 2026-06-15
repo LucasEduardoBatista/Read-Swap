@@ -64,7 +64,7 @@
     <h1 class="text-center mb-4">Cadastro de Livros</h1>
 
     <div class="p-4 border rounded-4 shadow-lg bg-light mx-auto divFormLivro" style="max-width: 700px;">
-      <form id="formLivro">
+      <form id="formLivro" method="POST" action="backend/livros/salvar.php" enctype="multipart/form-data">
         <!-- Título -->
         <div class="mb-3">
           <label for="titulo" class="form-label" style="font-weight: bold;">Título <span class="text-danger">*</span></label>

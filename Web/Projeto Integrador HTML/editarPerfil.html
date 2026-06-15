@@ -292,39 +292,39 @@
 
         <div class="col-12 col-lg-7">
           <div class="campos-claros">
-            <form id="formEditarPerfil" novalidate>
+            <form id="formEditarPerfil" method="POST" action="backend/perfil/atualizar.php" enctype="multipart/form-data" novalidate>
               <div class="mb-3">
                 <label for="fotoPerfil" class="form-label">Foto de perfil</label>
-                <input class="form-control" type="file" id="fotoPerfil" accept="image/*">
+                <input class="form-control" type="file" id="fotoPerfil" name="fotoPerfil" accept="image/*">
                 <div class="form-text">A imagem só muda na pré-visualização desta página.</div>
               </div>
 
               <div class="mb-3">
                 <label for="nome" class="form-label">Nome completo</label>
-                <input type="text" class="form-control" id="nome" maxlength="50" value="Ronaldo El Pepe" required>
+                <input type="text" class="form-control" id="nome" name="nome" maxlength="50" value="Ronaldo El Pepe" required>
               </div>
 
               <div class="mb-3">
                 <label for="cidade" class="form-label">Cidade / Estado</label>
-                <input type="text" class="form-control" id="cidade" maxlength="60" value="Limeira - SP" required>
+                <input type="text" class="form-control" id="cidade" name="cidade" maxlength="60" value="Limeira - SP" required>
               </div>
 
               <div class="mb-4">
                 <label class="form-label">Gêneros favoritos</label>
                 <div class="generos-box">
                   <div class="d-flex flex-wrap gap-2" id="generosSelecao">
-                    <label class="genero-chip selecionado"><input type="checkbox" value="Fantasia" checked>Fantasia</label>
-                    <label class="genero-chip selecionado"><input type="checkbox" value="Romance" checked>Romance</label>
-                    <label class="genero-chip selecionado"><input type="checkbox" value="Aventura" checked>Aventura</label>
-                    <label class="genero-chip"><input type="checkbox" value="Drama">Drama</label>
-                    <label class="genero-chip"><input type="checkbox" value="Contos">Contos</label>
-                    <label class="genero-chip"><input type="checkbox" value="Terror">Terror</label>
-                    <label class="genero-chip"><input type="checkbox" value="Mistério">Mistério</label>
-                    <label class="genero-chip"><input type="checkbox" value="Suspense/Thriller">Suspense/Thriller</label>
-                    <label class="genero-chip"><input type="checkbox" value="Ficção Científica">Ficção Científica</label>
-                    <label class="genero-chip"><input type="checkbox" value="Biografia">Biografia</label>
-                    <label class="genero-chip"><input type="checkbox" value="HQ/Quadrinhos">HQ/Quadrinhos</label>
-                    <label class="genero-chip"><input type="checkbox" value="Clássicos">Clássicos</label>
+                    <label class="genero-chip selecionado"><input type="checkbox" name="generos[]" value="Fantasia" checked>Fantasia</label>
+                    <label class="genero-chip selecionado"><input type="checkbox" name="generos[]" value="Romance" checked>Romance</label>
+                    <label class="genero-chip selecionado"><input type="checkbox" name="generos[]" value="Aventura" checked>Aventura</label>
+                    <label class="genero-chip"><input type="checkbox" name="generos[]" value="Drama">Drama</label>
+                    <label class="genero-chip"><input type="checkbox" name="generos[]" value="Contos">Contos</label>
+                    <label class="genero-chip"><input type="checkbox" name="generos[]" value="Terror">Terror</label>
+                    <label class="genero-chip"><input type="checkbox" name="generos[]" value="Mistério">Mistério</label>
+                    <label class="genero-chip"><input type="checkbox" name="generos[]" value="Suspense/Thriller">Suspense/Thriller</label>
+                    <label class="genero-chip"><input type="checkbox" name="generos[]" value="Ficção Científica">Ficção Científica</label>
+                    <label class="genero-chip"><input type="checkbox" name="generos[]" value="Biografia">Biografia</label>
+                    <label class="genero-chip"><input type="checkbox" name="generos[]" value="HQ/Quadrinhos">HQ/Quadrinhos</label>
+                    <label class="genero-chip"><input type="checkbox" name="generos[]" value="Clássicos">Clássicos</label>
                   </div>
                 </div>
               </div>
@@ -404,6 +404,46 @@
     const formEditarPerfil = document.getElementById('formEditarPerfil');
     const btnRecarregar = document.getElementById('btnRecarregar');
     const generoChips = document.querySelectorAll('#generosSelecao .genero-chip');
+    let perfilOriginal = null;
+
+    async function carregarDadosPerfil() {
+      try {
+        const resposta = await fetch('backend/perfil/dados.php', { headers: { 'Accept': 'application/json' } });
+
+        if (resposta.status === 401) {
+          window.location.href = 'login.html';
+          return;
+        }
+
+        if (!resposta.ok) throw new Error('Falha ao carregar dados do perfil');
+
+        const dados = await resposta.json();
+        perfilOriginal = dados;
+
+        nomeInput.value = dados.nome || '';
+        cidadeInput.value = dados.cidade || '';
+        previewNome.textContent = dados.nome || 'Seu nome';
+        previewCidade.textContent = dados.cidade || 'Sua cidade';
+
+        if (dados.foto) {
+          previewFoto.src = dados.foto;
+        }
+
+        const generosSalvos = Array.isArray(dados.generos) ? dados.generos : [];
+        generoChips.forEach(chip => {
+          const input = chip.querySelector('input');
+          input.checked = generosSalvos.includes(input.value);
+        });
+
+        atualizarSelecionados();
+      } catch (erro) {
+        console.error('Não foi possível carregar o perfil:', erro);
+        atualizarSelecionados();
+      }
+    }
+
+    carregarDadosPerfil();
+
 
     function atualizarPreviewGeneros() {
       previewGeneros.innerHTML = '';
@@ -506,26 +546,14 @@
     });
 
     formEditarPerfil.addEventListener('submit', function (event) {
-      event.preventDefault();
-      event.stopPropagation();
-      alert('Alterações salvas na pré-visualização desta página.');
+      if (!formEditarPerfil.checkValidity()) {
+        event.preventDefault();
+        event.stopPropagation();
+      }
     });
 
     btnRecarregar.addEventListener('click', function () {
-      nomeInput.value = 'Ronaldo El Pepe';
-      cidadeInput.value = 'Limeira - SP';
-      previewNome.textContent = 'Ronaldo El Pepe';
-      previewCidade.textContent = 'Limeira - SP';
-      previewFoto.src = './Imagens/default-profile.jpg';
-      fotoInput.value = '';
-
-      generoChips.forEach(chip => {
-        const input = chip.querySelector('input');
-        const base = ['Fantasia', 'Romance', 'Aventura'];
-        input.checked = base.includes(input.value);
-      });
-
-      atualizarSelecionados();
+      window.location.reload();
     });
 
     atualizarSelecionados();
