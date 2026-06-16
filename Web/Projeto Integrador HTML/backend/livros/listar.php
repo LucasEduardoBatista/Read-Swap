@@ -12,7 +12,7 @@ if (!isset($_SESSION['usuario_id'])) {
 $idDono = (int)$_SESSION['usuario_id'];
 
 $stmt = $conn->prepare("
-    SELECT idLivrosADMs, Nome, Autor, Editora, Ano, Genero, Estado, Observacoes, Fotolivro
+    SELECT idLivrosADMs, Nome, Autor, Editora, AnoPublicacao, Genero, EstadoConservacao, Observacoes, Fotolivro
     FROM LivrosADMs
     WHERE IdDono = ? AND Status = 0
     ORDER BY idLivrosADMs DESC

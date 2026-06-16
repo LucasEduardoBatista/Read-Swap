@@ -30,7 +30,7 @@ $fotoBin = file_get_contents($_FILES['foto']['tmp_name']);
 $status = 0;
 $stmt = $conn->prepare("
     INSERT INTO LivrosADMs
-    (Nome, Autor, Editora, Ano, Genero, Estado, Observacoes, IdDono, Status, Fotolivro)
+    (Nome, Autor, Editora, AnoPublicacao, Genero, EstadoConservacao, Observacoes, IdDono, Status, Fotolivro)
     VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
 ");
 $stmt->bind_param("ssssssssss", $nome, $autor, $editora, $ano, $genero, $estado, $observacoes, $idDono, $status, $fotoBin);
