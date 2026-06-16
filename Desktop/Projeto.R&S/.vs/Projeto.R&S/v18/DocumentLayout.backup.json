@@ -3,11 +3,11 @@
   "WorkspaceRootPath": "C:\\Users\\hipoc\\OneDrive\\Documents\\Projetos\\Read-Swap\\Desktop\\Projeto.R\u0026S\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{66933573-D270-4F8E-92EF-A782E32D7827}|Projeto.R\u0026S\\Projeto.R\u0026S.csproj|C:\\Users\\hipoc\\OneDrive\\Documents\\Projetos\\Read-Swap\\Desktop\\Projeto.R\u0026S\\projeto.r\u0026s\\perfil.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "AbsoluteMoniker": "D:0:0:{66933573-D270-4F8E-92EF-A782E32D7827}|Projeto.R\u0026S\\Projeto.R\u0026S.csproj|c:\\users\\hipoc\\onedrive\\documents\\projetos\\read-swap\\desktop\\projeto.r\u0026s\\projeto.r\u0026s\\perfil.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{66933573-D270-4F8E-92EF-A782E32D7827}|Projeto.R\u0026S\\Projeto.R\u0026S.csproj|solutionrelative:projeto.r\u0026s\\perfil.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{66933573-D270-4F8E-92EF-A782E32D7827}|Projeto.R\u0026S\\Projeto.R\u0026S.csproj|c:\\users\\hipoc\\onedrive\\documents\\projetos\\read-swap\\desktop\\projeto.r\u0026s\\projeto.r\u0026s\\userspremium.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "AbsoluteMoniker": "D:0:0:{66933573-D270-4F8E-92EF-A782E32D7827}|Projeto.R\u0026S\\Projeto.R\u0026S.csproj|C:\\Users\\hipoc\\OneDrive\\Documents\\Projetos\\Read-Swap\\Desktop\\Projeto.R\u0026S\\projeto.r\u0026s\\userspremium.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{66933573-D270-4F8E-92EF-A782E32D7827}|Projeto.R\u0026S\\Projeto.R\u0026S.csproj|solutionrelative:projeto.r\u0026s\\userspremium.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
@@ -15,7 +15,7 @@
       "RelativeMoniker": "D:0:0:{66933573-D270-4F8E-92EF-A782E32D7827}|Projeto.R\u0026S\\Projeto.R\u0026S.csproj|solutionrelative:projeto.r\u0026s\\userspremium.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{66933573-D270-4F8E-92EF-A782E32D7827}|Projeto.R\u0026S\\Projeto.R\u0026S.csproj|c:\\users\\hipoc\\onedrive\\documents\\projetos\\read-swap\\desktop\\projeto.r\u0026s\\projeto.r\u0026s\\perfis.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "AbsoluteMoniker": "D:0:0:{66933573-D270-4F8E-92EF-A782E32D7827}|Projeto.R\u0026S\\Projeto.R\u0026S.csproj|C:\\Users\\hipoc\\OneDrive\\Documents\\Projetos\\Read-Swap\\Desktop\\Projeto.R\u0026S\\projeto.r\u0026s\\perfis.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{66933573-D270-4F8E-92EF-A782E32D7827}|Projeto.R\u0026S\\Projeto.R\u0026S.csproj|solutionrelative:projeto.r\u0026s\\perfis.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
@@ -94,8 +94,7 @@
               "RelativeToolTip": "Projeto.R\u0026S\\Foto.cs [Design]",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2026-06-15T23:53:39.72Z",
-              "IsPinned": true,
-              "EditorCaption": " [Design]"
+              "IsPinned": true
             },
             {
               "$type": "Document",
@@ -122,8 +121,7 @@
               "ViewState": "AgIAACoAAAAAAAAAAAA3wDMAAAAuAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2026-05-03T14:24:25.418Z",
-              "IsPinned": true,
-              "EditorCaption": ""
+              "IsPinned": true
             },
             {
               "$type": "Document",
@@ -135,8 +133,7 @@
               "RelativeToolTip": "Projeto.R\u0026S\\FrmLivros.cs [Design]",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2026-05-05T01:05:50.196Z",
-              "IsPinned": true,
-              "EditorCaption": " [Design]"
+              "IsPinned": true
             },
             {
               "$type": "Document",
@@ -149,8 +146,7 @@
               "ViewState": "AgIAAKUAAAAAAAAAAAAUwL4AAAAJAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2026-05-05T01:06:39.327Z",
-              "IsPinned": true,
-              "EditorCaption": ""
+              "IsPinned": true
             },
             {
               "$type": "Document",
@@ -163,8 +159,7 @@
               "ViewState": "AgIAACEAAAAAAAAAAAAYwDsAAAAJAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2026-05-05T01:46:09.996Z",
-              "IsPinned": true,
-              "EditorCaption": ""
+              "IsPinned": true
             },
             {
               "$type": "Document",
@@ -176,8 +171,7 @@
               "RelativeToolTip": "Projeto.R\u0026S\\Userspremium.cs",
               "ViewState": "AgIAADEAAAAAAAAAAAAvwDwAAAAvAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-06-16T02:33:30.606Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-06-16T02:33:30.606Z"
             },
             {
               "$type": "Document",
@@ -212,8 +206,7 @@
               "RelativeToolTip": "Projeto.R\u0026S\\Foto.cs",
               "ViewState": "AgIAAAwAAAAAAAAAAAAWwBkAAAAMAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-06-16T01:41:07.637Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-06-16T01:41:07.637Z"
             },
             {
               "$type": "Document",
@@ -224,8 +217,7 @@
               "ToolTip": "C:\\Users\\hipoc\\OneDrive\\Documents\\Projetos\\Read-Swap\\Desktop\\Projeto.R\u0026S\\Projeto.R\u0026S\\Userspremium.cs [Design]",
               "RelativeToolTip": "Projeto.R\u0026S\\Userspremium.cs [Design]",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-05-05T00:27:19.212Z",
-              "EditorCaption": " [Design]"
+              "WhenOpened": "2026-05-05T00:27:19.212Z"
             },
             {
               "$type": "Document",
