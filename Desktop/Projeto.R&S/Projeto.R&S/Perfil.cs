@@ -126,14 +126,14 @@ namespace Projeto.R_S
                 cmd => cmd.Parameters.AddWithValue("@v", "%" + nome + "%"));
         }
 
-        public List<PerfilRow> consultarEmail(string email)
+        public List<PerfilRow> consultarEmailp(string email)
         {
             return ExecutarConsulta(
                 "SELECT Status, Nome, Email, idPerfis, Foto FROM PerfisADMs WHERE Premium = 1 AND Email LIKE @v",
                 cmd => cmd.Parameters.AddWithValue("@v", "%" + email + "%"));
         }
 
-        public List<PerfilRow> consultarEmailp(string email)
+        public List<PerfilRow> consultarEmail(string email)
         {
             return ExecutarConsulta(
                 "SELECT Status, Nome, Email, idPerfis, Foto FROM PerfisADMs WHERE Email LIKE @v",
@@ -150,7 +150,7 @@ namespace Projeto.R_S
         public List<PerfilRow> consultarIDp(string id)
         {
             return ExecutarConsulta(
-                "SELECT Status, Nome, Email, idPerfis, Foto FROM PerfisADMs WHERE idPerfis LIKE @v",
+                "SELECT Status, Nome, Email, idPerfis, Foto FROM PerfisADMs WHERE Premium = 1 AND idPerfis LIKE @v",
                 cmd => cmd.Parameters.AddWithValue("@v", "%" + id + "%"));
         }
 

@@ -13,19 +13,49 @@ namespace Projeto.R_S
 {
     public partial class FrmLivros : Form
     {
+        int id;
         public FrmLivros()
         {
             InitializeComponent();
 
             Livros livros = new Livros();
             MySqlDataReader r = livros.consultarLivros();
+
             while (r.Read())
             {
+                byte[] foto = r["Fotolivro"] == DBNull.Value
+                    ? null
+                    : (byte[])r["Fotolivro"];
+
+                int row;
+
                 if (r.GetUInt16(4) == 0)
-                    guna2DataGridView1.Rows.Add(r.GetString(0), r.GetString(1), r.GetString(2), r.GetString(3), "Aberto para troca", r["Fotolivro"] == DBNull.Value ? null : (byte[])r["Fotolivro"]);
-                else if (r.GetUInt16(4) == 1)
-                    guna2DataGridView1.Rows.Add(r.GetString(0), r.GetString(1), r.GetString(2), r.GetString(3), "Já trocado", r["Fotolivro"] == DBNull.Value ? null : (byte[])r["Fotolivro"]);
+                {
+                    row = guna2DataGridView1.Rows.Add(
+                        r.GetString(0),
+                        r.GetString(1),
+                        r.GetString(2),
+                        r.GetString(3),
+                        "Aberto para troca",
+                        foto
+                    );
+                }
+                else
+                {
+                    row = guna2DataGridView1.Rows.Add(
+                        r.GetString(0),
+                        r.GetString(1),
+                        r.GetString(2),
+                        r.GetString(3),
+                        "Já trocado",
+                        foto
+                    );
+                }
+
+                guna2DataGridView1.Rows[row].Tag = r.GetInt32(6);
             }
+
+            r.Close();
             DAO_conexao.con.Close();
         }
 
@@ -43,20 +73,46 @@ namespace Projeto.R_S
 
         private void guna2TextBox1_TextChanged(object sender, EventArgs e)
         {
-
-
             guna2DataGridView1.Rows.Clear();
+
             Livros livros = new Livros();
             MySqlDataReader r = livros.consultarNomes(guna2TextBox1.Text);
+
             while (r.Read())
             {
+                byte[] foto = r["Fotolivro"] == DBNull.Value
+                    ? null
+                    : (byte[])r["Fotolivro"];
 
+                int row;
 
                 if (r.GetUInt16(4) == 0)
-                    guna2DataGridView1.Rows.Add(r.GetString(0), r.GetString(1), r.GetString(2), r.GetString(3), "Aberto para troca", r["Fotolivro"] == DBNull.Value ? null : (byte[])r["Fotolivro"]);
-                else if (r.GetUInt16(4) == 1)
-                    guna2DataGridView1.Rows.Add(r.GetString(0), r.GetString(1), r.GetString(2), r.GetString(3), "Já trocado", r["Fotolivro"] == DBNull.Value ? null : (byte[])r["Fotolivro"]);
+                {
+                    row = guna2DataGridView1.Rows.Add(
+                        r.GetString(0),
+                        r.GetString(1),
+                        r.GetString(2),
+                        r.GetString(3),
+                        "Aberto para troca",
+                        foto
+                    );
+                }
+                else
+                {
+                    row = guna2DataGridView1.Rows.Add(
+                        r.GetString(0),
+                        r.GetString(1),
+                        r.GetString(2),
+                        r.GetString(3),
+                        "Já trocado",
+                        foto
+                    );
+                }
+
+                guna2DataGridView1.Rows[row].Tag = r.GetInt32(6);
             }
+
+            r.Close();
             DAO_conexao.con.Close();
         }
 
@@ -98,6 +154,52 @@ namespace Projeto.R_S
                 {
                     f.Location = new System.Drawing.Point(Cursor.Position.X + 10, Cursor.Position.Y + 10);
                 }
+            }
+        }
+
+        private void guna2Button2_Click(object sender, EventArgs e)
+        {
+            if (id <= 0)
+            {
+                MessageBox.Show("Selecione um livro primeiro.");
+                return;
+            }
+
+            DialogResult resultado = MessageBox.Show(
+                "Deseja realmente excluir este livro?",
+                "Confirmação",
+                MessageBoxButtons.YesNo,
+                MessageBoxIcon.Question);
+
+            if (resultado != DialogResult.Yes)
+                return;
+
+            Livros livros = new Livros();
+
+            livros.Deletarlivro(id);
+
+            MessageBox.Show("Livro excluído com sucesso!");
+
+            if (guna2DataGridView1.CurrentRow != null)
+            {
+                guna2DataGridView1.Rows.RemoveAt(
+                    guna2DataGridView1.CurrentRow.Index
+                );
+            }
+
+            id = 0;
+        }
+
+        private void guna2DataGridView1_CellClick(object sender, DataGridViewCellEventArgs e)
+        {
+            if (e.RowIndex < 0)
+                return;
+
+            var tag = guna2DataGridView1.Rows[e.RowIndex].Tag;
+
+            if (tag != null)
+            {
+                id = Convert.ToInt32(tag);
             }
         }
     }

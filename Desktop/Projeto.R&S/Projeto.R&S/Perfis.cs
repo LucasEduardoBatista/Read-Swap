@@ -49,13 +49,13 @@ namespace Projeto.R_S
         private void guna2TextBox2_TextChanged(object sender, EventArgs e)
         {
             Perfil perfil = new Perfil();
-            CarregarGrid(perfil.consultarEmailp(guna2TextBox2.Text));
+            CarregarGrid(perfil.consultarEmail(guna2TextBox2.Text));
         }
 
         private void guna2TextBox3_TextChanged(object sender, EventArgs e)
         {
                 Perfil perfil = new Perfil();
-                CarregarGrid(perfil.consultarIDp(guna2TextBox3.Text));
+                CarregarGrid(perfil.consultarID(guna2TextBox3.Text));
             
         }
 
