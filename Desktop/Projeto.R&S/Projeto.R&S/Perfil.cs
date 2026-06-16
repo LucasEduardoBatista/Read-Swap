@@ -11,6 +11,7 @@ namespace Projeto.R_S
         public string Nome { get; set; }
         public string Email { get; set; }
         public int Id { get; set; }
+        public byte[] Foto { get; set; }
     }
 
     internal class Perfil
@@ -34,7 +35,8 @@ namespace Projeto.R_S
                         Status = r.GetUInt16(0) == 0 ? "Ativo" : "Inativo",
                         Nome = r.GetString(1),
                         Email = r.GetString(2),
-                        Id = r.GetInt32(3)
+                        Id = r.GetInt32(3),
+                        Foto = r["Foto"] == DBNull.Value ? null : (byte[])r["Foto"],
                     });
                 }
                 r.Close();
@@ -76,79 +78,79 @@ namespace Projeto.R_S
         public List<PerfilRow> consultarPerfis()
         {
             return ExecutarConsulta(
-                "SELECT Status, Nome, Email, idPerfis FROM PerfisADMs");
+                "SELECT Status, Nome, Email, idPerfis, Foto FROM PerfisADMs");
         }
 
         public List<PerfilRow> consultarPerfisprem()
         {
             return ExecutarConsulta(
-                "SELECT Status, Nome, Email, idPerfis FROM PerfisADMs WHERE Premium = 1");
+                "SELECT Status, Nome, Email, idPerfis, Foto FROM PerfisADMs WHERE Premium = 1");
         }
 
         public List<PerfilRow> consultarativos()
         {
             return ExecutarConsulta(
-                "SELECT Status, Nome, Email, idPerfis FROM PerfisADMs WHERE Status = 0");
+                "SELECT Status, Nome, Email, idPerfis, Foto FROM PerfisADMs WHERE Status = 0");
         }
 
         public List<PerfilRow> consultarinativos()
         {
             return ExecutarConsulta(
-                "SELECT Status, Nome, Email, idPerfis FROM PerfisADMs WHERE Status = 1");
+                "SELECT Status, Nome, Email, idPerfis, Foto FROM PerfisADMs WHERE Status = 1");
         }
 
         public List<PerfilRow> consultarativosprem()
         {
             return ExecutarConsulta(
-                "SELECT Status, Nome, Email, idPerfis FROM PerfisADMs WHERE Premium = 1 AND Status = 0");
+                "SELECT Status, Nome, Email, idPerfis, Foto FROM PerfisADMs WHERE Premium = 1 AND Status = 0");
         }
 
         public List<PerfilRow> consultarinativosprem()
         {
             return ExecutarConsulta(
-                "SELECT Status, Nome, Email, idPerfis FROM PerfisADMs WHERE Premium = 1 AND Status = 1");
+                "SELECT Status, Nome, Email, idPerfis, Foto FROM PerfisADMs WHERE Premium = 1 AND Status = 1");
         }
 
 
         public List<PerfilRow> consultarNomes(string nome)
         {
             return ExecutarConsulta(
-                "SELECT Status, Nome, Email, idPerfis FROM PerfisADMs WHERE Nome LIKE @v",
+                "SELECT Status, Nome, Email, idPerfis, Foto FROM PerfisADMs WHERE Nome LIKE @v",
                 cmd => cmd.Parameters.AddWithValue("@v", "%" + nome + "%"));
         }
 
         public List<PerfilRow> consultarPremium(string nome)
         {
             return ExecutarConsulta(
-                "SELECT Status, Nome, Email, idPerfis FROM PerfisADMs WHERE Premium = 1 AND Nome LIKE @v",
+                "SELECT Status, Nome, Email, idPerfis, Foto FROM PerfisADMs WHERE Premium = 1 AND Nome LIKE @v",
                 cmd => cmd.Parameters.AddWithValue("@v", "%" + nome + "%"));
-        }
-
-        public List<PerfilRow> consultarEmail(string email)
-        {
-            return ExecutarConsulta(
-                "SELECT Status, Nome, Email, idPerfis FROM PerfisADMs WHERE Premium = 1 AND Email LIKE @v",
-                cmd => cmd.Parameters.AddWithValue("@v", "%" + email + "%"));
         }
 
         public List<PerfilRow> consultarEmailp(string email)
         {
             return ExecutarConsulta(
-                "SELECT Status, Nome, Email, idPerfis FROM PerfisADMs WHERE Email LIKE @v",
+                "SELECT Status, Nome, Email, idPerfis, Foto FROM PerfisADMs WHERE Premium = 1 AND Email LIKE @v",
+                cmd => cmd.Parameters.AddWithValue("@v", "%" + email + "%"));
+        }
+
+        public List<PerfilRow> consultarEmail(string email)
+        {
+            return ExecutarConsulta(
+                "SELECT Status, Nome, Email, idPerfis, Foto FROM PerfisADMs WHERE Email LIKE @v",
                 cmd => cmd.Parameters.AddWithValue("@v", "%" + email + "%"));
         }
 
         public List<PerfilRow> consultarID(string id)
         {
             return ExecutarConsulta(
-                "SELECT Status, Nome, Email, idPerfis FROM PerfisADMs WHERE Premium = 1 AND idPerfis LIKE @v",
+                "SELECT Status, Nome, Email, idPerfis, Foto FROM PerfisADMs WHERE idPerfis LIKE @v",
                 cmd => cmd.Parameters.AddWithValue("@v", "%" + id + "%"));
         }
 
         public List<PerfilRow> consultarIDp(string id)
         {
             return ExecutarConsulta(
-                "SELECT Status, Nome, Email, idPerfis FROM PerfisADMs WHERE idPerfis LIKE @v",
+                "SELECT Status, Nome, Email, idPerfis, Foto FROM PerfisADMs WHERE Premium = 1 AND idPerfis LIKE @v",
                 cmd => cmd.Parameters.AddWithValue("@v", "%" + id + "%"));
         }
 

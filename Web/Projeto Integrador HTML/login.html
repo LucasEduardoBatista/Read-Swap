@@ -67,7 +67,7 @@
   <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4 py-4 pt-5 mt-5 main_login">
     <div id="box">
       <h1 style="text-align: center;">Entrar</h1>
-      <form id="needs-validation" novalidate>
+      <form id="needs-validation" method="POST" action="backend/usuarios/login.php" novalidate>
         <!-- Campo de email com feedback -->
         <div class="mb-3">
           <input id="login" type="email" class="form-control" placeholder="E-mail" name="login" required style="margin-top: 10%;">
@@ -77,7 +77,7 @@
         </div>
 
         <div class="input-group has-validation mb-3">
-          <input id="senha" type="password" class="form-control" minlength="6" maxlength="50" placeholder="Senha" required>
+          <input id="senha" name="senha" type="password" class="form-control" minlength="6" maxlength="50" placeholder="Senha" required>
           <button class="btn btn-outline-secondary" type="button" id="toggleSenha">
             <i class="bi bi-eye" id="iconeSenha"></i>
           </button>
