@@ -17,7 +17,7 @@ namespace Projeto.R_S
             try
             {
                 DAO_conexao.con.Open();
-                MySqlCommand consulta = new MySqlCommand("SELECT l.Autor, l.Nome, l.Genero, p.Nome, l.Status FROM cl204224.LivrosADMs l JOIN cl204224.PerfisADMs p ON l.IdDono = p.idPerfis", DAO_conexao.con);
+                MySqlCommand consulta = new MySqlCommand("SELECT l.Autor, l.Nome, l.Genero, p.Nome, l.Status, l.Fotolivro FROM cl204224.LivrosADMs l JOIN cl204224.PerfisADMs p ON l.IdDono = p.idPerfis", DAO_conexao.con);
                 lista = consulta.ExecuteReader();
             }
             catch (Exception ex)
@@ -34,7 +34,7 @@ namespace Projeto.R_S
             try
             {
                 DAO_conexao.con.Open();
-                MySqlCommand consulta = new MySqlCommand("SELECT l.Autor, l.Nome, l.Genero, p.Nome, l.Status FROM cl204224.LivrosADMs l JOIN cl204224.PerfisADMs p ON l.IdDono = p.idPerfis " +
+                MySqlCommand consulta = new MySqlCommand("SELECT l.Autor, l.Nome, l.Genero, p.Nome, l.Status, l.Fotolivro FROM cl204224.LivrosADMs l JOIN cl204224.PerfisADMs p ON l.IdDono = p.idPerfis " +
 "WHERE (l.Nome LIKE '%" + nome + "%' OR NOT EXISTS (SELECT 1 FROM cl204224.LivrosADMs WHERE Nome LIKE '%" + nome + "%'))", DAO_conexao.con);
                 lista = consulta.ExecuteReader();
             }

@@ -26,7 +26,8 @@ namespace Projeto.R_S
                     row.Status,
                     row.Nome,
                     row.Email,
-                    row.Id
+                    row.Id,
+                    row.Foto
                 );
 
                 guna2DataGridView1.Rows[index].Tag = row.Id;
@@ -53,11 +54,9 @@ namespace Projeto.R_S
 
         private void guna2TextBox3_TextChanged(object sender, EventArgs e)
         {
-            if (!string.IsNullOrEmpty(guna2TextBox3.Text))
-            {
                 Perfil perfil = new Perfil();
                 CarregarGrid(perfil.consultarIDp(guna2TextBox3.Text));
-            }
+            
         }
 
         private void guna2CustomCheckBox1_Click(object sender, EventArgs e)
@@ -150,5 +149,47 @@ namespace Projeto.R_S
             fmr.Show();
             this.Close();
         }
+
+        private void guna2DataGridView1_CellMouseEnter(object sender, DataGridViewCellEventArgs e)
+        {
+            if (e.RowIndex < 0 || e.RowIndex >= guna2DataGridView1.Rows.Count) return;
+            if (guna2DataGridView1.Columns.Count < 5) return;
+
+            var valor = guna2DataGridView1.Rows[e.RowIndex].Cells[4].Value;
+
+            if (valor == null || valor is DBNull) return;
+
+            byte[] foto = valor as byte[];
+            if (foto == null || foto.Length == 0) return;
+
+            Foto ft = new Foto(foto);
+            ft.StartPosition = FormStartPosition.Manual;
+            ft.Location = new System.Drawing.Point(Cursor.Position.X + 10, Cursor.Position.Y + 10);
+            ft.Show();
+        }
+
+        
+            private void guna2DataGridView1_CellMouseLeave(object sender, DataGridViewCellEventArgs e)
+            {
+            foreach (Form f in Application.OpenForms)
+            {
+                if (f is Foto)
+                {
+                    f.Close();
+                    break;
+                }
+            }
+        }
+
+        private void guna2DataGridView1_CellMouseMove(object sender, DataGridViewCellMouseEventArgs e)
+        {
+            foreach (Form f in Application.OpenForms)
+            {
+                if (f is Foto)
+                {
+                    f.Location = new System.Drawing.Point(Cursor.Position.X + 10, Cursor.Position.Y + 10);
+                }
+            }
+        }
     }
-}
+  }

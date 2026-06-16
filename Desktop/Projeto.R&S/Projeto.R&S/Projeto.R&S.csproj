@@ -196,6 +196,12 @@
     </Compile>
     <Compile Include="Conversastable.cs" />
     <Compile Include="DAO_conexao.cs" />
+    <Compile Include="Foto.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Foto.Designer.cs">
+      <DependentUpon>Foto.cs</DependentUpon>
+    </Compile>
     <Compile Include="FrmLivros.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -235,6 +241,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Conversas.resx">
       <DependentUpon>Conversas.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Foto.resx">
+      <DependentUpon>Foto.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="FrmLivros.resx">
       <DependentUpon>FrmLivros.cs</DependentUpon>
