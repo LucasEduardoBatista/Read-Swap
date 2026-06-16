@@ -98,8 +98,8 @@ class _PerfilState extends State<Perfil> {
 
                     Text(
                       usuario!.localizacao
-                          ? "📍 Localização ativada"
-                          : "📍 Localização desativada",
+                          ? "Localização ativada"
+                          : "Localização desativada",
                       style: TextStyle(
                         fontWeight: FontWeight.bold,
                         color: usuario!.localizacao
@@ -111,24 +111,6 @@ class _PerfilState extends State<Perfil> {
                 ),
 
                 const SizedBox(height: 10),
-
-                if (!usuario!.localizacao)
-                  ElevatedButton.icon(
-                    onPressed: () {
-                      setState(() {
-                        usuario!.localizacao = true;
-                      });
-                    },
-                    icon: const Icon(Icons.location_on),
-                    label: const Text(
-                      "Ativar localização",
-                    ),
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor:
-                          const Color(0xFFFF6B6B),
-                      foregroundColor: Colors.white,
-                    ),
-                  ),
 
                 const SizedBox(height: 25),
 
@@ -210,25 +192,52 @@ class _PerfilState extends State<Perfil> {
                   ],
                 ),
 
-                const SizedBox(height: 25),
+                const SizedBox(height: 20),
 
-                GestureDetector(
-                  onTap: () {
-                    Navigator.pushReplacement(
-                      context,
-                      MaterialPageRoute(
-                        builder: (_) => const Biblioteca(),
+                Padding(
+                        padding:
+                            const EdgeInsets.all(
+                          5,
+                        ),
+
+                        child: SizedBox(
+                          height: 45,
+                          width: double.infinity,
+
+                          child:
+                          ElevatedButton.icon(
+
+                            icon: const Icon(
+                              Icons.bookmark,
+                            ),
+
+                            label: const Text(
+                              "Ver Biblioteca",
+                                    style: TextStyle(
+                                      fontSize: 16),
+                            ),
+
+                            style:
+                                ElevatedButton.styleFrom(
+                              backgroundColor:
+                                  const Color(
+                                0xFFFF6B6B,
+                              ),
+                              foregroundColor:
+                                  Colors.white,
+                            ),
+                            onPressed: () {
+                              Navigator.pushReplacement(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (_) => const Biblioteca(),
+                                ),
+                              );
+                            },
+                          ),
+                        ),
                       ),
-                    );
-                  },
-                  child: const Text(
-                    "📚 Procurando sua biblioteca? Clique aqui!",
-                    style: TextStyle(
-                      color: Colors.blue,
-                      fontSize: 16,
-                    ),
-                  ),
-                ),
+            
 
                 const SizedBox(height: 20),
 
