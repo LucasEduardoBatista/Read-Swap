@@ -12,10 +12,9 @@ if (!isset($_SESSION['usuario_id'])) {
 $idDono = (int)$_SESSION['usuario_id'];
 
 $stmt = $conn->prepare("
-    SELECT idLivrosADMs, Nome, Autor, Editora, AnoPublicacao, Genero, EstadoConservacao, Observacoes, Fotolivro
+    SELECT idLivrosADMs, Nome, Autor, Editora, AnoPublicacao, Genero, EstadoConservacao, Observacoes, Fotolivro, Status
     FROM LivrosADMs
-    WHERE IdDono = ? AND Status = 0
-    ORDER BY idLivrosADMs DESC
+    WHERE IdDono = ? ORDER BY idLivrosADMs DESC
 ");
 $stmt->bind_param("i", $idDono);
 $stmt->execute();
@@ -28,11 +27,12 @@ while ($row = $resultado->fetch_assoc()) {
         'Nome' => $row['Nome'] ?? '',
         'Autor' => $row['Autor'] ?? '',
         'Editora' => $row['Editora'] ?? '',
-        'Ano' => $row['Ano'] ?? '',
+        'Ano' => $row['AnoPublicacao'] ?? '',
         'Genero' => $row['Genero'] ?? '',
-        'Estado' => $row['Estado'] ?? '',
+        'Estado' => $row['EstadoConservacao'] ?? '',
         'Observacoes' => $row['Observacoes'] ?? '',
-        'foto' => !empty($row['Fotolivro']) ? blobParaDataUri($row['Fotolivro'], 'image/png') : './Imagens/sem_livros.png'
+        'foto' => !empty($row['Fotolivro']) ? blobParaDataUri($row['Fotolivro'], 'image/png') : './Imagens/sem_livros.png',
+        'status' => isset($row['Status']) && $row['Status'] == 1 ? 'Livro já trocado' : 'Livro aberto a troca',
     ];
 }
 

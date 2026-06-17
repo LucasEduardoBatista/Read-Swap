@@ -10,7 +10,7 @@ if ($id <= 0) {
     responderErro('Livro inválido.', '../../biblioteca.html');
 }
 
-$stmt = $conn->prepare("UPDATE LivrosADMs SET Status = 1 WHERE idLivrosADMs = ? AND IdDono = ?");
+$stmt = $conn->prepare("DELETE FROM LivrosADMs WHERE idLivrosADMs = ? AND IdDono = ?");
 $stmt->bind_param("ii", $id, $usuarioId);
 $stmt->execute();
 
