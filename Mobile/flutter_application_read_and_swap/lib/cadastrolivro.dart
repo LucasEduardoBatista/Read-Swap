@@ -18,12 +18,9 @@ class _CadastrolivroState extends State<Cadastrolivro> {
   TextEditingController nomeController = TextEditingController();
   TextEditingController anoController = TextEditingController();
   TextEditingController autorController = TextEditingController();
-  TextEditingController conservacaoController =
-      TextEditingController();
-  TextEditingController editoraController =
-      TextEditingController();
-  TextEditingController observacoesController =
-      TextEditingController();
+  TextEditingController conservacaoController = TextEditingController();
+  TextEditingController editoraController = TextEditingController();
+  TextEditingController observacoesController = TextEditingController();
 
   String generoSelecionado = "Fantasia";
 
@@ -41,11 +38,9 @@ class _CadastrolivroState extends State<Cadastrolivro> {
       nomeController.text = livro.nome;
       anoController.text = livro.ano;
       autorController.text = livro.autor;
-      conservacaoController.text =
-          livro.conservacao;
+      conservacaoController.text = livro.conservacao;
       editoraController.text = livro.editora;
-      observacoesController.text =
-          livro.observacoes;
+      observacoesController.text = livro.observacoes;
       generoSelecionado = livro.genero;
     }
   }
@@ -266,6 +261,7 @@ class _CadastrolivroState extends State<Cadastrolivro> {
                 ),
                 items: [
                   "Fantasia",
+                  "Aventura",
                   "Romance",
                   "Jovem Adulto",
                   "Ficção Científica",
