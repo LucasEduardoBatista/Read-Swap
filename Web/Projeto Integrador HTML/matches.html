@@ -11,14 +11,9 @@
 
   <link rel="stylesheet" href="style.css">
 
-  <style>
-    /* Estilos extras podem ficar aqui ou no style.css.
-       Mantive alguns específicos para garantir o visual. */
-  </style>
 </head>
 <body class="d-flex flex-column min-vh-100" id="top">
 
-<!-- NAVBAR -->
 <nav class="navbar navbar-expand-lg bg-light fixed-top" data-bs-theme="light">
     <div class="container-fluid">
       <a class="navbar-brand" href="index.html"><img id="logoNav" src="./Imagens/logo_navbar.png" style="width: 8rem"></a>
@@ -52,10 +47,9 @@
     </div>
   </nav>
 
-<!-- MAIN - CHAT LAYOUT -->
+
 <main class="chat-layout">
 
-  <!-- LISTA DE CONVERSAS -->
   <aside class="conversations-panel">
 
     <div class="panel-header">
@@ -66,59 +60,33 @@
       <img src="./Imagens/livro2.jpg" class="match-cover">
       <div class="match-info">
         <strong>José A.</strong>
-        <span class="last-msg">Depois das 18h?</span>
-        <span class="msg-time">Agora</span>
+        <span class="last-msg"></span>
+        <span class="msg-time"></span>
       </div>
     </div>
 
-    <div class="match-item" data-chat="chat2">
-      <img src="./Imagens/livro3.jpg" class="match-cover">
-      <div class="match-info">
-        <strong>Diogo P.</strong>
-        <span class="last-msg">Perfeito! 😊</span>
-        <span class="msg-time">15 min</span>
-      </div>
-    </div>
-
-    <div class="match-item" data-chat="chat3">
-      <img src="./Imagens/livro1.jpg" class="match-cover">
-      <div class="match-info">
-        <strong>Carlos B.</strong>
-        <span class="last-msg">Vamos combinar?</span>
-        <span class="msg-time">2 h</span>
-      </div>
-    </div>
 
   </aside>
 
-  <!-- CHAT 1 (visível) -->
   <section class="chat-panel" id="chat1">
 
     <div class="chat-header">
       <img src="./Imagens/livro2.jpg" class="chat-avatar">
       <div class="chat-user-info">
         <strong>José A.</strong>
-        <span class="status online"><i class="bi bi-circle-fill"></i> Online</span>
+        <span class="status online" id="online"><i class="bi bi-circle-fill"></i> Online</span>
       </div>
       <div class="chat-header-actions">
-        <i class="bi bi-telephone"></i>
-        <i class="bi bi-camera-video"></i>
         <i class="bi bi-three-dots-vertical"></i>
       </div>
     </div>
-
+    <!-- Área que vai pro javascript e conecta com o banco-->
     <div class="messages">
       <div class="message received">
-        Oi! Achei seu livro interessante.
-        <span class="msg-time">14:30</span>
+        <span class="msg-time"></span>
       </div>
       <div class="message sent">
-        Boa! Tenho interesse sim.
-        <span class="msg-time">14:32</span>
-      </div>
-      <div class="message received">
-        Depois das 18h?
-        <span class="msg-time">14:35</span>
+        <span class="msg-time"></span>
       </div>
     </div>
 
@@ -127,55 +95,6 @@
       <button class="send-btn"><i class="bi bi-send-fill"></i></button>
     </div>
 
-  </section>
-
-  <!-- CHAT 2 (oculto) -->
-  <section class="chat-panel d-none" id="chat2">
-    <div class="chat-header">
-      <img src="./Imagens/livro3.jpg" class="chat-avatar">
-      <div class="chat-user-info">
-        <strong>Diogo P.</strong>
-        <span class="status"><i class="bi bi-circle-fill"></i> Visto há 5 min</span>
-      </div>
-      <div class="chat-header-actions">
-        <i class="bi bi-telephone"></i>
-        <i class="bi bi-camera-video"></i>
-        <i class="bi bi-three-dots-vertical"></i>
-      </div>
-    </div>
-    <div class="messages">
-      <div class="message received">E aí, tudo bem?</div>
-      <div class="message sent">Tudo! E você?</div>
-      <div class="message received">Perfeito! 😊</div>
-    </div>
-    <div class="chat-input">
-      <input type="text" class="form-control" placeholder="Digite uma mensagem...">
-      <button class="send-btn"><i class="bi bi-send-fill"></i></button>
-    </div>
-  </section>
-
-  <!-- CHAT 3 (oculto) -->
-  <section class="chat-panel d-none" id="chat3">
-    <div class="chat-header">
-      <img src="./Imagens/livro1.jpg" class="chat-avatar">
-      <div class="chat-user-info">
-        <strong>Carlos B.</strong>
-        <span class="status"><i class="bi bi-circle-fill"></i> Visto há 2 h</span>
-      </div>
-      <div class="chat-header-actions">
-        <i class="bi bi-telephone"></i>
-        <i class="bi bi-camera-video"></i>
-        <i class="bi bi-three-dots-vertical"></i>
-      </div>
-    </div>
-    <div class="messages">
-      <div class="message received">Vamos combinar a troca?</div>
-      <div class="message sent">Claro! Quando você pode?</div>
-    </div>
-    <div class="chat-input">
-      <input type="text" class="form-control" placeholder="Digite uma mensagem...">
-      <button class="send-btn"><i class="bi bi-send-fill"></i></button>
-    </div>
   </section>
 
 </main>
