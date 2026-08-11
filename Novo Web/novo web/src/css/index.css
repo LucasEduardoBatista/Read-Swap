@@ -1,0 +1,127 @@
+/* ================= GLOBAL ================= */
+body {
+    background: linear-gradient(135deg, #FFE8D4, #FFF6EF) !important;
+    font-family: "Zalando Sans", "Segoe UI", sans-serif;
+}
+
+main { padding-top: 70px; }
+
+h1 {
+    font-weight: 900;
+    letter-spacing: -0.02em;
+}
+
+hr {
+    display: none !important;
+    height: 0 !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    border: none !important;
+}
+
+.container-fluid {
+    margin-left: 15%;
+    margin-right: 15%;
+    font-family: arial;
+}
+
+.myContainer {
+    margin-top: 15px;
+    color: black;
+    padding-top: 5px;
+    padding-bottom: 15px;
+}
+
+.alinhaJustificado { text-align: justify; }
+
+.asterisco { color: red; }
+
+a { text-decoration: none; }
+
+.img-fluid { border-radius: 50px; }
+
+.contatos { color: white; }
+
+.sobre { margin-top: 50px; }
+
+.bi-instagram, .bi-youtube, .bi-facebook { font-size: 20px; }
+
+.card {
+    transition: transform 0.3s ease;
+    border-radius: 10%;
+    border: 0 !important;
+    box-shadow: 0 4px 16px rgba(0,0,0,0.09);
+}
+
+.card-premium {
+    transition: transform 0.3s ease;
+    border-radius: 5%;
+}
+
+.card-title { text-align: center; }
+
+.titulo_card { color: #023E7D; }
+.titulo_card:hover { text-decoration: underline; }
+
+.card:hover { transform: scale(1.05); }
+
+.titulo { font-size: 4rem; }
+
+.cadastrar {
+    background-color: #F08080;
+    border: 0;
+}
+.cadastrar:hover {
+    background-color: #c76b6b;
+    border: 0;
+}
+
+.entrar {
+    color: #ff5757;
+    margin-top: 8px;
+}
+.entrar:hover {
+    text-decoration: underline;
+    color: #bf4141;
+}
+
+.btn-danger {
+    background: linear-gradient(135deg, #ff5757, #ff8a8a) !important;
+    margin-bottom: 10px;
+    margin-top: 10px;
+    border: none !important;
+    border-radius: 12px !important;
+    box-shadow: 0 2px 8px rgba(240,128,128,0.3);
+}
+.btn-danger:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(255,87,87,.35);
+}
+
+.btn-outline-danger { border-color: #F08080; }
+.btn-outline-danger:hover {
+    background-color: #F08080;
+    color: white !important;
+}
+
+.btn {
+    border-radius: 8px;
+    transition: all 0.2s ease;
+}
+
+button:hover { background-color: rgba(150, 150, 150, 0.25); }
+
+.book-img, .card-img-top, #previewFinal {
+    aspect-ratio: 3/4 !important;
+    object-fit: cover !important;
+    border-radius: 10px;
+}
+
+.feedbackCard { border-radius: 100%; }
+
+::-webkit-scrollbar { width: 8px; }
+::-webkit-scrollbar-track { background: #FFE8D4; }
+::-webkit-scrollbar-thumb { background: #F08080; border-radius: 20px; }
+::-webkit-scrollbar-thumb:hover { background: #c76b6b; }
+
+html { overflow-y: scroll; }

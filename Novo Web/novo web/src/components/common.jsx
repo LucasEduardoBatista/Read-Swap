@@ -1,6 +1,4 @@
-// Funções compartilhadas por todas as páginas.
-// No React, prefira chamar essas funções dentro de useEffect() ou transformá-las
-// em hooks/componentes.
+
 
 export function toggleDarkMode() {
   document.body.classList.toggle('dark-mode');
@@ -71,4 +69,7 @@ export function mostrarFeedbackInvalido(form) {
 export function inicializarComuns() {
   atualizarNavbar();
   inicializarTema();
+  inicializarTema()
+  toggleDarkMode();
+  atualizarNavbar()
 }

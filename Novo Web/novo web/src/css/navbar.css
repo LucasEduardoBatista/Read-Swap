@@ -1,0 +1,23 @@
+/* ================= NAVBAR ================= */
+.navbar {
+    box-shadow: 0 2px 12px rgba(0,0,0,0.08);
+    border-bottom: 1px solid rgba(0,0,0,0.06);
+    background: rgba(255,255,255,.88) !important;
+    backdrop-filter: blur(14px);
+    margin-bottom: 0 !important;
+    border-bottom: none !important;
+}
+
+.nav-link {
+    transition: color 0.2s ease;
+    font-weight: 500;
+    letter-spacing: 0.01em;
+}
+
+.perfil {
+    color: black;
+    margin-top: 7px;
+}
+
+.bi-moon-fill { margin-top: 9px; }
+#darkModeBtn { margin-top: 9px; }

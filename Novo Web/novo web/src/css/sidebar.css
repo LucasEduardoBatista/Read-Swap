@@ -1,0 +1,19 @@
+
+.sidebar {
+    position: fixed;
+    top: 69px;
+    left: 0;
+    height: calc(100vh - 56px);
+    width: 250px;
+    z-index: 1040;
+    overflow-y: auto;
+    transition: transform 0.3s ease;
+}
+
+#main {
+    margin-left: 250px;
+    transition: margin-left 0.3s ease;
+}
+
+.sidebar:not(.show) { transform: translateX(-100%); }
+.sidebar.show { transform: translateX(0); }
