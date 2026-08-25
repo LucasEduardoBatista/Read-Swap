@@ -1,19 +1,22 @@
 import { useState } from 'react'
 import { useEffect } from 'react'
-import { inicializarComuns} from './components/common.jsx'
+import {InicializarComuns, ToggleDarkMode} from './components/common.jsx'
+import Navbar from './components/navbar.jsx'
+import Footer from './components/footer.jsx'
 import './css/App.css'
+
 
 
 function App() {
   return (
     <>
-    <div id="top">
-<navbar>
+    <InicializarComuns/>
+     <Navbar/>
 
-</navbar>
+    <div id="top">
       <main>
 
-      <Navbar/>
+     
 
         <header
           id="header-index"
@@ -386,25 +389,14 @@ function App() {
       </main>
 
 
-<Footer/>
+
     </div>
-  
+
+  <Footer/>
 
 </>
   )
 }
 export default App;
 
-/*
-<nav>
-<Link to="/"></Link> |
-<Link to="/produtos">Produtos</Link> |
-<Link to="/sobre">Sobre</Link> |
-</nav>
-<hr />
-<Routes>
-<Route path="/" element={<Home />}/>
-<Route path="/produtos" element={<Produtos />}/>
-<Route path="/sobre" element={<Sobre />}/>
-<Route path="*" element={<Erro404 />}/>
-</Routes>*/
+

@@ -1,3 +1,5 @@
+import { ToggleDarkMode } from "./common";
+
 function Navbar(){
 
     return( 
@@ -53,7 +55,7 @@ function Navbar(){
                   <li>
                     <a
                       className="dropdown-item"
-                      href="/biblioteca"
+                      href="../pages/biblioteca.jsx"
                     >
                       Meus Livros
                     </a>
@@ -62,7 +64,7 @@ function Navbar(){
                   <li>
                     <a
                       className="dropdown-item"
-                      href="/livros"
+                      href="../pages/livros.jsx"
                     >
                       Cadastro de Livros
                     </a>
@@ -75,7 +77,7 @@ function Navbar(){
               <li className="nav-item">
                 <a
                   className="nav-link"
-                  href="/swaps"
+                  href="../pages/swaps.jsx"
                 >
                   Swap
                 </a>
@@ -84,7 +86,7 @@ function Navbar(){
               <li className="nav-item">
                 <a
                   className="nav-link"
-                  href="/matches"
+                  href="../pages/Conversas.jsx"
                 >
                   Matches
                 </a>
@@ -93,7 +95,7 @@ function Navbar(){
               <li className="nav-item">
                 <a
                   className="nav-link"
-                  href="/premium"
+                  href="../pages/Premium.jsx"
                 >
                   Premium
                 </a>
@@ -114,7 +116,7 @@ function Navbar(){
               </li>
 
               <li className="nav-item">
-                <a href="/cadastro">
+                <a href="../pages/Cadastrar.jsx">
                   <button className="btn btn-danger cadastrar">
                     Cadastrar
                   </button>
@@ -123,7 +125,7 @@ function Navbar(){
 
               <li style={{ display: "none" }}>
                 <a
-                  href="/perfil"
+                  href="../pages/Perfilacoes.jsx"
                   className="nav-link perfil"
                 >
                   <i className="bi bi-person-circle"></i>
@@ -135,6 +137,7 @@ function Navbar(){
                   id="darkModeBtn"
                   className="btn"
                   type="button"
+                  onClick={ToggleDarkMode}
                 >
                   <i className="bi bi-moon-fill"></i>
                 </button>

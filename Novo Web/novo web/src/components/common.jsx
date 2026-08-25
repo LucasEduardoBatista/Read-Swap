@@ -1,6 +1,6 @@
 
 
-export function toggleDarkMode() {
+export function ToggleDarkMode() {
   document.body.classList.toggle('dark-mode');
   const btn = document.getElementById('darkModeBtn');
 
@@ -13,7 +13,7 @@ export function toggleDarkMode() {
   }
 }
 
-export function atualizarNavbar() {
+export function AtualizarNavbar() {
   const logado = sessionStorage.getItem('logado') === 'true';
   const elEntrar = document.querySelector('.nav-link.entrar');
   const elCadastrar = document.querySelector('.btn.btn-danger.cadastrar');
@@ -34,7 +34,7 @@ export function atualizarNavbar() {
   }
 }
 
-export function inicializarTema() {
+export function InicializarTema() {
   if (localStorage.getItem('theme') === 'dark') {
     document.body.classList.add('dark-mode');
     const btn = document.getElementById('darkModeBtn');
@@ -42,7 +42,7 @@ export function inicializarTema() {
   }
 }
 
-export function escaparHtml(texto) {
+export function EscaparHtml(texto) {
   return String(texto ?? '')
     .replace(/&/g, '&amp;')
     .replace(/</g, '&lt;')
@@ -51,7 +51,7 @@ export function escaparHtml(texto) {
     .replace(/'/g, '&#39;');
 }
 
-export function mostrarFeedbackInvalido(form) {
+export function MostrarFeedbackInvalido(form) {
   const invalidElements = form.querySelectorAll(
     '.form-control:invalid, .form-check-input:invalid'
   );
@@ -66,10 +66,7 @@ export function mostrarFeedbackInvalido(form) {
   });
 }
 
-export function inicializarComuns() {
-  atualizarNavbar();
-  inicializarTema();
-  inicializarTema()
-  toggleDarkMode();
-  atualizarNavbar()
+export function InicializarComuns() {
+  AtualizarNavbar();
+  InicializarTema();
 }
