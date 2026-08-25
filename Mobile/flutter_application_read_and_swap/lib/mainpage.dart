@@ -366,7 +366,7 @@ class _MainpageState extends State<Mainpage> {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (_) => const Perfil(),
+                    builder: (_) => Perfil(),
                   ),
                 );
               },
