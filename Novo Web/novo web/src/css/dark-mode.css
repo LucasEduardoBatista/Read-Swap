@@ -61,7 +61,7 @@
 }
 
 .dark-mode #logoNav {
-    content: url("/Imagens/logo_navbarEscura.png");
+    content: url("/imagens/logo_navbarEscura.png");
 }
 
 .dark-mode .form-text,

@@ -10,7 +10,7 @@ function Footer(){
           <a href="#top">
 
             <img
-              src="/Imagens/logo.png"
+              src="/imagens/logo.png"
               style={{ height: "10rem" }}
               alt="Read & Swap"
             />
