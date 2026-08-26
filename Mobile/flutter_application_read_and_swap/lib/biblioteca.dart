@@ -60,7 +60,7 @@ class _BibliotecaState extends State<Biblioteca> {
               context,
               MaterialPageRoute(
                 builder: (_) =>
-                    const Perfil(),
+                    Perfil(),
               ),
             );
           },

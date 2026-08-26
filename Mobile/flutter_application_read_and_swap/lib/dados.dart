@@ -4,11 +4,16 @@ class Usuario {
   String senha;
   bool localizacao;
 
+  String? fotoPerfil;
+  List<String> generosFavoritos;
+
   Usuario({
     required this.nome,
     required this.email,
     required this.senha,
     required this.localizacao,
+    this.fotoPerfil,
+    this.generosFavoritos = const [],
   });
 }
 
