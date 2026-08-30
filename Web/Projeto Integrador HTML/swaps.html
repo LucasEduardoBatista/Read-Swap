@@ -3,6 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
+  <script>if(localStorage.getItem('theme')==='dark')document.documentElement.classList.add('dark-mode')</script>
   <title>Read & Swap | O melhor site para troca de livros por região</title>
   <link rel="icon" href="./Imagens/icon.png">
 
@@ -14,7 +15,7 @@
   <link rel="stylesheet" type="text/css" href="style.css">
 </head>
 
-<body class="d-flex flex-column min-vh-100" id="top">
+<body class="d-flex flex-column min-vh-100 swaps-page-body" id="top">
 
   <!-- Navbar -->
   <nav class="navbar navbar-expand-lg bg-light fixed-top" data-bs-theme="light">
@@ -53,12 +54,16 @@
   <main id="swapMain">
     <h1>Swap</h1>
     <div class="swap-wrapper">
+      <aside id="swapOwnerPanel" class="swap-owner-panel" hidden aria-label="Proprietário do livro">
+        <img id="swapOwnerPhoto" src="./Imagens/default-profile.jpg" alt="Foto do proprietário">
+        <div><span>Livro de</span><strong id="swapOwnerName"></strong><small id="swapOwnerCity"><i class="bi bi-geo-alt-fill"></i></small></div>
+      </aside>
       <div id="swapCardContainer" class="swap-card">
-        <img src="./Imagens/livro1.jpg" class="swap-cover" alt="Capa do Livro">
+        <img src="./Imagens/sem_livros.png" class="swap-cover" alt="Carregando livros">
         <div class="swap-body">
-          <h5 id="bookTitle">Título do Livro</h5>
-          <p id="bookDesc">Autor do livro</p>
-          <button id="btnDetalhes" class="btn btn-danger btn-sm">Ver detalhes</button>
+          <h5 id="bookTitle">Carregando livros...</h5>
+          <p id="bookDesc">Aguarde um momento.</p>
+          <button id="btnDetalhes" class="btn btn-danger btn-sm" disabled>Ver detalhes</button>
           <div id="detalhesConteudo" style="display:none;"></div>
         </div>
       </div>
@@ -67,8 +72,8 @@
       </div>
     </div>
     <div class="swap-actions">
-      <button id="btnRecusar" class="swap-btn swap-btn-recusar"><i class="bi bi-x"></i></button>
-      <button id="btnCurtir" class="swap-btn swap-btn-curtir"><i class="bi bi-heart-fill"></i></button>
+      <button id="btnRecusar" class="swap-btn swap-btn-recusar" aria-label="Recusar livro" disabled><i class="bi bi-x-lg"></i><span>Recusar</span></button>
+      <button id="btnCurtir" class="swap-btn swap-btn-curtir" aria-label="Aceitar livro" disabled><i class="bi bi-heart-fill"></i><span>Aceitar</span></button>
     </div>
     <p class="swap-location"><i class="bi bi-geo-alt-fill"></i> Mostrando livros perto de você</p>
   </main>

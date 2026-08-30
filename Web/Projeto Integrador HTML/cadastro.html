@@ -3,6 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
+  <script>if(localStorage.getItem('theme')==='dark')document.documentElement.classList.add('dark-mode')</script>
   <title>Read & Swap | O melhor site para troca de livros por região</title>
   <link rel="icon" href="./Imagens/icon.png">
 
@@ -86,20 +87,25 @@
         </div>
       </div>
 
+      <div class="mb-1">
+        <input id="confirmaEmail" name="confirmaEmail" type="email" class="form-control" placeholder="Confirme seu e-mail" required autocomplete="off">
+        <div class="invalid-feedback">Os endereços de e-mail devem coincidir.</div>
+      </div>
+
       <div class="input-group has-validation mb-1">
-        <input id="senha" name="senha" type="password" class="form-control" placeholder="Senha" minlength="6" maxlength="50" required>
+        <input id="senha" name="senha" type="password" class="form-control" placeholder="Senha" minlength="8" maxlength="72" required autocomplete="new-password">
         <button class="btn btn-outline-secondary" type="button" id="toggleSenha">
           <i class="bi bi-eye" id="iconeSenha"></i>
         </button>
         <div class="invalid-feedback">
-          A senha deve ter entre 6 e 50 caracteres.
+          A senha deve ter entre 8 e 72 caracteres.
         </div>
       </div>
 
       <div class="input-group has-validation mb-1">
-        <input id="confirmaSenha" name="confirmaSenha" type="password" class="form-control" placeholder="Confirme sua senha" minlength="6" maxlength="50" required>
+        <input id="confirmaSenha" name="confirmaSenha" type="password" class="form-control" placeholder="Confirme sua senha" minlength="8" maxlength="72" required autocomplete="new-password">
         <div class="invalid-feedback">
-          As senhas não coincidem.
+          A confirmação deve ter entre 8 e 72 caracteres.
         </div>
       </div>
 

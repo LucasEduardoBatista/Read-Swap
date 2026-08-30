@@ -6,11 +6,29 @@ if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
     exit;
 }
 
-$email = trim($_POST['login'] ?? $_POST['email'] ?? '');
+$email = normalizarEmail($_POST['login'] ?? $_POST['email'] ?? '');
 $senha = $_POST['senha'] ?? '';
+$retornoSolicitado = strtolower(basename($_POST['retorno'] ?? 'index.html'));
+$destinosPermitidos = [
+    'index.html' => 'index.html',
+    'biblioteca.html' => 'biblioteca.html',
+    'livros.html' => 'livros.html',
+    'swaps.html' => 'swaps.html',
+    'matches.html' => 'matches.html',
+    'perfil.html' => 'perfil.html',
+    'editarperfil.html' => 'editarPerfil.html',
+    'configuracoes.html' => 'configuracoes.html',
+    'premium.html' => 'premium.html'
+];
+$destino = isset($destinosPermitidos[$retornoSolicitado])
+    ? '../../' . $destinosPermitidos[$retornoSolicitado]
+    : '../../index.html';
 
 if ($email === '' || $senha === '') {
     responderErro('Preencha e-mail e senha.', '../../login.html');
+}
+if (!filter_var($email, FILTER_VALIDATE_EMAIL) || strlen($email) > 255) {
+    responderErro('Digite um e-mail válido.', '../../login.html');
 }
 
 $stmt = $conn->prepare("SELECT * FROM PerfisADMs WHERE Email = ? LIMIT 1");
@@ -27,9 +45,21 @@ if ((int)($usuario['Status'] ?? 1) !== 0) {
     responderErro('Sua conta está inativa.', '../../login.html');
 }
 
-if (!password_verify($senha, $usuario['Senha'] ?? '')) {
+$senhaArmazenada = $usuario['Senha'] ?? '';
+$senhaCorreta = password_verify($senha, $senhaArmazenada);
+
+// Converte com segurança contas antigas que ainda guardavam senha em texto puro.
+if (!$senhaCorreta && password_get_info($senhaArmazenada)['algo'] === null && hash_equals($senhaArmazenada, $senha)) {
+    $senhaCorreta = true;
+    $novoHash = password_hash($senha, PASSWORD_DEFAULT);
+    $atualiza = $conn->prepare('UPDATE PerfisADMs SET Senha = ? WHERE idPerfis = ?');
+    $atualiza->bind_param('si', $novoHash, $usuario['idPerfis']);
+    $atualiza->execute();
+}
+
+if (!$senhaCorreta) {
     responderErro('E-mail ou senha incorretos.', '../../login.html');
 }
 
-responderSucessoLogin($usuario, '../../index.html');
+responderSucessoLogin($usuario, $destino);
 ?>

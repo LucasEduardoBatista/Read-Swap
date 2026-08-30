@@ -15,9 +15,9 @@ CREATE TABLE IF NOT EXISTS LivrosADMs (
     Nome VARCHAR(255) NOT NULL,
     Autor VARCHAR(255) DEFAULT NULL,
     Editora VARCHAR(255) DEFAULT NULL,
-    Ano INT DEFAULT NULL,
+    AnoPublicacao INT DEFAULT NULL,
     Genero VARCHAR(255) NOT NULL,
-    Estado VARCHAR(255) DEFAULT NULL,
+    EstadoConservacao VARCHAR(255) DEFAULT NULL,
     Observacoes TEXT DEFAULT NULL,
     IdDono INT NOT NULL,
     Status TINYINT NOT NULL DEFAULT 0,
@@ -31,14 +31,29 @@ CREATE TABLE IF NOT EXISTS conversasADMs (
     idConversa INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
     id1 INT NOT NULL,
     id2 INT NOT NULL,
-    conteudo TEXT NOT NULL,
+    conteudo JSON NOT NULL COMMENT 'Histórico JSON das mensagens',
     Statuscvs TINYINT DEFAULT 0,
+    DataEnvio DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    UNIQUE KEY uk_conversa_participantes (id1, id2),
     CONSTRAINT fk_conv_id1
         FOREIGN KEY (id1) REFERENCES PerfisADMs(idPerfis)
         ON DELETE CASCADE,
     CONSTRAINT fk_conv_id2
         FOREIGN KEY (id2) REFERENCES PerfisADMs(idPerfis)
         ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+CREATE TABLE IF NOT EXISTS SwapsADMs (
+    idSwap INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    idUsuario INT NOT NULL,
+    idLivro INT NOT NULL,
+    Gostou TINYINT NOT NULL,
+    DataAvaliacao DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    UNIQUE KEY uk_swap_usuario_livro (idUsuario, idLivro),
+    CONSTRAINT fk_swap_usuario FOREIGN KEY (idUsuario)
+        REFERENCES PerfisADMs(idPerfis) ON DELETE CASCADE,
+    CONSTRAINT fk_swap_livro FOREIGN KEY (idLivro)
+        REFERENCES LivrosADMs(idLivrosADMs) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 CREATE TABLE IF NOT EXISTS ReadSwapADMs (

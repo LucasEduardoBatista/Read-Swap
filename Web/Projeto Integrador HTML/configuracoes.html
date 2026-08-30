@@ -3,6 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
+  <script>if(localStorage.getItem('theme')==='dark')document.documentElement.classList.add('dark-mode')</script>
   <title>Configurações - Read & Swap</title>
   <link rel="icon" href="./Imagens/icon.png">
 
@@ -61,7 +62,7 @@
   </style>
 </head>
 
-<body class="d-flex flex-column min-vh-100" id="top">
+<body class="d-flex flex-column min-vh-100 settings-page-body" id="top">
 
 <!-- Navbar -->
 <nav class="navbar navbar-expand-lg bg-light fixed-top" data-bs-theme="light">
@@ -76,8 +77,6 @@
 
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
       <ul class="navbar-nav me-auto">
-        <li class="nav-item"><a class="nav-link" href="index.html">Início</a></li>
-
         <li class="nav-item dropdown">
           <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown">Livros</a>
           <ul class="dropdown-menu">
@@ -100,58 +99,65 @@
 </nav>
 
 <!-- Conteúdo -->
-<main class="container mt-5 pt-5 pb-5 d-flex justify-content-center">
-  <div id="box">
+<main class="container-fluid wide-content-page settings-page mt-5 pt-5 pb-5">
+  <div id="box" class="settings-shell">
 
-    <div class="d-flex justify-content-between align-items-center mb-4">
-      <h1>Configurações</h1>
-      <a href="perfil.html" class="btn btn-outline-danger btn-sm">Voltar</a>
+    <div class="settings-heading">
+      <div><span class="profile-eyebrow">Preferências da conta</span><h1>Configurações</h1><p>Controle sua experiência, privacidade e acesso ao Read & Swap.</p></div>
+      <a href="perfil.html" class="btn btn-outline-danger"><i class="bi bi-arrow-left"></i> Voltar ao perfil</a>
     </div>
 
-    <!-- Preferências -->
+    <div class="settings-grid">
+    <section class="settings-panel"><div class="settings-panel-title"><span><i class="bi bi-sliders"></i></span><div><h2>Preferências</h2><p>Personalize a aparência e os alertas.</p></div></div>
     <div class="config-item">
-      <div>
+      <div class="config-copy"><i class="bi bi-moon-stars-fill"></i><div>
         <h6>Modo escuro</h6>
-        <small>Ativar ou desativar</small>
-      </div>
-      <button class="btn btn-dark btn-sm" onclick="toggleDarkMode()">Alternar</button>
+        <small>Reduza o brilho e use cores escuras.</small>
+      </div></div>
+      <div class="form-check form-switch"><input class="form-check-input" type="checkbox" role="switch" id="darkModeSwitch" aria-label="Alternar modo escuro"></div>
     </div>
 
     <div class="config-item">
-      <div>
+      <div class="config-copy"><i class="bi bi-bell-fill"></i><div>
         <h6>Notificações</h6>
-        <small>Receber alertas de trocas</small>
-      </div>
-      <input type="checkbox" checked>
+        <small>Receba alertas de novos interesses e mensagens.</small>
+      </div></div>
+      <div class="form-check form-switch"><input class="form-check-input preference-switch" type="checkbox" role="switch" id="notificationsSwitch" data-preference="notificacoes" checked></div>
     </div>
 
     <div class="config-item">
-      <div>
+      <div class="config-copy"><i class="bi bi-eye-fill"></i><div>
         <h6>Privacidade</h6>
-        <small>Perfil visível para outros usuários</small>
-      </div>
-      <input type="checkbox" checked>
+        <small>Permita que outros leitores encontrem seu perfil.</small>
+      </div></div>
+      <div class="form-check form-switch"><input class="form-check-input preference-switch" type="checkbox" role="switch" id="privacySwitch" data-preference="perfilVisivel" checked></div>
     </div>
+
+    </section><section class="settings-panel"><div class="settings-panel-title"><span><i class="bi bi-shield-lock-fill"></i></span><div><h2>Conta e segurança</h2><p>Gerencie seu perfil e sua sessão.</p></div></div>
+
+    <a class="config-item config-link" href="editarPerfil.html">
+      <div class="config-copy"><i class="bi bi-person-lines-fill"></i><div><h6>Detalhes do perfil</h6><small>Atualize foto, nome, cidade e gêneros.</small></div></div>
+      <i class="bi bi-chevron-right"></i>
+    </a>
 
     <!-- Ações -->
     <div class="config-item">
-      <div>
+      <div class="config-copy"><i class="bi bi-box-arrow-right"></i><div>
         <h6>Encerrar sessão</h6>
-        <small>Sair da sua conta</small>
-      </div>
-      <button class="btn btn-secondary btn-sm" id="logoutBtn">Sair</button>
+        <small>Finalize o acesso neste dispositivo.</small>
+      </div></div>
+      <button class="btn btn-outline-secondary btn-sm" id="logoutBtn">Sair</button>
     </div>
 
     <!-- Zona perigosa -->
     <div class="danger-zone">
-      <h5>Zona de risco</h5>
-
-      <p class="mb-3">Essas ações são irreversíveis.</p>
+      <div><span><i class="bi bi-exclamation-triangle-fill"></i></span><div><h5>Excluir conta</h5><p>Todos os seus livros, matches e conversas serão apagados permanentemente.</p></div></div>
 
       <button class="btn btn-danger w-100" id="deleteAccountBtn">
-        Excluir conta permanentemente
+        <i class="bi bi-trash3-fill"></i> Excluir conta permanentemente
       </button>
     </div>
+    </section></div>
 
   </div>
 </main>
@@ -182,23 +188,6 @@
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 <script src="javascript.js"></script>
-
-<script>
-  const logoutBtn = document.getElementById('logoutBtn');
-  const deleteAccountBtn = document.getElementById('deleteAccountBtn');
-
-  logoutBtn.addEventListener('click', () => {
-    window.location.href = 'backend/usuarios/logout.php';
-  });
-
-  deleteAccountBtn.addEventListener('click', () => {
-    const confirmacao = confirm('Tem certeza que deseja excluir sua conta? Essa ação NÃO pode ser desfeita.');
-
-    if (confirmacao) {
-      window.location.href = 'backend/usuarios/excluir.php';
-    }
-  });
-</script>
 
 </body>
 </html>

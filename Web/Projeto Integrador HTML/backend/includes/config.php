@@ -1,20 +1,35 @@
 <?php
 if (session_status() === PHP_SESSION_NONE) {
+    ini_set('session.use_strict_mode', '1');
+    ini_set('session.use_only_cookies', '1');
+    session_set_cookie_params([
+        'httponly' => true,
+        'secure' => !empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off',
+        'samesite' => 'Lax'
+    ]);
     session_start();
 }
 
-$conn = new mysqli(
-    "143.106.241.4",
-    "cl204224",
-    "cl*27102008",
-    "cl204224"
-);
+$configLocal = __DIR__ . '/config.local.php';
+$db = is_file($configLocal) ? require $configLocal : [
+    'host' => getenv('READSWAP_DB_HOST') ?: '',
+    'user' => getenv('READSWAP_DB_USER') ?: '',
+    'password' => getenv('READSWAP_DB_PASSWORD') ?: '',
+    'database' => getenv('READSWAP_DB_NAME') ?: '',
+    'port' => (int)(getenv('READSWAP_DB_PORT') ?: 3306)
+];
 
-if ($conn->connect_error) {
-    die("Erro na conexão: " . $conn->connect_error);
+try {
+    mysqli_report(MYSQLI_REPORT_ERROR | MYSQLI_REPORT_STRICT);
+    $conn = mysqli_init();
+    $conn->options(MYSQLI_OPT_CONNECT_TIMEOUT, 5);
+    $conn->real_connect($db['host'], $db['user'], $db['password'], $db['database'], $db['port'] ?? 3306);
+    $conn->set_charset('utf8mb4');
+} catch (mysqli_sql_exception $e) {
+    error_log('ReadSwap: falha na conexão MySQL: ' . $e->getMessage());
+    http_response_code(503);
+    die("<!doctype html><html lang='pt-br'><head><meta charset='utf-8'><title>Serviço indisponível</title></head><body><p>Não foi possível conectar ao banco de dados. Tente novamente em alguns instantes.</p></body></html>");
 }
-
-$conn->set_charset("utf8mb4");
 
 function responderErro(string $mensagem, string $destino): void {
     $mensagemJs = json_encode($mensagem, JSON_UNESCAPED_UNICODE);
@@ -25,6 +40,8 @@ function responderErro(string $mensagem, string $destino): void {
 }
 
 function responderSucessoLogin(array $usuario, string $destino = '../../index.html'): void {
+    session_regenerate_id(true);
+    unset($_SESSION['livros_swap_passados']);
     $_SESSION['usuario_id'] = (int)$usuario['idPerfis'];
     $_SESSION['usuario_nome'] = $usuario['Nome'];
     $_SESSION['usuario_email'] = $usuario['Email'];
@@ -83,5 +100,18 @@ function blobParaDataUri(?string $blob, string $mime = 'image/png'): string {
         return '';
     }
     return 'data:' . $mime . ';base64,' . base64_encode($blob);
+}
+
+function normalizarEmail(string $email): string {
+    $email = trim($email);
+    return function_exists('mb_strtolower') ? mb_strtolower($email, 'UTF-8') : strtolower($email);
+}
+
+function tamanhoTexto(string $texto): int {
+    if (function_exists('mb_strlen')) {
+        return mb_strlen($texto, 'UTF-8');
+    }
+    $resultado = preg_match_all('/./us', $texto, $caracteres);
+    return $resultado === false ? strlen($texto) : $resultado;
 }
 ?>

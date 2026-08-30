@@ -3,6 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
+  <script>if(localStorage.getItem('theme')==='dark')document.documentElement.classList.add('dark-mode')</script>
   <title>Read & Swap | O melhor site para troca de livros por região</title>
   <link rel="icon" href="./Imagens/icon.png">
 
@@ -22,7 +23,7 @@
 </head>
 
 
-<body class="d-flex flex-column min-vh-100" id="top">
+<body class="d-flex flex-column min-vh-100 books-page-body" id="top">
 
   <!--inicio navbar-->
   <nav class="navbar navbar-expand-lg bg-light fixed-top" data-bs-theme="light">
@@ -60,50 +61,65 @@
   </nav>
 
   <!-- body -->
-  <main class="container mt-5 pt-5">
-    <h1 class="text-center mb-4">Cadastro de Livros</h1>
+  <main class="book-create-page">
+    <header class="book-page-hero">
+      <div><span class="profile-eyebrow">Compartilhe uma história</span><h1>Cadastre um livro</h1><p>Adicione as informações da obra para que outros leitores possam encontrá-la no Swap.</p></div>
+      <a href="biblioteca.html" class="btn btn-light"><i class="bi bi-collection-fill"></i> Ver minha biblioteca</a>
+    </header>
 
-    <div class="p-4 border rounded-4 shadow-lg bg-light mx-auto divFormLivro" style="max-width: 700px;">
-      <form id="formLivro" method="POST" action="backend/livros/salvar.php" enctype="multipart/form-data">
+    <section class="book-create-layout">
+      <aside class="book-create-guide">
+        <div class="guide-icon"><i class="bi bi-book-half"></i></div>
+        <h2>Prepare seu anúncio</h2>
+        <p>Fotos claras e informações completas aumentam as chances de uma boa troca.</p>
+        <ol>
+          <li><span>1</span><div><strong>Mostre a capa</strong><small>Use uma foto vertical e bem iluminada.</small></div></li>
+          <li><span>2</span><div><strong>Descreva o estado</strong><small>Informe marcas e detalhes importantes.</small></div></li>
+          <li><span>3</span><div><strong>Publique no Swap</strong><small>Seu livro ficará disponível para leitores.</small></div></li>
+        </ol>
+      </aside>
+
+    <div class="divFormLivro book-form-panel">
+      <form id="formLivro" class="book-form-grid" method="POST" action="backend/livros/salvar.php" enctype="multipart/form-data">
         <!-- Título -->
-        <div class="mb-3">
+        <div class="mb-3 book-field">
           <label for="titulo" class="form-label" style="font-weight: bold;">Título <span class="text-danger">*</span></label>
           <input type="text" class="form-control" id="titulo" name="titulo" minlength="3" maxlength="80" required>
         </div>
 
         <!-- Autor -->
-        <div class="mb-3">
+        <div class="mb-3 book-field">
           <label for="autor" class="form-label" style="font-weight: bold;">Autor <span class="text-danger">*</span></label>
           <input type="text" class="form-control" id="autor" name="autor" minlength="3" maxlength="30" required>
         </div>
 
         <!-- Foto do livro -->
-        <div class="mb-3">
+        <div class="mb-3 book-field book-field-full book-photo-field">
           <label for="foto" class="form-label" style="font-weight: bold;">Foto do livro <span class="text-danger">*</span></label>
           <input type="file" class="form-control" id="foto" name="foto" accept="image/*" required>
           <div class="form-text">A imagem deve ter proporção 3:4.</div>
         </div>
 
         <!-- Preview final -->
-        <div class="text-center mb-4 d-none" id="previewSection">
+        <div class="text-center mb-4 d-none book-field-full" id="previewSection">
           <h5>Pré-visualização final:</h5>
           <img id="previewFinal" src="#">
         </div>
 
         <!-- Editora -->
-        <div class="mb-3">
+        <div class="mb-3 book-field">
           <label for="editora" class="form-label" style="font-weight: bold;">Editora <span class="text-danger">*</span></label>
           <input type="text" class="form-control" id="editora" name="editora" minlength="3" maxlength="30" required>
         </div>
 
         <!-- Ano de publicação -->
-        <div class="mb-3">
+        <div class="mb-3 book-field">
           <label for="ano" class="form-label" style="font-weight: bold;">Ano de publicação <span class="text-danger">*</span></label>
           <input type="number" class="form-control" id="ano" name="ano" min="1500" max="2026" required>
         </div>
 
         <!-- Gênero -->
-        <div class="mb-3">
+        <div class="mb-3 book-field">
           <label for="genero" class="form-label" style="font-weight: bold;">Gênero <span class="text-danger">*</span></label>
           <select class="form-select" id="genero" name="genero" required>
             <option value="" selected disabled hidden>Selecione...</option>
@@ -131,7 +147,7 @@
         </div>
 
         <!-- Estado de conservação -->
-        <div class="mb-3">
+        <div class="mb-3 book-field">
           <label for="estado" class="form-label" style="font-weight: bold;">Estado de conservação <span class="text-danger">*</span></label>
           <select class="form-select" id="estado" name="estado" required>
             <option value="" selected disabled hidden>Selecione...</option>
@@ -144,17 +160,18 @@
         </div>
 
         <!-- Observações -->
-        <div class="mb-3">
+        <div class="mb-3 book-field book-field-full">
           <label for="observacoes" class="form-label" style="font-weight: bold;">Observações (opcional)</label>
           <textarea class="form-control" id="observacoes" name="observacoes" rows="3" placeholder="Inclua detalhes como autógrafos, páginas amareladas, etc."></textarea>
         </div>
 
         <!-- Botão -->
-        <div class="text-center">
-          <button type="submit" class="btn btn-danger px-4 w-100">Cadastrar Livro</button>
+        <div class="text-center book-field-full book-submit-row">
+          <button type="submit" class="btn btn-danger px-4"><i class="bi bi-plus-circle-fill"></i> Cadastrar livro</button>
         </div>
       </form>
     </div>
+    </section>
   </main>
 
   <br><br>

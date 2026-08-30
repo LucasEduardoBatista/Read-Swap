@@ -3,6 +3,7 @@
 <head>
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<script>if(localStorage.getItem('theme')==='dark')document.documentElement.classList.add('dark-mode')</script>
 	<title>Premium - Read & Swap | O melhor site para troca de livros por região</title>
 	<link rel="icon" href="./Imagens/icon.png">
 
@@ -37,7 +38,7 @@
             <li><a class="dropdown-item" href="livros.html">Cadastro de Livros</a></li>
           </ul>
         <li class="nav-item">
-          <a class="nav-link" href="Swaps.html">Swap</a>
+          <a class="nav-link" href="swaps.html">Swap</a>
         </li>
         <li class="nav-item"><a class="nav-link" href="matches.html">Matches</a></li>
         <li class="nav-item">
@@ -66,7 +67,7 @@
 
           <!-- body -->
 
-      <main class="mt-5">
+      <main class="mt-5 premium-page">
 
         <!-- inicio header -->
         <header>
@@ -75,12 +76,12 @@
         </header>
 
       <!--inicio container materias-->
-      <div class="container mt-5 myContainer">
+      <div class="container-fluid wide-content-page mt-5 myContainer">
 
         <!--linha de materias-->
-        <div class="row d-flex justify-content-center gap-3">
+        <div class="premium-grid">
 
-          <div class="card mx-auto card-premium" style="width: 20rem; height: 24rem;">
+          <div class="card card-premium">
             <div class="card-body">
               <img src="./Imagens/icon.png" width="10%"><b> Standard</b><br>
               <h4 class="mt-2">Versão Gratuita</h4>
@@ -92,7 +93,7 @@
             </div>
           </div>
 
-          <div class="card mx-auto card-premium position-relative" style="width: 20rem; height: 24rem;">
+          <div class="card card-premium position-relative featured-plan">
             <div class="card-body d-flex flex-column">
               <div>
                 <img src="./Imagens/icon.png" width="10%"><b> Premium</b><br>
@@ -111,7 +112,7 @@
             </div>
           </div>
 
-          <div class="card mx-auto card-premium position-relative" style="width: 20rem; height: 24rem;">
+          <div class="card card-premium position-relative">
             <div class="card-body d-flex flex-column">
               <div>
                 <img src="./Imagens/icon.png" width="10%"><b> Premium</b><br>

@@ -1,14 +1,5 @@
 <?php
-
-$conn = new mysqli(
-    "143.106.241.4",
-    "cl204224",
-    "cl*27102008",
-    "cl204224"
-);
-
-if ($conn->connect_error) {
-    die("Erro: " . $conn->connect_error);
-}
-
-echo "Conectado com sucesso!";
+require_once __DIR__ . '/includes/config.php';
+header('Content-Type: text/plain; charset=utf-8');
+echo "Conectado com sucesso!\n";
+echo 'Servidor MySQL: ' . $conn->server_info;

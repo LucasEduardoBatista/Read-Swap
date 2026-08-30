@@ -3,6 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
+  <script>if(localStorage.getItem('theme')==='dark')document.documentElement.classList.add('dark-mode')</script>
   <title>Read & Swap | Mensagens</title>
   <link rel="icon" href="./Imagens/icon.png">
 
@@ -56,43 +57,27 @@
       <h4><i class="bi bi-chat-dots-fill"></i> Mensagens</h4>
     </div>
 
-    <div class="match-item active" data-chat="chat1">
-      <img src="./Imagens/livro2.jpg" class="match-cover">
-      <div class="match-info">
-        <strong>José A.</strong>
-        <span class="last-msg"></span>
-        <span class="msg-time"></span>
-      </div>
-    </div>
+    <div id="conversationsList" class="p-3 text-muted">Carregando conversas...</div>
 
 
   </aside>
 
-  <section class="chat-panel" id="chat1">
+  <section class="chat-panel" id="chatPanel">
 
     <div class="chat-header">
-      <img src="./Imagens/livro2.jpg" class="chat-avatar">
+      <img id="chatAvatar" src="./Imagens/default-profile.jpg" class="chat-avatar">
       <div class="chat-user-info">
-        <strong>José A.</strong>
-        <span class="status online" id="online"><i class="bi bi-circle-fill"></i> Online</span>
+        <strong id="chatUserName">Selecione uma conversa</strong>
       </div>
       <div class="chat-header-actions">
         <i class="bi bi-three-dots-vertical"></i>
       </div>
     </div>
-    <!-- Área que vai pro javascript e conecta com o banco-->
-    <div class="messages">
-      <div class="message received">
-        <span class="msg-time"></span>
-      </div>
-      <div class="message sent">
-        <span class="msg-time"></span>
-      </div>
-    </div>
+    <div class="messages" id="chatMessages"><div class="text-muted text-center p-4">Escolha um match para conversar.</div></div>
 
     <div class="chat-input">
-      <input type="text" class="form-control" placeholder="Digite uma mensagem...">
-      <button class="send-btn"><i class="bi bi-send-fill"></i></button>
+      <input id="chatInput" type="text" class="form-control" maxlength="2000" placeholder="Digite uma mensagem..." disabled>
+      <button id="chatSend" class="send-btn" disabled><i class="bi bi-send-fill"></i></button>
     </div>
 
   </section>

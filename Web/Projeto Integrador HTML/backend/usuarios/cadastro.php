@@ -7,16 +7,26 @@ if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
 }
 
 $nome = trim($_POST['nome'] ?? '');
-$email = trim($_POST['email'] ?? '');
+$email = normalizarEmail($_POST['email'] ?? '');
+$confirmaEmail = normalizarEmail($_POST['confirmaEmail'] ?? '');
 $senha = $_POST['senha'] ?? '';
 $confirmaSenha = $_POST['confirmaSenha'] ?? '';
 
-if ($nome === '' || $email === '' || $senha === '' || $confirmaSenha === '') {
+if ($nome === '' || $email === '' || $confirmaEmail === '' || $senha === '' || $confirmaSenha === '') {
     responderErro('Preencha todos os campos obrigatórios.', '../../cadastro.html');
 }
 
-if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+if (!filter_var($email, FILTER_VALIDATE_EMAIL) || strlen($email) > 255) {
     responderErro('Digite um e-mail válido.', '../../cadastro.html');
+}
+if (!hash_equals($email, $confirmaEmail)) {
+    responderErro('Os endereços de e-mail não coincidem.', '../../cadastro.html');
+}
+if (tamanhoTexto($nome) < 3 || tamanhoTexto($nome) > 255) {
+    responderErro('Digite um nome válido.', '../../cadastro.html');
+}
+if (strlen($senha) < 8 || strlen($senha) > 72) {
+    responderErro('A senha deve ter entre 8 e 72 caracteres.', '../../cadastro.html');
 }
 
 if ($senha !== $confirmaSenha) {
@@ -59,11 +69,11 @@ $stmt->bind_param(
     $premium
 );
 
-if (!$stmt->execute()) {
-    responderErro(
-        'Não foi possível salvar o cadastro: ' . $stmt->error,
-        '../../cadastro.html'
-    );
+try {
+    $stmt->execute();
+} catch (mysqli_sql_exception $e) {
+    error_log('ReadSwap: falha ao cadastrar usuário: ' . $stmt->error);
+    responderErro('Não foi possível concluir o cadastro.', '../../cadastro.html');
 }
 
 $novoUsuario = [

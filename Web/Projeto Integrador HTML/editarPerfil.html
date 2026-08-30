@@ -3,6 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
+  <script>if(localStorage.getItem('theme')==='dark')document.documentElement.classList.add('dark-mode')</script>
   <title>Editar Perfil - Read & Swap | O melhor site para troca de livros por região</title>
   <link rel="icon" href="./Imagens/icon.png">
 
@@ -12,7 +13,7 @@
   <style>
     #box {
       width: 100%;
-      max-width: 920px;
+      max-width: none;
       background-color: white;
       padding: 35px;
       border-radius: 18px;
@@ -213,7 +214,7 @@
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/cropperjs@1.6.1/dist/cropper.min.css">
 </head>
 
-<body class="d-flex flex-column min-vh-100" id="top">
+<body class="d-flex flex-column min-vh-100 edit-profile-body" id="top">
 
   <!-- Navbar -->
   <nav class="navbar navbar-expand-lg bg-light fixed-top" data-bs-theme="light">
@@ -224,7 +225,6 @@
       </button>
       <div class="collapse navbar-collapse" id="navbarSupportedContent">
         <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-          <li class="nav-item"><a class="nav-link" href="index.html">Início</a></li>
           <li class="nav-item dropdown">
             <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">Livros</a>
             <ul class="dropdown-menu">
@@ -248,15 +248,15 @@
   </nav>
 
   <!-- Conteúdo -->
-  <main class="container mt-5 pt-5 pb-5 d-flex justify-content-center">
-    <div id="box" style="max-width: 920px !important;">
-      <div class="d-flex justify-content-between align-items-center mb-3">
-        <h1 class="mb-0">Editar perfil</h1>
-        <a href="perfil.html" class="btn btn-outline-danger btn-sm">Voltar</a>
+  <main class="edit-profile-page">
+    <div id="box" class="edit-profile-shell">
+      <div class="edit-profile-heading">
+        <div><span class="profile-eyebrow">Personalize sua presença</span><h1 class="mb-1">Editar perfil</h1><p>Atualize sua foto, localização e preferências literárias.</p></div>
+        <a href="perfil.html" class="btn btn-outline-danger"><i class="bi bi-arrow-left"></i> Voltar ao perfil</a>
       </div>
 
       <div class="row g-4 align-items-stretch">
-        <div class="col-12 col-lg-5">
+        <div class="col-12 col-lg-4">
           <div class="edit-preview-box h-100">
             <div class="perfil-header-edit">
               <div class="perfil-foto-container mb-3">
@@ -270,7 +270,7 @@
                   <div class="stat-icon bg-danger text-white">
                     <i class="bi bi-book"></i>
                   </div>
-                  <p class="stat-num">12</p>
+                  <p class="stat-num" id="previewTotalLivros">0</p>
                   <p class="stat-label">Livros</p>
                 </div>
 
@@ -278,39 +278,46 @@
                   <div class="stat-icon bg-success text-white">
                     <i class="bi bi-arrow-left-right"></i>
                   </div>
-                  <p class="stat-num">4</p>
+                  <p class="stat-num" id="previewTotalTrocas">0</p>
                   <p class="stat-label">Trocas</p>
                 </div>
               </div>
             </div>
 
-            <div class="mt-4 text-center">
-              <p class="mb-1"><b>Assinatura:</b> <span class="text-success">Ativa (Premium)</span></p>
+            <div class="edit-preview-footer">
+              <span>Visualização em tempo real</span>
+              <p class="mb-0" id="previewAssinatura"><i class="bi bi-person-check-fill"></i> Plano gratuito</p>
             </div>
           </div>
         </div>
 
-        <div class="col-12 col-lg-7">
-          <div class="campos-claros">
+        <div class="col-12 col-lg-8">
+          <div class="campos-claros edit-form-panel">
             <form id="formEditarPerfil" method="POST" action="backend/perfil/atualizar.php" enctype="multipart/form-data" novalidate>
-              <div class="mb-3">
-                <label for="fotoPerfil" class="form-label">Foto de perfil</label>
-                <input class="form-control" type="file" id="fotoPerfil" name="fotoPerfil" accept="image/*">
-                <div class="form-text">A imagem só muda na pré-visualização desta página.</div>
+              <div class="edit-section-heading"><span><i class="bi bi-camera-fill"></i></span><div><h2>Foto de perfil</h2><p>Escolha uma imagem clara que represente você.</p></div></div>
+              <label for="fotoPerfil" class="profile-upload-area">
+                <i class="bi bi-cloud-arrow-up-fill"></i>
+                <span><strong>Selecionar nova foto</strong><small>PNG ou JPG; você poderá ajustar o corte.</small></span>
+                <span class="btn btn-outline-danger btn-sm">Escolher arquivo</span>
+              </label>
+              <input class="visually-hidden" type="file" id="fotoPerfil" name="fotoPerfil" accept="image/*">
+
+              <div class="edit-section-divider"></div>
+              <div class="edit-section-heading"><span><i class="bi bi-person-vcard-fill"></i></span><div><h2>Informações pessoais</h2><p>Esses dados serão exibidos no seu perfil público.</p></div></div>
+              <div class="row g-3">
+                <div class="col-12 col-md-6">
+                  <label for="nome" class="form-label">Nome completo</label>
+                  <div class="input-with-icon"><i class="bi bi-person-fill"></i><input type="text" class="form-control" id="nome" name="nome" maxlength="50" value="Ronaldo El Pepe" required></div>
+                </div>
+                <div class="col-12 col-md-6">
+                  <label for="cidade" class="form-label">Cidade / Estado</label>
+                  <div class="input-with-icon"><i class="bi bi-geo-alt-fill"></i><input type="text" class="form-control" id="cidade" name="cidade" maxlength="60" value="Limeira - SP" required></div>
+                </div>
               </div>
 
+              <div class="edit-section-divider"></div>
+              <div class="edit-section-heading"><span><i class="bi bi-bookmarks-fill"></i></span><div><h2>Preferências literárias</h2><p>Selecione os gêneros que mais combinam com suas leituras.</p></div></div>
               <div class="mb-3">
-                <label for="nome" class="form-label">Nome completo</label>
-                <input type="text" class="form-control" id="nome" name="nome" maxlength="50" value="Ronaldo El Pepe" required>
-              </div>
-
-              <div class="mb-3">
-                <label for="cidade" class="form-label">Cidade / Estado</label>
-                <input type="text" class="form-control" id="cidade" name="cidade" maxlength="60" value="Limeira - SP" required>
-              </div>
-
-              <div class="mb-4">
-                <label class="form-label">Gêneros favoritos</label>
                 <div class="generos-box">
                   <div class="d-flex flex-wrap gap-2" id="generosSelecao">
                     <label class="genero-chip selecionado"><input type="checkbox" name="generos[]" value="Fantasia" checked>Fantasia</label>
@@ -329,14 +336,14 @@
                 </div>
               </div>
 
-              <div class="mb-4">
-                <label class="form-label">Prévia dos gêneros</label>
+              <div class="selected-genres-preview mb-4">
+                <span class="form-label mb-0">Selecionados</span>
                 <div id="previewGeneros" class="generos-preview"></div>
               </div>
 
-              <div class="d-flex gap-2 flex-wrap">
-                <button type="submit" class="btn acao-btn px-4">Salvar alterações</button>
-                <button type="button" id="btnRecarregar" class="btn btn-outline-secondary px-4"><a href="perfil.html" style="color: grey;">Cancelar</a></button>
+              <div class="edit-form-actions">
+                <button type="submit" class="btn acao-btn px-4"><i class="bi bi-check2-circle"></i> Salvar alterações</button>
+                <a href="perfil.html" id="btnRecarregar" class="btn btn-outline-secondary px-4">Cancelar</a>
               </div>
             </form>
           </div>
@@ -401,6 +408,9 @@
     const previewCidade = document.getElementById('previewCidade');
     const previewFoto = document.getElementById('previewFoto');
     const previewGeneros = document.getElementById('previewGeneros');
+    const previewTotalLivros = document.getElementById('previewTotalLivros');
+    const previewTotalTrocas = document.getElementById('previewTotalTrocas');
+    const previewAssinatura = document.getElementById('previewAssinatura');
     const formEditarPerfil = document.getElementById('formEditarPerfil');
     const btnRecarregar = document.getElementById('btnRecarregar');
     const generoChips = document.querySelectorAll('#generosSelecao .genero-chip');
@@ -424,6 +434,13 @@
         cidadeInput.value = dados.cidade || '';
         previewNome.textContent = dados.nome || 'Seu nome';
         previewCidade.textContent = dados.cidade || 'Sua cidade';
+        if (previewTotalLivros) previewTotalLivros.textContent = Number(dados.totalLivros || 0);
+        if (previewTotalTrocas) previewTotalTrocas.textContent = Number(dados.totalTrocas || 0);
+        if (previewAssinatura) {
+          previewAssinatura.innerHTML = Number(dados.premium) === 1
+            ? '<i class="bi bi-patch-check-fill"></i> Plano Premium ativo'
+            : '<i class="bi bi-person-check-fill"></i> Plano gratuito';
+        }
 
         if (dados.foto) {
           previewFoto.src = dados.foto;
@@ -550,10 +567,6 @@
         event.preventDefault();
         event.stopPropagation();
       }
-    });
-
-    btnRecarregar.addEventListener('click', function () {
-      window.location.reload();
     });
 
     atualizarSelecionados();

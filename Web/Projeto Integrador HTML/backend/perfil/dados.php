@@ -17,6 +17,17 @@ if (!$usuario) {
     exit;
 }
 
+$usuarioId = (int)$usuario['idPerfis'];
+$stmt = $conn->prepare('SELECT COUNT(*) AS total, COALESCE(SUM(Status = 1), 0) AS trocados FROM LivrosADMs WHERE IdDono = ?');
+$stmt->bind_param('i', $usuarioId);
+$stmt->execute();
+$resumoLivros = $stmt->get_result()->fetch_assoc() ?: ['total' => 0, 'trocados' => 0];
+
+$stmt = $conn->prepare('SELECT COUNT(*) AS total FROM SwapsADMs WHERE idUsuario = ? AND Gostou = 1');
+$stmt->bind_param('i', $usuarioId);
+$stmt->execute();
+$resumoMatches = $stmt->get_result()->fetch_assoc() ?: ['total' => 0];
+
 $foto = !empty($usuario['Foto']) ? blobParaDataUri($usuario['Foto'], 'image/png') : './Imagens/default-profile.jpg';
 $generos = [];
 if (!empty($usuario['Generos'])) {
@@ -35,6 +46,9 @@ echo json_encode([
     'status' => (int)($usuario['Status'] ?? 0),
     'generos' => $generos,
     'foto' => $foto,
+    'totalLivros' => (int)$resumoLivros['total'],
+    'totalTrocas' => (int)$resumoLivros['trocados'],
+    'totalMatches' => (int)$resumoMatches['total'],
 ], JSON_UNESCAPED_UNICODE);
 exit;
 ?>

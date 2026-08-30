@@ -8,17 +8,15 @@
    ```
    ou use o Apache do XAMPP.
 3. Importe `backend/database.sql` no banco MySQL.
-4. Ajuste a conexão em `backend/includes/config.php` se necessário.
-
-## Credenciais atuais do banco
-- Host: `143.106.241.4`
-- Usuário: `cl204224`
-- Banco: `cl204224`
+   Em um banco que já possui as tabelas antigas, execute também `backend/migration_swaps_conversas.sql` uma única vez.
+   Para consolidar as mensagens antigas em JSON, execute `php backend/migrar_conversas_json.php`. O script mantém `conversasADMs_backup_json` como backup.
+4. Copie `backend/includes/config.local.example.php` para `backend/includes/config.local.php` e preencha as credenciais. Esse arquivo é ignorado pelo Git. Como alternativa, use as variáveis `READSWAP_DB_HOST`, `READSWAP_DB_USER`, `READSWAP_DB_PASSWORD`, `READSWAP_DB_NAME` e `READSWAP_DB_PORT`.
 
 ## Tabelas usadas
 - `PerfisADMs`
 - `LivrosADMs`
 - `conversasADMs`
+- `SwapsADMs`
 - `ReadSwapADMs`
 
 ## Observações
@@ -26,6 +24,7 @@
 - `Status = 1` significa conta inativa.
 - `Statuscvs = 0` significa conversa desbloqueada.
 - `Statuscvs = 1` significa conversa bloqueada.
+- `conversasADMs` possui uma linha por par de usuários; `conteudo` guarda um array JSON com remetente, texto e data de cada mensagem.
 
 ## Arquivos principais
 - `backend/usuarios/cadastro.php`

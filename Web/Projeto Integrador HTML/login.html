@@ -3,6 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
+  <script>if(localStorage.getItem('theme')==='dark')document.documentElement.classList.add('dark-mode')</script>
   <title>Read & Swap | O melhor site para troca de livros por região</title>
   <link rel="icon" href="./Imagens/icon.png">
 
@@ -68,21 +69,22 @@
     <div id="box">
       <h1 style="text-align: center;">Entrar</h1>
       <form id="needs-validation" method="POST" action="backend/usuarios/login.php" novalidate>
+        <input type="hidden" id="retornoLogin" name="retorno" value="index.html">
         <!-- Campo de email com feedback -->
         <div class="mb-3">
-          <input id="login" type="email" class="form-control" placeholder="E-mail" name="login" required style="margin-top: 10%;">
+          <input id="login" type="email" class="form-control" placeholder="E-mail" name="login" required maxlength="255" autocomplete="email" style="margin-top: 10%;">
           <div class="invalid-feedback">
             Insira um e-mail válido.
           </div>
         </div>
 
         <div class="input-group has-validation mb-3">
-          <input id="senha" name="senha" type="password" class="form-control" minlength="6" maxlength="50" placeholder="Senha" required>
+          <input id="senha" name="senha" type="password" class="form-control" maxlength="72" placeholder="Senha" required autocomplete="current-password">
           <button class="btn btn-outline-secondary" type="button" id="toggleSenha">
             <i class="bi bi-eye" id="iconeSenha"></i>
           </button>
           <div class="invalid-feedback">
-            A senha deve ter entre 6 e 50 caracteres.
+            Digite sua senha.
           </div>
         </div>
 

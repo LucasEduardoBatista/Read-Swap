@@ -3,6 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
+  <script>if(localStorage.getItem('theme')==='dark')document.documentElement.classList.add('dark-mode')</script>
   <title>Read & Swap | O melhor site para troca de livros por região</title>
   <link rel="icon" href="./Imagens/icon.png">
 
@@ -22,7 +23,7 @@
 </head>
 
 
-<body class="d-flex flex-column min-vh-100" id="top">
+<body class="d-flex flex-column min-vh-100 library-page-body" id="top">
 
   <!--inicio navbar-->
   <nav class="navbar navbar-expand-lg bg-light fixed-top" data-bs-theme="light">
@@ -61,17 +62,18 @@
   </nav>
 
   <!-- body -->
-<main class="container py-5 mt-5">
-  <div class="d-flex justify-content-between align-items-center mb-4">
-    <h1 class="fw-bold">Meus Livros</h1>
-    <a href="livros.html" class="btn btn-danger btn-sm px-3">
-      <i class="bi bi-plus-lg"></i> Adicionar Livro
-    </a>
-  </div>
+<main class="library-page">
+  <header class="library-hero">
+    <div><span class="profile-eyebrow">Sua estante digital</span><h1>Meus livros</h1><p>Organize os títulos cadastrados e acompanhe quais estão disponíveis para troca.</p></div>
+    <a href="livros.html" class="btn btn-light"><i class="bi bi-plus-lg"></i> Adicionar livro</a>
+  </header>
 
-  <div class="row g-4" id="bibliotecaContainer">
- 
-  </div>
+  <section class="library-content">
+    <div class="library-content-heading"><div><h2>Sua coleção</h2><p>Todos os livros vinculados à sua conta.</p></div><span class="library-view-label"><i class="bi bi-grid-fill"></i> Biblioteca</span></div>
+    <div class="row g-4" id="bibliotecaContainer">
+
+    </div>
+  </section>
 </main>
 
   <!-- Footer -->

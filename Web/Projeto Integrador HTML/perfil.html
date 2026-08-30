@@ -3,6 +3,7 @@
 <head>
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<script>if(localStorage.getItem('theme')==='dark')document.documentElement.classList.add('dark-mode')</script>
 	<title>Read & Swap | O melhor site para troca de livros por região</title>
 	<link rel="icon" href="./Imagens/icon.png">
 
@@ -64,63 +65,54 @@
   </div>
   </nav>
 
-          <!-- body -->
-	   <main class="mt-5 d-flex flex-column align-items-center justify-content-center" style="min-height: 80vh;">
-	    <div id="box">
-         <h1 style="text-align: center;">Meu perfil</h1>
-         <div class="d-flex justify-content-between w-100 mb-2">
-        <button class="btn btn-light editarPerfil" style="border-radius: 100%;"><a href="editarPerfil.html" class="refEditarPerfil"><i class="bi bi-person-fill-gear" style="font-size: 25px; color: black;"></i></a></button>
-        <button class="btn btn-light configuracoes" style="border-radius: 100%;"><a href="configuracoes.html" class="refEditarPerfil"><i class="bi bi-gear" style="font-size: 25px; color: black;"></i></a></button>
+  <main class="profile-page">
+    <section class="profile-hero" aria-labelledby="profileName">
+      <div class="profile-hero-pattern" aria-hidden="true"></div>
+      <div class="profile-identity perfil-header">
+        <div class="perfil-foto-container"><img src="./Imagens/default-profile.jpg" class="perfil-foto" alt="Foto do perfil"></div>
+        <div class="profile-identity-copy">
+          <span class="profile-eyebrow">Meu perfil</span>
+          <h1 id="profileName"></h1>
+          <p class="text-muted"><i class="bi bi-geo-alt-fill"></i> Cidade não informada</p>
+        </div>
+        <div class="profile-actions">
+          <a href="editarPerfil.html" class="btn btn-light editarPerfil"><i class="bi bi-pencil-square"></i> Editar perfil</a>
+          <a href="configuracoes.html" class="btn btn-outline-light configuracoes"><i class="bi bi-gear-fill"></i> Configurações</a>
+        </div>
       </div>
-<div class="perfil-header">
-  
-  <!-- Foto e nome -->
-  <div class="perfil-foto-container">
-    <img src="./Imagens/default-profile.jpg" class="perfil-foto">
-  </div>
+    </section>
 
-  <h3 class="mt-3 fw-bold"></h3>
-  <p class="text-muted"><i class="bi bi-geo-alt"></i></p>
-
-  <!-- Estatísticas -->
-  <div class="perfil-stats d-flex justify-content-center gap-3 mt-3">
-
-    <div class="stat-item">
-      <div class="stat-icon bg-danger text-white">
-        <i class="bi bi-book"></i>
-      </div>
-      <p class="stat-num">12</p>
-      <p class="stat-label">Livros</p>
-    </div>
-
-    <div class="stat-item">
-      <div class="stat-icon bg-success text-white">
-        <i class="bi bi-arrow-left-right"></i>
-      </div>
-      <p class="stat-num">4</p>
-      <p class="stat-label">Trocas</p>
-    </div>
-
-  </div>
-  <br>
-    <div>
-      <p><b>Assinatura:</b> <span id="statusAssinatura"></span></p>
-
-      <div class="generos-favoritos">
-        <p class="titulo-generos"><b>Gêneros favoritos:</b></p>
-        <div id="listaGeneros"></div>
+    <section class="profile-content" aria-label="Resumo do perfil">
+      <div class="profile-stats-grid">
+        <article class="profile-stat-card"><div class="stat-icon stat-books"><i class="bi bi-journal-bookmark-fill"></i></div><div><strong id="totalLivros">0</strong><span>livros cadastrados</span></div></article>
+        <article class="profile-stat-card"><div class="stat-icon stat-swaps"><i class="bi bi-arrow-left-right"></i></div><div><strong id="totalTrocas">0</strong><span>livros trocados</span></div></article>
+        <article class="profile-stat-card"><div class="stat-icon stat-matches"><i class="bi bi-heart-fill"></i></div><div><strong id="totalMatches">0</strong><span>interesses enviados</span></div></article>
       </div>
 
-      <button id="botaoPremium" class="btn btn-danger" style="display: none;"><b>Torne-se Premium</b></button>
-      <p>Procurando sua biblioteca? <a href="biblioteca.html">Clique aqui!</a></p>
-    </div>
+      <div class="profile-panels-grid">
+        <article class="profile-panel membership-panel">
+          <div class="profile-panel-heading"><div class="panel-icon"><i class="bi bi-stars"></i></div><div><span class="profile-eyebrow">Sua conta</span><h2>Assinatura</h2></div></div>
+          <p id="statusAssinatura" class="membership-status"></p>
+          <p class="panel-description">Aproveite os recursos do Read & Swap e encontre sua próxima leitura.</p>
+          <button id="botaoPremium" class="btn btn-danger" style="display:none"><i class="bi bi-gem"></i> Conhecer o Premium</button>
+        </article>
+        <article class="profile-panel genres-panel">
+          <div class="profile-panel-heading"><div class="panel-icon"><i class="bi bi-bookmarks-fill"></i></div><div><span class="profile-eyebrow">Preferências</span><h2>Gêneros favoritos</h2></div></div>
+          <div id="listaGeneros" class="profile-genres-list"></div>
+          <a href="editarPerfil.html" class="panel-link">Atualizar preferências <i class="bi bi-arrow-right"></i></a>
+        </article>
+      </div>
 
-</div>
-		</div>
-	   </main>
-
-
-      <br><br>
+      <section class="profile-quick-links" aria-label="Acessos rápidos">
+        <div><span class="profile-eyebrow">Continue explorando</span><h2>Sua jornada literária</h2></div>
+        <div class="quick-links-grid">
+          <a href="biblioteca.html" class="quick-link"><i class="bi bi-collection-fill"></i><span><strong>Minha biblioteca</strong><small>Gerencie seus livros</small></span><i class="bi bi-chevron-right"></i></a>
+          <a href="swaps.html" class="quick-link"><i class="bi bi-arrow-through-heart-fill"></i><span><strong>Descobrir livros</strong><small>Encontre sua próxima troca</small></span><i class="bi bi-chevron-right"></i></a>
+          <a href="matches.html" class="quick-link"><i class="bi bi-chat-heart-fill"></i><span><strong>Minhas conversas</strong><small>Fale com outros leitores</small></span><i class="bi bi-chevron-right"></i></a>
+        </div>
+      </section>
+    </section>
+  </main>
 
 
           <!--inicio footer-->
@@ -147,12 +139,6 @@
             </div>
           </footer>
 
-          </div>
-
-        </div>
-
-      </div>
-
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
 
 <script src="javascript.js"></script>
@@ -160,11 +146,14 @@
 <script>
 document.addEventListener('DOMContentLoaded', async () => {
   const fotoPerfil = document.querySelector('.perfil-foto');
-  const nomePerfil = document.querySelector('.perfil-header h3');
+  const nomePerfil = document.getElementById('profileName');
   const cidadePerfil = document.querySelector('.perfil-header p.text-muted');
   const statusEl = document.getElementById('statusAssinatura');
   const botaoPremium = document.getElementById('botaoPremium');
   const listaGeneros = document.getElementById('listaGeneros');
+  const totalLivros = document.getElementById('totalLivros');
+  const totalTrocas = document.getElementById('totalTrocas');
+  const totalMatches = document.getElementById('totalMatches');
 
   try {
     const resposta = await fetch('backend/perfil/dados.php', { headers: { 'Accept': 'application/json' } });
@@ -194,15 +183,19 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     if (statusEl) {
       if (Number(dados.premium) === 1) {
-        statusEl.textContent = 'Ativa (Usuário Premium)';
-        statusEl.style.color = 'green';
+        statusEl.innerHTML = '<i class="bi bi-patch-check-fill"></i> Plano Premium ativo';
+        statusEl.className = 'membership-status is-premium';
         if (botaoPremium) botaoPremium.style.display = 'none';
       } else {
-        statusEl.textContent = 'Nenhuma assinatura ativa';
-        statusEl.style.color = 'red';
+        statusEl.innerHTML = '<i class="bi bi-person-check-fill"></i> Plano gratuito';
+        statusEl.className = 'membership-status is-free';
         if (botaoPremium) botaoPremium.style.display = 'inline-block';
       }
     }
+
+    if (totalLivros) totalLivros.textContent = Number(dados.totalLivros || 0);
+    if (totalTrocas) totalTrocas.textContent = Number(dados.totalTrocas || 0);
+    if (totalMatches) totalMatches.textContent = Number(dados.totalMatches || 0);
 
     if (botaoPremium) {
       botaoPremium.addEventListener('click', () => {
@@ -231,8 +224,8 @@ document.addEventListener('DOMContentLoaded', async () => {
   } catch (erro) {
     console.error(erro);
     if (statusEl) {
-      statusEl.textContent = 'Nenhuma assinatura ativa';
-      statusEl.style.color = 'red';
+      statusEl.innerHTML = '<i class="bi bi-exclamation-circle-fill"></i> Status indisponível';
+      statusEl.className = 'membership-status is-free';
     }
   }
 });
