@@ -325,7 +325,7 @@ class _PerfilState extends State<Perfil> {
                 const SizedBox(height: 12),
 
                 (usuario?.generosFavoritos == null ||
-                        usuario!.generosFavoritos!.isEmpty)
+                        usuario!.generosFavoritos.isEmpty)
                     ? Container(
                         width: double.infinity,
                         padding: const EdgeInsets.symmetric(

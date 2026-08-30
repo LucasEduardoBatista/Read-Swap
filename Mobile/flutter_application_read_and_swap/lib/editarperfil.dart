@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_application_read_and_swap/perfil.dart';
 import 'dados.dart';
 
 class Editarperfil extends StatefulWidget {
@@ -387,10 +388,25 @@ class _EditarperfilState extends State<Editarperfil> {
       backgroundColor: fundo,
 
       appBar: AppBar(
-        backgroundColor: Colors.transparent,
+        backgroundColor:
+            Colors.transparent,
         elevation: 0,
 
-        leading: botaoVoltar(),
+        leading: IconButton(
+          icon: const Icon(
+            Icons.arrow_back,
+            color: Color(0xFFFF6B6B),
+          ),
+          onPressed: () {
+            Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(
+                builder: (_) =>
+                    Perfil(),
+              ),
+            );
+          },
+        ),
 
         title: const Text(
           "Editar perfil",
