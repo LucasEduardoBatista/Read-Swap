@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
+import 'api.dart';
 import 'biblioteca.dart';
 import 'dados.dart';
+import 'image_data.dart';
+import 'app_navbar.dart';
 
 class Cadastrolivro extends StatefulWidget {
   final int? indice;
@@ -15,6 +19,18 @@ class Cadastrolivro extends StatefulWidget {
 }
 
 class _CadastrolivroState extends State<Cadastrolivro> {
+  static const List<String> generosDisponiveis = [
+    "Fantasia",
+    "Aventura",
+    "Romance",
+    "Jovem Adulto",
+    "Ficção Científica",
+    "Terror",
+    "Suspense",
+    "Literatura Clássica",
+    "Mistério",
+  ];
+
   TextEditingController nomeController = TextEditingController();
   TextEditingController anoController = TextEditingController();
   TextEditingController autorController = TextEditingController();
@@ -23,6 +39,8 @@ class _CadastrolivroState extends State<Cadastrolivro> {
   TextEditingController observacoesController = TextEditingController();
 
   String generoSelecionado = "Fantasia";
+  String? fotoLivro;
+  bool salvando = false;
 
   bool editando = false;
 
@@ -30,7 +48,9 @@ class _CadastrolivroState extends State<Cadastrolivro> {
   void initState() {
     super.initState();
 
-    if (widget.indice != null) {
+    if (widget.indice != null &&
+        widget.indice! >= 0 &&
+        widget.indice! < DadosApp.livros.length) {
       editando = true;
 
       Livro livro = DadosApp.livros[widget.indice!];
@@ -41,8 +61,34 @@ class _CadastrolivroState extends State<Cadastrolivro> {
       conservacaoController.text = livro.conservacao;
       editoraController.text = livro.editora;
       observacoesController.text = livro.observacoes;
-      generoSelecionado = livro.genero;
+      generoSelecionado = livro.genero.trim().isEmpty
+          ? generosDisponiveis.first
+          : livro.genero.trim();
+      fotoLivro = livro.foto;
     }
+  }
+
+  List<String> get generosDoFormulario {
+    final generos = List<String>.from(generosDisponiveis);
+    final atual = generoSelecionado.trim();
+    if (atual.isNotEmpty && !generos.contains(atual)) generos.insert(0, atual);
+    return generos;
+  }
+
+  Future<void> selecionarFoto() async {
+    final arquivo = await ImagePicker().pickImage(
+      source: ImageSource.gallery,
+      imageQuality: 80,
+      maxWidth: 1600,
+      maxHeight: 1600,
+    );
+    if (arquivo == null) return;
+    final bytes = await arquivo.readAsBytes();
+    if (!mounted) return;
+    setState(() => fotoLivro = imageDataUri(
+      bytes,
+      mimeType: arquivo.mimeType ?? 'image/jpeg',
+    ));
   }
 
   Widget campo(
@@ -88,6 +134,11 @@ class _CadastrolivroState extends State<Cadastrolivro> {
 
   @override
   Widget build(BuildContext context) {
+    final generos = generosDoFormulario.toSet().toList(growable: false);
+    final generoAtual = generos.contains(generoSelecionado)
+        ? generoSelecionado
+        : null;
+
     return Scaffold(
       backgroundColor:
           const Color.fromARGB(
@@ -148,7 +199,9 @@ class _CadastrolivroState extends State<Cadastrolivro> {
           child: Column(
             children: [
 
-              Container(
+              GestureDetector(
+                onTap: selecionarFoto,
+                child: Container(
                 width: double.infinity,
                 height: 180,
                 decoration: BoxDecoration(
@@ -166,7 +219,10 @@ class _CadastrolivroState extends State<Cadastrolivro> {
                     width: 2,
                   ),
                 ),
-                child: const Column(
+                clipBehavior: Clip.antiAlias,
+                child: imageProviderFromData(fotoLivro) != null
+                  ? Image(image: imageProviderFromData(fotoLivro)!, fit: BoxFit.cover)
+                  : const Column(
                   mainAxisAlignment:
                       MainAxisAlignment
                           .center,
@@ -191,6 +247,7 @@ class _CadastrolivroState extends State<Cadastrolivro> {
                       ),
                     ),
                   ],
+                ),
                 ),
               ),
 
@@ -244,9 +301,9 @@ class _CadastrolivroState extends State<Cadastrolivro> {
                 linhas: 4,
               ),
 
-              DropdownButtonFormField(
-                value:
-                    generoSelecionado,
+              DropdownButtonFormField<String>(
+                key: ValueKey(generoAtual),
+                initialValue: generoAtual,
                 decoration:
                     InputDecoration(
                   labelText:
@@ -259,18 +316,8 @@ class _CadastrolivroState extends State<Cadastrolivro> {
                         ),
                   ),
                 ),
-                items: [
-                  "Fantasia",
-                  "Aventura",
-                  "Romance",
-                  "Jovem Adulto",
-                  "Ficção Científica",
-                  "Terror",
-                  "Suspense",
-                  "Literatura Clássica",
-                  "Mistério",
-                ].map((genero) {
-                  return DropdownMenuItem(
+                items: generos.map((genero) {
+                  return DropdownMenuItem<String>(
                     value: genero,
                     child:
                         Text(genero),
@@ -327,7 +374,7 @@ class _CadastrolivroState extends State<Cadastrolivro> {
                           ),
                     ),
                   ),
-                  onPressed: () {
+                  onPressed: salvando ? null : () async {
                   if (nomeController.text.isEmpty ||
                       anoController.text.isEmpty ||
                       autorController.text.isEmpty ||
@@ -347,6 +394,7 @@ class _CadastrolivroState extends State<Cadastrolivro> {
                   }
 
                   Livro livro = Livro(
+                    id: editando ? DadosApp.livros[widget.indice!].id : null,
                     nome: nomeController.text,
                     autor: autorController.text,
                     editora: editoraController.text,
@@ -354,18 +402,22 @@ class _CadastrolivroState extends State<Cadastrolivro> {
                     conservacao: conservacaoController.text,
                     observacoes: observacoesController.text,
                     genero: generoSelecionado,
+                    foto: fotoLivro,
                   );
 
-                  if (editando) {
-
-                    DadosApp.livros[widget.indice!] = livro;
-
-                  } else {
-
-                    DadosApp.livros.add(livro);
-
+                  setState(() => salvando = true);
+                  try {
+                    await Api.salvarLivro(livro);
+                  } catch (erro) {
+                    if (!mounted) return;
+                    setState(() => salvando = false);
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(content: Text('Não foi possível salvar: $erro')),
+                    );
+                    return;
                   }
 
+                  if (!mounted) return;
                   Navigator.pushReplacement(
                     context,
                     MaterialPageRoute(
@@ -379,6 +431,7 @@ class _CadastrolivroState extends State<Cadastrolivro> {
           ),
         ),
       ),
+      bottomNavigationBar: const AppNavbar(selectedIndex: 2),
     );
   }
 }

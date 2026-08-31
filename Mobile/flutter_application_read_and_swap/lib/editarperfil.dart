@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_application_read_and_swap/perfil.dart';
+import 'package:image_picker/image_picker.dart';
+import 'api.dart';
 import 'dados.dart';
+import 'image_data.dart';
+import 'app_navbar.dart';
 
 class Editarperfil extends StatefulWidget {
   const Editarperfil({super.key});
@@ -65,7 +69,25 @@ class _EditarperfilState extends State<Editarperfil> {
   // SALVAR PERFIL
   // ==========================================================
 
-  void salvarPerfil() {
+  bool salvando = false;
+
+  Future<void> selecionarFoto() async {
+    final arquivo = await ImagePicker().pickImage(
+      source: ImageSource.gallery,
+      imageQuality: 80,
+      maxWidth: 1200,
+      maxHeight: 1200,
+    );
+    if (arquivo == null) return;
+    final bytes = await arquivo.readAsBytes();
+    if (!mounted) return;
+    setState(() => fotoPerfil = imageDataUri(
+      bytes,
+      mimeType: arquivo.mimeType ?? 'image/jpeg',
+    ));
+  }
+
+  Future<void> salvarPerfil() async {
     final nome = nomeController.text.trim();
 
     if (nome.isEmpty) {
@@ -79,14 +101,26 @@ class _EditarperfilState extends State<Editarperfil> {
     }
 
     final usuario = DadosApp.usuarioLogado;
+    if (usuario == null || salvando) return;
+    setState(() => salvando = true);
 
-    if (usuario != null) {
-      usuario.nome = nome;
-      usuario.fotoPerfil = fotoPerfil;
-
-      usuario.generosFavoritos =
-          List<String>.from(generosSelecionados);
+    try {
+      await Api.atualizarPerfil(
+        nome,
+        usuario.cidade,
+        generosSelecionados,
+        foto: fotoPerfil,
+      );
+    } catch (erro) {
+      if (!mounted) return;
+      setState(() => salvando = false);
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Não foi possível salvar: $erro')),
+      );
+      return;
     }
+
+    if (!mounted) return;
 
     ScaffoldMessenger.of(context).showSnackBar(
       const SnackBar(
@@ -157,8 +191,7 @@ class _EditarperfilState extends State<Editarperfil> {
     return Column(
       children: [
         GestureDetector(
-          // Foto desativada temporariamente
-          onTap: () {},
+          onTap: selecionarFoto,
 
           child: Stack(
             clipBehavior: Clip.none,
@@ -185,13 +218,11 @@ class _EditarperfilState extends State<Editarperfil> {
                   ],
                 ),
 
-                child: const CircleAvatar(
+                child: CircleAvatar(
                   radius: 65,
-                  backgroundColor: Color(0xFFFFF5EC),
-
-                  backgroundImage: AssetImage(
-                    "assets/images/pfp.jfif",
-                  ),
+                  backgroundColor: const Color(0xFFFFF5EC),
+                  backgroundImage: imageProviderFromData(fotoPerfil) ??
+                      const AssetImage("assets/images/pfp.jfif"),
                 ),
               ),
 
@@ -232,7 +263,7 @@ class _EditarperfilState extends State<Editarperfil> {
         const SizedBox(height: 12),
 
         Text(
-          "Alteração de foto desativada",
+          "Toque para alterar a foto",
           style: TextStyle(
             color: marrom,
             fontWeight: FontWeight.w600,
@@ -527,7 +558,7 @@ class _EditarperfilState extends State<Editarperfil> {
                 height: 52,
 
                 child: ElevatedButton(
-                  onPressed: salvarPerfil,
+                  onPressed: salvando ? null : salvarPerfil,
 
                   style:
                       ElevatedButton.styleFrom(
@@ -558,6 +589,7 @@ class _EditarperfilState extends State<Editarperfil> {
           ),
         ),
       ),
+      bottomNavigationBar: const AppNavbar(selectedIndex: 2),
     );
   }
 }

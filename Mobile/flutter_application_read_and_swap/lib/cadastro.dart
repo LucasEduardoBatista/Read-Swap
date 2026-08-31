@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'login.dart';
 import 'dados.dart';
+import 'api.dart';
+import 'mainpage.dart';
 
 class Cadastro extends StatefulWidget {
   Cadastro({super.key});
@@ -167,7 +169,7 @@ class _CadastroState extends State<Cadastro> {
                             style: ElevatedButton.styleFrom(
                               backgroundColor: Color(0xFFFF6B6B),
                             ),
-                            onPressed: () {
+                            onPressed: () async {
                               if (nomeController.text.isEmpty ||
                                   emailController.text.isEmpty ||
                                   senhaController.text.isEmpty) {
@@ -203,6 +205,18 @@ class _CadastroState extends State<Cadastro> {
                                 return;
                               }
 
+                              try {
+                                await Api.cadastrar(nomeController.text, emailController.text, senhaController.text);
+                                if (!context.mounted) return;
+                                Navigator.pushReplacement(context, MaterialPageRoute(builder: (_) => Mainpage()));
+                                return;
+                              } catch (e) {
+                                if (!context.mounted) return;
+                                ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(e.toString())));
+                                return;
+                              }
+
+                              // Legacy in-memory fallback kept unreachable for source compatibility.
                               for (var usuario in DadosApp.usuarios) {
                                 if (usuario.email == emailController.text) {
                                   ScaffoldMessenger.of(context).showSnackBar(

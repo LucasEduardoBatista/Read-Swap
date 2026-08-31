@@ -2,6 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_application_read_and_swap/cadastrolivro.dart';
 import 'package:flutter_application_read_and_swap/dados.dart';
 import 'package:flutter_application_read_and_swap/perfil.dart';
+import 'package:flutter_application_read_and_swap/api.dart';
+import 'image_data.dart';
+import 'app_navbar.dart';
 
 class Biblioteca extends StatefulWidget {
   const Biblioteca({super.key});
@@ -11,6 +14,24 @@ class Biblioteca extends StatefulWidget {
 }
 
 class _BibliotecaState extends State<Biblioteca> {
+
+  bool carregando = true;
+
+  @override
+  void initState() {
+    super.initState();
+    Api.listarLivros().then((_) { if (mounted) setState(() => carregando = false); })
+      .catchError((_) { if (mounted) setState(() => carregando = false); });
+  }
+
+  Future<void> _atualizarLivros() async {
+    setState(() => carregando = true);
+    try {
+      await Api.listarLivros();
+    } finally {
+      if (mounted) setState(() => carregando = false);
+    }
+  }
 
   TextEditingController buscaController = TextEditingController();
 
@@ -116,8 +137,9 @@ class _BibliotecaState extends State<Biblioteca> {
           ),
 
           Expanded(
-            child:
-                livrosFiltrados
+            child: carregando
+                ? const Center(child: CircularProgressIndicator())
+                : livrosFiltrados
                         .isEmpty
                     ? const Center(
                         child: Text(
@@ -201,13 +223,10 @@ class _BibliotecaState extends State<Biblioteca> {
                                         ),
                                       ),
 
-                                      child:
-                                          const Icon(
-                                        Icons
-                                            .menu_book,
-                                        size:
-                                            40,
-                                      ),
+                                      clipBehavior: Clip.antiAlias,
+                                      child: imageProviderFromData(livro.foto) != null
+                                          ? Image(image: imageProviderFromData(livro.foto)!, fit: BoxFit.cover)
+                                          : const Icon(Icons.menu_book, size: 40),
                                     ),
 
                                     const SizedBox(
@@ -432,13 +451,15 @@ class _BibliotecaState extends State<Biblioteca> {
 
                                         if (confirmar == true) {
 
-                                          setState(() {
-
-                                            DadosApp.livros.remove(
-                                              livro,
-                                            );
-
-                                          });
+                                          if (livro.id != null) {
+                                            try {
+                                              await Api.excluirLivro(livro.id!);
+                                              if (mounted) setState(() {});
+                                            } catch (e) {
+                                              if (mounted) ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(e.toString())));
+                                              return;
+                                            }
+                                          }
 
                                           ScaffoldMessenger.of(context)
                                               .showSnackBar(
@@ -463,51 +484,17 @@ class _BibliotecaState extends State<Biblioteca> {
         ],
       ),
 
-      bottomNavigationBar:
-          Padding(
-        padding:
-            const EdgeInsets.all(
-          15,
-        ),
-
-        child: SizedBox(
-          height: 55,
-
-          child:
-              ElevatedButton.icon(
-            icon: const Icon(
-              Icons.add,
-            ),
-
-            label: const Text(
-              "Adicionar Livro",
-            ),
-
-            style:
-                ElevatedButton.styleFrom(
-              backgroundColor:
-                  const Color(
-                0xFFFF6B6B,
-              ),
-              foregroundColor:
-                  Colors.white,
-            ),
-
-            onPressed: () {
-
-              Navigator.pushReplacement(
-                context,
-                MaterialPageRoute(
-                  builder:
-                      (_) =>
-                          const Cadastrolivro(),
-                ),
-              );
-
-            },
-          ),
-        ),
+      floatingActionButton: FloatingActionButton.extended(
+        backgroundColor: const Color(0xFFFF6B6B),
+        foregroundColor: Colors.white,
+        onPressed: () => Navigator.push(
+          context,
+          MaterialPageRoute(builder: (_) => const Cadastrolivro()),
+        ).then((_) => _atualizarLivros()),
+        icon: const Icon(Icons.add),
+        label: const Text('Adicionar livro'),
       ),
+      bottomNavigationBar: const AppNavbar(selectedIndex: 2),
     );
   }
 }

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'cadastro.dart';
 import 'mainpage.dart';
 import 'dados.dart';
+import 'api.dart';
 
 class Login extends StatefulWidget {
   Login({super.key});
@@ -142,17 +143,20 @@ class _LoginState extends State<Login> {
 
                         SizedBox(height: 15),
 
-                        CheckboxListTile(
-                          value: localizacao,
-                          activeColor: Color(0xFFFF6B6B),
-                          title: Text("Ativar localização"),
-                          controlAffinity:
-                              ListTileControlAffinity.leading,
-                          onChanged: (value) {
-                            setState(() {
-                              localizacao = value!;
-                            });
-                          },
+                        Material(
+                          color: Colors.transparent,
+                          child: CheckboxListTile(
+                            value: localizacao,
+                            activeColor: Color(0xFFFF6B6B),
+                            title: Text("Ativar localização"),
+                            controlAffinity:
+                                ListTileControlAffinity.leading,
+                            onChanged: (value) {
+                              setState(() {
+                                localizacao = value!;
+                              });
+                            },
+                          ),
                         ),
 
                         SizedBox(height: 20),
@@ -167,7 +171,7 @@ class _LoginState extends State<Login> {
                                 borderRadius: BorderRadius.circular(15),
                               ),
                             ),
-                            onPressed: () {
+                            onPressed: () async {
                               if (emailController.text.isEmpty ||
                                   senhaController.text.isEmpty) {
 
@@ -202,41 +206,16 @@ class _LoginState extends State<Login> {
                                 return;
                               }
 
-                              Usuario? usuarioEncontrado;
-
-                              for (var usuario in DadosApp.usuarios) {
-
-                                if (usuario.email == emailController.text &&
-                                    usuario.senha == senhaController.text) {
-
-                                  usuarioEncontrado = usuario;
-                                  break;
-                                }
+                              try {
+                                final usuario = await Api.login(emailController.text, senhaController.text);
+                                usuario.localizacao = localizacao || usuario.localizacao;
+                                await Api.listarLivros();
+                                if (!context.mounted) return;
+                                Navigator.pushReplacement(context, MaterialPageRoute(builder: (_) => Mainpage()));
+                              } catch (e) {
+                                if (!context.mounted) return;
+                                ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(e.toString())));
                               }
-
-                              if (usuarioEncontrado == null) {
-
-                                ScaffoldMessenger.of(context).showSnackBar(
-                                  SnackBar(
-                                    content: Text(
-                                      "Email ou senha incorretos",
-                                    ),
-                                  ),
-                                );
-
-                                return;
-                              }
-
-                              usuarioEncontrado.localizacao = localizacao;
-
-                              DadosApp.usuarioLogado = usuarioEncontrado;
-
-                              Navigator.pushReplacement(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (_) => Mainpage(),
-                                ),
-                              );
                             },
                             child: Text(
                               "Entrar →",

@@ -1,13 +1,13 @@
-import 'dart:io';
 import 'package:flutter/material.dart';
 
 import 'package:flutter_application_read_and_swap/biblioteca.dart';
 import 'package:flutter_application_read_and_swap/dados.dart';
 import 'package:flutter_application_read_and_swap/editarperfil.dart';
 import 'package:flutter_application_read_and_swap/login.dart';
+import 'package:flutter_application_read_and_swap/api.dart';
 
-import 'mainpage.dart';
-import 'matches.dart';
+import 'image_data.dart';
+import 'app_navbar.dart';
 
 class Perfil extends StatefulWidget {
   const Perfil({super.key});
@@ -155,15 +155,8 @@ class _PerfilState extends State<Perfil> {
                   child: CircleAvatar(
                     radius: 68,
 
-                    backgroundImage:
-                        usuario?.fotoPerfil != null &&
-                                usuario!.fotoPerfil!.isNotEmpty
-                            ? FileImage(
-                                File(usuario!.fotoPerfil!),
-                              )
-                            : const AssetImage(
-                                "assets/images/pfp.jfif",
-                              ),
+                    backgroundImage: imageProviderFromData(usuario?.fotoPerfil) ??
+                        const AssetImage("assets/images/pfp.jfif"),
                   ),
                 ),
 
@@ -467,90 +460,7 @@ class _PerfilState extends State<Perfil> {
       // BOTTOM NAVIGATION
       // ==========================================================
 
-      bottomNavigationBar: Container(
-        height: 90,
-        color: Colors.white,
-
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-
-          children: [
-
-            // ======================================================
-            // SWAPS
-            // ======================================================
-
-            GestureDetector(
-              onTap: () {
-                Navigator.push(
-                  context,
-
-                  MaterialPageRoute(
-                    builder: (_) => Mainpage(),
-                  ),
-                );
-              },
-
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-
-                children: const [
-                  Icon(Icons.book),
-                  Text("Swaps"),
-                ],
-              ),
-            ),
-
-            // ======================================================
-            // MATCHES
-            // ======================================================
-
-            GestureDetector(
-              onTap: () {
-                Navigator.push(
-                  context,
-
-                  MaterialPageRoute(
-                    builder: (_) => Matches(),
-                  ),
-                );
-              },
-
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-
-                children: const [
-                  Icon(Icons.chat_bubble_outline),
-                  Text("Matches"),
-                ],
-              ),
-            ),
-
-            // ======================================================
-            // PERFIL
-            // ======================================================
-
-            Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-
-              children: const [
-                Icon(
-                  Icons.person,
-                  color: Color(0xFFFF6B6B),
-                ),
-
-                Text(
-                  "Perfil",
-
-                  style: TextStyle(
-                    color: Color(0xFFFF6B6B),
-                  ),
-                ),
-              ],
-            ),
-          ],
-        ),
-      ),
+      bottomNavigationBar: const AppNavbar(selectedIndex: 2),
     );
   }
 
@@ -654,8 +564,10 @@ class _PerfilState extends State<Perfil> {
             ),
           ),
 
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
+          child: Material(
+            color: Colors.transparent,
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
 
             children: [
 
@@ -717,7 +629,10 @@ class _PerfilState extends State<Perfil> {
                   ],
                 ),
 
-                child: ListTile(
+                child: Material(
+                  color: Colors.transparent,
+                  borderRadius: BorderRadius.circular(18),
+                  child: ListTile(
                   contentPadding: const EdgeInsets.symmetric(
                     horizontal: 12,
                     vertical: 4,
@@ -794,6 +709,7 @@ class _PerfilState extends State<Perfil> {
                       },
                     );
                   },
+                  ),
                 ),
               ),
 
@@ -878,7 +794,7 @@ class _PerfilState extends State<Perfil> {
                   Icons.chevron_right_rounded,
                 ),
 
-                onTap: () {
+                onTap: () async {
                   Navigator.pop(context);
 
                   Navigator.push(
@@ -916,13 +832,42 @@ class _PerfilState extends State<Perfil> {
                   ),
                 ),
 
-                onTap: () {
+                onTap: () async {
+                  final confirmar = await showDialog<bool>(
+                    context: context,
+                    builder: (dialogContext) => AlertDialog(
+                      title: const Text('Sair da conta?'),
+                      content: const Text(
+                        'Você precisará entrar novamente para acessar seus livros e conversas.',
+                      ),
+                      actions: [
+                        TextButton(
+                          onPressed: () => Navigator.pop(dialogContext, false),
+                          child: const Text('Cancelar'),
+                        ),
+                        FilledButton.icon(
+                          style: FilledButton.styleFrom(
+                            backgroundColor: Colors.red.shade400,
+                            foregroundColor: Colors.white,
+                          ),
+                          onPressed: () => Navigator.pop(dialogContext, true),
+                          icon: const Icon(Icons.logout_rounded),
+                          label: const Text('Sair'),
+                        ),
+                      ],
+                    ),
+                  );
+
+                  if (confirmar != true || !mounted) return;
+
+                  // Fecha o menu inferior antes de encerrar a sessão.
                   Navigator.pop(context);
 
-                  DadosApp.usuarioLogado = null;
+                  await Api.logout();
 
-                  Navigator.pushAndRemoveUntil(
-                    context,
+                  if (!mounted) return;
+
+                  Navigator.of(this.context).pushAndRemoveUntil(
 
                     MaterialPageRoute(
                       builder: (_) => Login(),
@@ -932,7 +877,8 @@ class _PerfilState extends State<Perfil> {
                   );
                 },
               ),
-            ],
+              ],
+            ),
           ),
         );
       },
