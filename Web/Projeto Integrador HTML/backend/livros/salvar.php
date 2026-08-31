@@ -7,6 +7,7 @@ if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
     header('Location: ../../livros.html');
     exit;
 }
+exigirCsrf();
 
 $nome = trim($_POST['titulo'] ?? '');
 $autor = trim($_POST['autor'] ?? '');
@@ -21,11 +22,23 @@ if ($nome === '' || $autor === '' || $editora === '' || $ano <= 0 || $genero ===
     responderErro('Preencha os campos obrigatórios do livro.', '../../livros.html');
 }
 
-if (!isset($_FILES['foto']) || $_FILES['foto']['error'] !== UPLOAD_ERR_OK || !is_uploaded_file($_FILES['foto']['tmp_name'])) {
-    responderErro('Envie uma foto válida do livro.', '../../livros.html');
+$generosPermitidos = ['Romance', 'Fantasia', 'Ficção Científica', 'Terror', 'Suspense/Thriller', 'Mistério', 'Aventura', 'Drama', 'Biografia', 'Autoajuda', 'Didático', 'Clássicos', 'Poesia', 'Crônicas', 'Contos', 'HQ/Quadrinhos', 'Infantojuvenil', 'História', 'Não ficção', 'Outros'];
+$estadosPermitidos = ['Novo', 'Usado - Ótimo estado', 'Usado - Bom estado', 'Usado - Regular', 'Com marcas de uso'];
+if (tamanhoTexto($nome) < 3 || tamanhoTexto($nome) > 80
+    || tamanhoTexto($autor) < 3 || tamanhoTexto($autor) > 30
+    || tamanhoTexto($editora) < 3 || tamanhoTexto($editora) > 30
+    || $ano < 1500 || $ano > (int)date('Y')
+    || !in_array($genero, $generosPermitidos, true)
+    || !in_array($estado, $estadosPermitidos, true)
+    || tamanhoTexto($observacoes) > 1000) {
+    responderErro('Os dados do livro são inválidos.', '../../livros.html');
 }
 
-$fotoBin = file_get_contents($_FILES['foto']['tmp_name']);
+try {
+    $fotoBin = lerImagemUpload($_FILES['foto'] ?? []);
+} catch (RuntimeException $erro) {
+    responderErro($erro->getMessage(), '../../livros.html');
+}
 
 $status = 0;
 $stmt = $conn->prepare("

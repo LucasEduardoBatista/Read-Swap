@@ -3,7 +3,13 @@ require_once __DIR__ . '/../includes/config.php';
 
 exigirLogin('../../login.html');
 
-$id = (int)($_GET['id'] ?? 0);
+if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+    http_response_code(405);
+    exit;
+}
+exigirCsrf();
+
+$id = (int)($_POST['id'] ?? 0);
 $usuarioId = (int)$_SESSION['usuario_id'];
 
 if ($id <= 0) {

@@ -1,0 +1,411 @@
+﻿[
+    {
+        "title":  {
+                      "romaji":  "Chainsaw Man"
+                  },
+        "coverImage":  {
+                           "extraLarge":  "https://s4.anilist.co/file/anilistcdn/media/manga/cover/large/bx105778-euxXZEIfDY2u.png"
+                       },
+        "genres":  [
+                       "Action",
+                       "Comedy",
+                       "Drama",
+                       "Horror",
+                       "Supernatural"
+                   ],
+        "startDate":  {
+                          "year":  2018
+                      }
+    },
+    {
+        "title":  {
+                      "romaji":  "Na Honjaman Level Up"
+                  },
+        "coverImage":  {
+                           "extraLarge":  "https://s4.anilist.co/file/anilistcdn/media/manga/cover/large/bx105398-b673Vt5ZSuz3.jpg"
+                       },
+        "genres":  [
+                       "Action",
+                       "Adventure",
+                       "Fantasy"
+                   ],
+        "startDate":  {
+                          "year":  2018
+                      }
+    },
+    {
+        "title":  {
+                      "romaji":  "Jujutsu Kaisen"
+                  },
+        "coverImage":  {
+                           "extraLarge":  "https://s4.anilist.co/file/anilistcdn/media/manga/cover/large/bx101517-H3TdM3g5ZUe9.jpg"
+                       },
+        "genres":  [
+                       "Action",
+                       "Drama",
+                       "Supernatural"
+                   ],
+        "startDate":  {
+                          "year":  2018
+                      }
+    },
+    {
+        "title":  {
+                      "romaji":  "Berserk"
+                  },
+        "coverImage":  {
+                           "extraLarge":  "https://s4.anilist.co/file/anilistcdn/media/manga/cover/large/bx30002-Cul4OeN7bYtn.jpg"
+                       },
+        "genres":  [
+                       "Action",
+                       "Adventure",
+                       "Drama",
+                       "Fantasy",
+                       "Horror",
+                       "Psychological"
+                   ],
+        "startDate":  {
+                          "year":  1989
+                      }
+    },
+    {
+        "title":  {
+                      "romaji":  "ONE PIECE"
+                  },
+        "coverImage":  {
+                           "extraLarge":  "https://s4.anilist.co/file/anilistcdn/media/manga/cover/large/bx30013-BeslEMqiPhlk.jpg"
+                       },
+        "genres":  [
+                       "Action",
+                       "Adventure",
+                       "Comedy",
+                       "Fantasy"
+                   ],
+        "startDate":  {
+                          "year":  1997
+                      }
+    },
+    {
+        "title":  {
+                      "romaji":  "Shingeki no Kyojin"
+                  },
+        "coverImage":  {
+                           "extraLarge":  "https://s4.anilist.co/file/anilistcdn/media/manga/cover/large/bx53390-1RsuABC34P9D.jpg"
+                       },
+        "genres":  [
+                       "Action",
+                       "Drama",
+                       "Fantasy",
+                       "Mystery"
+                   ],
+        "startDate":  {
+                          "year":  2009
+                      }
+    },
+    {
+        "title":  {
+                      "romaji":  "Kimetsu no Yaiba"
+                  },
+        "coverImage":  {
+                           "extraLarge":  "https://s4.anilist.co/file/anilistcdn/media/manga/cover/large/bx87216-c9bSNVD10UuD.png"
+                       },
+        "genres":  [
+                       "Action",
+                       "Adventure",
+                       "Drama",
+                       "Supernatural"
+                   ],
+        "startDate":  {
+                          "year":  2016
+                      }
+    },
+    {
+        "title":  {
+                      "romaji":  "Tokyo Ghoul"
+                  },
+        "coverImage":  {
+                           "extraLarge":  "https://s4.anilist.co/file/anilistcdn/media/manga/cover/large/bx63327-glC9cDxYBja9.png"
+                       },
+        "genres":  [
+                       "Action",
+                       "Horror",
+                       "Mystery",
+                       "Psychological",
+                       "Supernatural"
+                   ],
+        "startDate":  {
+                          "year":  2011
+                      }
+    },
+    {
+        "title":  {
+                      "romaji":  "Oyasumi Punpun"
+                  },
+        "coverImage":  {
+                           "extraLarge":  "https://s4.anilist.co/file/anilistcdn/media/manga/cover/large/bx34632-5xMDkx3pXsEh.png"
+                       },
+        "genres":  [
+                       "Drama",
+                       "Psychological",
+                       "Slice of Life"
+                   ],
+        "startDate":  {
+                          "year":  2007
+                      }
+    },
+    {
+        "title":  {
+                      "romaji":  "Boku no Hero Academia"
+                  },
+        "coverImage":  {
+                           "extraLarge":  "https://s4.anilist.co/file/anilistcdn/media/manga/cover/large/bx85486-INqnYx8gL3eX.jpg"
+                       },
+        "genres":  [
+                       "Action",
+                       "Adventure",
+                       "Comedy",
+                       "Drama",
+                       "Fantasy"
+                   ],
+        "startDate":  {
+                          "year":  2014
+                      }
+    },
+    {
+        "title":  {
+                      "romaji":  "One Punch-Man"
+                  },
+        "coverImage":  {
+                           "extraLarge":  "https://s4.anilist.co/file/anilistcdn/media/manga/cover/large/bx74347-sZpmNJ5xLwRK.jpg"
+                       },
+        "genres":  [
+                       "Action",
+                       "Comedy",
+                       "Sci-Fi",
+                       "Supernatural"
+                   ],
+        "startDate":  {
+                          "year":  2012
+                      }
+    },
+    {
+        "title":  {
+                      "romaji":  "Vagabond"
+                  },
+        "coverImage":  {
+                           "extraLarge":  "https://s4.anilist.co/file/anilistcdn/media/manga/cover/large/bx30656-9mW113O7rDnA.png"
+                       },
+        "genres":  [
+                       "Action",
+                       "Adventure",
+                       "Drama"
+                   ],
+        "startDate":  {
+                          "year":  1998
+                      }
+    },
+    {
+        "title":  {
+                      "romaji":  "SPY×FAMILY"
+                  },
+        "coverImage":  {
+                           "extraLarge":  "https://s4.anilist.co/file/anilistcdn/media/manga/cover/large/bx108556-NHjkz0BNJhLx.jpg"
+                       },
+        "genres":  [
+                       "Action",
+                       "Comedy",
+                       "Slice of Life",
+                       "Supernatural"
+                   ],
+        "startDate":  {
+                          "year":  2019
+                      }
+    },
+    {
+        "title":  {
+                      "romaji":  "Vinland Saga"
+                  },
+        "coverImage":  {
+                           "extraLarge":  "https://s4.anilist.co/file/anilistcdn/media/manga/cover/large/bx30642-0mjRDkf4THpo.jpg"
+                       },
+        "genres":  [
+                       "Action",
+                       "Adventure",
+                       "Drama"
+                   ],
+        "startDate":  {
+                          "year":  2005
+                      }
+    },
+    {
+        "title":  {
+                      "romaji":  "Yakusoku no Neverland"
+                  },
+        "coverImage":  {
+                           "extraLarge":  "https://s4.anilist.co/file/anilistcdn/media/manga/cover/large/bx87423-gPNtu8QbGped.jpg"
+                       },
+        "genres":  [
+                       "Drama",
+                       "Fantasy",
+                       "Horror",
+                       "Mystery",
+                       "Psychological",
+                       "Thriller"
+                   ],
+        "startDate":  {
+                          "year":  2016
+                      }
+    },
+    {
+        "title":  {
+                      "romaji":  "Jeonjijeok Dokja Sijeom"
+                  },
+        "coverImage":  {
+                           "extraLarge":  "https://s4.anilist.co/file/anilistcdn/media/manga/cover/large/bx119257-Pi21aq3ey9GG.jpg"
+                       },
+        "genres":  [
+                       "Action",
+                       "Adventure",
+                       "Fantasy"
+                   ],
+        "startDate":  {
+                          "year":  2020
+                      }
+    },
+    {
+        "title":  {
+                      "romaji":  "Blue Lock"
+                  },
+        "coverImage":  {
+                           "extraLarge":  "https://s4.anilist.co/file/anilistcdn/media/manga/cover/large/bx106130-yPNeuSu75ey1.jpg"
+                       },
+        "genres":  [
+                       "Action",
+                       "Drama",
+                       "Sports"
+                   ],
+        "startDate":  {
+                          "year":  2018
+                      }
+    },
+    {
+        "title":  {
+                      "romaji":  "Horimiya"
+                  },
+        "coverImage":  {
+                           "extraLarge":  "https://s4.anilist.co/file/anilistcdn/media/manga/cover/large/bx72451-vVXtRwyttjGG.png"
+                       },
+        "genres":  [
+                       "Comedy",
+                       "Romance",
+                       "Slice of Life"
+                   ],
+        "startDate":  {
+                          "year":  2011
+                      }
+    },
+    {
+        "title":  {
+                      "romaji":  "BLEACH"
+                  },
+        "coverImage":  {
+                           "extraLarge":  "https://s4.anilist.co/file/anilistcdn/media/manga/cover/large/bx30012-1epmVfTSv2rr.png"
+                       },
+        "genres":  [
+                       "Action",
+                       "Adventure",
+                       "Supernatural"
+                   ],
+        "startDate":  {
+                          "year":  2001
+                      }
+    },
+    {
+        "title":  {
+                      "romaji":  "Kaguya-sama wa Kokurasetai: Tensaitachi no Renai Zunousen"
+                  },
+        "coverImage":  {
+                           "extraLarge":  "https://s4.anilist.co/file/anilistcdn/media/manga/cover/large/bx86635-EdaLQmsn86Fy.png"
+                       },
+        "genres":  [
+                       "Comedy",
+                       "Psychological",
+                       "Romance",
+                       "Slice of Life"
+                   ],
+        "startDate":  {
+                          "year":  2015
+                      }
+    },
+    {
+        "title":  {
+                      "romaji":  "Tokyo卍Revengers"
+                  },
+        "coverImage":  {
+                           "extraLarge":  "https://s4.anilist.co/file/anilistcdn/media/manga/cover/large/bx102988-OoVJxQCH6fbR.jpg"
+                       },
+        "genres":  [
+                       "Action",
+                       "Drama",
+                       "Romance",
+                       "Supernatural"
+                   ],
+        "startDate":  {
+                          "year":  2017
+                      }
+    },
+    {
+        "title":  {
+                      "romaji":  "Dandadan"
+                  },
+        "coverImage":  {
+                           "extraLarge":  "https://s4.anilist.co/file/anilistcdn/media/manga/cover/large/bx132029-prGF4gePdSKv.jpg"
+                       },
+        "genres":  [
+                       "Action",
+                       "Comedy",
+                       "Drama",
+                       "Romance",
+                       "Sci-Fi",
+                       "Supernatural"
+                   ],
+        "startDate":  {
+                          "year":  2021
+                      }
+    },
+    {
+        "title":  {
+                      "romaji":  "HUNTER×HUNTER"
+                  },
+        "coverImage":  {
+                           "extraLarge":  "https://s4.anilist.co/file/anilistcdn/media/manga/cover/large/bx30026-uCvXMudMzmwI.jpg"
+                       },
+        "genres":  [
+                       "Action",
+                       "Adventure",
+                       "Comedy",
+                       "Fantasy"
+                   ],
+        "startDate":  {
+                          "year":  1998
+                      }
+    },
+    {
+        "title":  {
+                      "romaji":  "20 Seiki Shounen"
+                  },
+        "coverImage":  {
+                           "extraLarge":  "https://s4.anilist.co/file/anilistcdn/media/manga/cover/large/bx30003-E84fwIh22LAQ.jpg"
+                       },
+        "genres":  [
+                       "Drama",
+                       "Mystery",
+                       "Psychological",
+                       "Sci-Fi",
+                       "Thriller"
+                   ],
+        "startDate":  {
+                          "year":  1999
+                      }
+    }
+]

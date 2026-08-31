@@ -10,6 +10,11 @@ if (session_status() === PHP_SESSION_NONE) {
     session_start();
 }
 
+header('X-Content-Type-Options: nosniff');
+header('X-Frame-Options: DENY');
+header('Referrer-Policy: strict-origin-when-cross-origin');
+header('Permissions-Policy: camera=(), microphone=(), geolocation=()');
+
 $configLocal = __DIR__ . '/config.local.php';
 $db = is_file($configLocal) ? require $configLocal : [
     'host' => getenv('READSWAP_DB_HOST') ?: '',
@@ -113,5 +118,53 @@ function tamanhoTexto(string $texto): int {
     }
     $resultado = preg_match_all('/./us', $texto, $caracteres);
     return $resultado === false ? strlen($texto) : $resultado;
+}
+
+function tokenCsrf(): string {
+    if (empty($_SESSION['csrf_token']) || !is_string($_SESSION['csrf_token'])) {
+        $_SESSION['csrf_token'] = bin2hex(random_bytes(32));
+    }
+    return $_SESSION['csrf_token'];
+}
+
+function exigirCsrf(): void {
+    $recebido = $_POST['csrf_token'] ?? ($_SERVER['HTTP_X_CSRF_TOKEN'] ?? '');
+    if (!is_string($recebido) || !hash_equals(tokenCsrf(), $recebido)) {
+        http_response_code(403);
+        $aceitaJson = str_contains($_SERVER['HTTP_ACCEPT'] ?? '', 'application/json')
+            || isset($_SERVER['HTTP_X_CSRF_TOKEN']);
+        if ($aceitaJson) {
+            header('Content-Type: application/json; charset=utf-8');
+            echo json_encode(['erro' => 'Sessão expirada. Atualize a página e tente novamente.'], JSON_UNESCAPED_UNICODE);
+        } else {
+            responderErro('Sessão expirada. Atualize a página e tente novamente.', '../../index.html');
+        }
+        exit;
+    }
+}
+
+function lerImagemUpload(array $arquivo, int $limiteBytes = 5242880): string {
+    if (($arquivo['error'] ?? UPLOAD_ERR_NO_FILE) !== UPLOAD_ERR_OK
+        || empty($arquivo['tmp_name'])
+        || !is_uploaded_file($arquivo['tmp_name'])) {
+        throw new RuntimeException('Envie uma imagem válida.');
+    }
+    $tamanho = (int)($arquivo['size'] ?? 0);
+    if ($tamanho <= 0 || $tamanho > $limiteBytes) {
+        throw new RuntimeException('A imagem deve ter no máximo 5 MB.');
+    }
+    $info = @getimagesize($arquivo['tmp_name']);
+    $mimesPermitidos = ['image/jpeg', 'image/png', 'image/webp'];
+    if (!$info || !in_array($info['mime'] ?? '', $mimesPermitidos, true)) {
+        throw new RuntimeException('Use uma imagem JPG, PNG ou WebP válida.');
+    }
+    if (($info[0] ?? 0) > 6000 || ($info[1] ?? 0) > 6000) {
+        throw new RuntimeException('A imagem possui dimensões muito grandes.');
+    }
+    $conteudo = file_get_contents($arquivo['tmp_name']);
+    if ($conteudo === false) {
+        throw new RuntimeException('Não foi possível processar a imagem.');
+    }
+    return $conteudo;
 }
 ?>

@@ -19,6 +19,7 @@ if ($nome === '' || $email === '' || $confirmaEmail === '' || $senha === '' || $
 if (!filter_var($email, FILTER_VALIDATE_EMAIL) || strlen($email) > 255) {
     responderErro('Digite um e-mail válido.', '../../cadastro.html');
 }
+exigirCsrf();
 if (!hash_equals($email, $confirmaEmail)) {
     responderErro('Os endereços de e-mail não coincidem.', '../../cadastro.html');
 }

@@ -36,7 +36,53 @@ async function verificarAutenticacao() {
     }
 }
 
+let csrfToken = '';
+async function carregarCsrf() {
+    try {
+        const resposta = await fetch('./backend/usuarios/csrf.php', { cache: 'no-store' });
+        if (!resposta.ok) throw new Error();
+        csrfToken = (await resposta.json()).token || '';
+    } catch (_) {
+        csrfToken = '';
+    }
+    return csrfToken;
+}
+
+function aplicarCsrfNosFormularios() {
+    if (!csrfToken) return;
+    document.querySelectorAll('form[method="POST"], form[method="post"]').forEach(form => {
+        let campo = form.querySelector('input[name="csrf_token"]');
+        if (!campo) {
+            campo = document.createElement('input');
+            campo.type = 'hidden';
+            campo.name = 'csrf_token';
+            form.appendChild(campo);
+        }
+        campo.value = csrfToken;
+    });
+}
+
+function enviarFormularioProtegido(acao, campos = {}) {
+    if (!csrfToken) {
+        alert('Não foi possível validar sua sessão. Atualize a página e tente novamente.');
+        return;
+    }
+    const formulario = document.createElement('form');
+    formulario.method = 'POST';
+    formulario.action = acao;
+    Object.entries({ ...campos, csrf_token: csrfToken }).forEach(([nome, valor]) => {
+        const campo = document.createElement('input');
+        campo.type = 'hidden';
+        campo.name = nome;
+        campo.value = valor;
+        formulario.appendChild(campo);
+    });
+    document.body.appendChild(formulario);
+    formulario.submit();
+}
+
 const autenticacaoPronta = verificarAutenticacao();
+const csrfPronto = carregarCsrf();
 
 function toggleDarkMode() {
     document.body.classList.toggle('dark-mode');
@@ -52,7 +98,7 @@ function toggleDarkMode() {
     if (darkModeSwitch) darkModeSwitch.checked = document.body.classList.contains('dark-mode');
 }
 
-function atualizarNavbar() {
+async function atualizarNavbar() {
     const logado = sessionStorage.getItem('logado') === 'true';
     const elEntrar = document.querySelector('.nav-link.entrar');
     const elCadastrar = document.querySelector('.btn.btn-danger.cadastrar');
@@ -65,6 +111,27 @@ function atualizarNavbar() {
         if (liEntrar) liEntrar.style.display = 'none';
         if (liCadastrar) liCadastrar.style.display = 'none';
         if (liPerfil) liPerfil.style.display = '';
+        if (elPerfil) {
+            elPerfil.innerHTML = '<img class="profile-nav-avatar" src="./Imagens/default-profile.jpg" alt="Abrir meu perfil">';
+            const avatar = elPerfil.querySelector('.profile-nav-avatar');
+            try {
+                const resposta = await fetch('./backend/perfil/dados.php', {
+                    headers: { 'Accept': 'application/json' },
+                    cache: 'no-store'
+                });
+                if (!resposta.ok) throw new Error();
+                const perfil = await resposta.json();
+                if (avatar && perfil.idPerfis) {
+                    avatar.onerror = () => {
+                        avatar.onerror = null;
+                        avatar.src = './Imagens/default-profile.jpg';
+                    };
+                    avatar.src = `./backend/imagens/publica.php?tipo=perfil&id=${encodeURIComponent(perfil.idPerfis)}`;
+                }
+            } catch (_) {
+                // Mantém o avatar padrão quando a foto não puder ser carregada.
+            }
+        }
     } else {
         if (liEntrar) liEntrar.style.display = '';
         if (liCadastrar) liCadastrar.style.display = '';
@@ -99,6 +166,8 @@ async function iniciarChat() {
     const mensagensEl = document.getElementById('chatMessages');
     const input = document.getElementById('chatInput');
     const botao = document.getElementById('chatSend');
+    const layout = document.querySelector('.chat-layout');
+    const botaoVoltar = document.getElementById('chatBack');
     if (!lista || !mensagensEl || !input || !botao) return;
     let contatoAtual = null;
     const formatarHora = data => data ? new Date(data.replace(' ', 'T')).toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' }) : '';
@@ -106,7 +175,8 @@ async function iniciarChat() {
     async function abrirContato(contato, item) {
         contatoAtual = contato.id;
         document.querySelectorAll('.match-item').forEach(el => el.classList.remove('active'));
-        item.classList.add('active');
+        if (item) item.classList.add('active');
+        if (layout) layout.classList.add('chat-open');
         document.getElementById('chatUserName').textContent = contato.nome;
         document.getElementById('chatAvatar').src = contato.foto;
         input.disabled = botao.disabled = false;
@@ -125,7 +195,7 @@ async function iniciarChat() {
             if (!resposta.ok) throw new Error();
             const contatos = await resposta.json();
             lista.className = '';
-            lista.innerHTML = contatos.length ? '' : '<div class="p-3 text-muted">Curta um livro no Swap para iniciar uma conversa.</div>';
+            lista.innerHTML = contatos.length ? '' : '<div class="p-3 text-muted">A conversa será liberada quando vocês curtirem livros um do outro.</div>';
             contatos.forEach(contato => {
                 const item = document.createElement('div');
                 item.className = 'match-item';
@@ -133,7 +203,9 @@ async function iniciarChat() {
                 item.addEventListener('click', () => abrirContato(contato, item));
                 lista.appendChild(item);
             });
-            if (contatos.length) abrirContato(contatos[0], lista.querySelector('.match-item'));
+            if (contatos.length && !window.matchMedia('(max-width: 768px)').matches) {
+                abrirContato(contatos[0], lista.querySelector('.match-item'));
+            }
         } catch (_) {
             lista.innerHTML = '<div class="p-3 text-danger">Não foi possível carregar as conversas.</div>';
         }
@@ -144,7 +216,7 @@ async function iniciarChat() {
         if (!conteudo || !contatoAtual) return;
         botao.disabled = true;
         const dados = new URLSearchParams({ acao: 'enviar', contato_id: contatoAtual, conteudo });
-        const resposta = await fetch('./backend/conversas/conversas.php', { method: 'POST', headers: { 'Content-Type': 'application/x-www-form-urlencoded' }, body: dados });
+        const resposta = await fetch('./backend/conversas/conversas.php', { method: 'POST', headers: { 'Content-Type': 'application/x-www-form-urlencoded', 'X-CSRF-Token': csrfToken }, body: dados });
         botao.disabled = false;
         if (!resposta.ok) return alert('Não foi possível enviar a mensagem.');
         input.value = '';
@@ -154,7 +226,126 @@ async function iniciarChat() {
     }
     botao.addEventListener('click', enviarMensagem);
     input.addEventListener('keydown', e => { if (e.key === 'Enter') { e.preventDefault(); enviarMensagem(); } });
+    if (botaoVoltar) {
+        botaoVoltar.addEventListener('click', () => {
+            if (layout) layout.classList.remove('chat-open');
+        });
+    }
     carregarContatos();
+}
+
+function iniciarBuscaPerfis() {
+    const collapse = document.querySelector('.navbar-collapse');
+    if (!collapse || collapse.querySelector('.profile-search')) return;
+    const menuConta = collapse.querySelector(':scope > .navbar-nav:last-of-type');
+    if (!menuConta) return;
+
+    const busca = document.createElement('form');
+    busca.className = 'profile-search';
+    busca.setAttribute('role', 'search');
+    busca.innerHTML = `
+        <label class="visually-hidden" for="profileSearchInput">Pesquisar perfis</label>
+        <div class="profile-search-control">
+            <i class="bi bi-search"></i>
+            <input id="profileSearchInput" type="search" autocomplete="off" maxlength="50" placeholder="Pesquisar perfis..." aria-label="Pesquisar perfis" aria-expanded="false" aria-controls="profileSearchResults">
+            <span class="profile-search-spinner spinner-border spinner-border-sm" hidden></span>
+        </div>
+        <div id="profileSearchResults" class="profile-search-results" hidden></div>`;
+    collapse.insertBefore(busca, menuConta);
+
+    const input = busca.querySelector('input');
+    const resultados = busca.querySelector('.profile-search-results');
+    const spinner = busca.querySelector('.profile-search-spinner');
+    let temporizador;
+    let requisicao;
+
+    function fechar() {
+        resultados.hidden = true;
+        input.setAttribute('aria-expanded', 'false');
+    }
+
+    async function pesquisar() {
+        const termo = input.value.trim();
+        if (termo.length < 2) {
+            resultados.innerHTML = '<div class="profile-search-hint">Digite pelo menos dois caracteres.</div>';
+            resultados.hidden = termo.length === 0;
+            input.setAttribute('aria-expanded', String(termo.length > 0));
+            return;
+        }
+        requisicao?.abort();
+        requisicao = new AbortController();
+        spinner.hidden = false;
+        try {
+            const resposta = await fetch(`./backend/perfis/publico.php?acao=buscar&q=${encodeURIComponent(termo)}`, { signal: requisicao.signal });
+            if (!resposta.ok) throw new Error();
+            const perfis = await resposta.json();
+            resultados.innerHTML = perfis.length
+                ? perfis.map(perfil => `<a class="profile-search-result" href="perfilPublico.html?id=${perfil.id}"><img src="${perfil.foto}" alt=""><span><strong>${escaparHtml(perfil.nome)}</strong><small><i class="bi bi-geo-alt"></i> ${escaparHtml(perfil.cidade || 'Cidade não informada')}</small></span><i class="bi bi-chevron-right"></i></a>`).join('')
+                : '<div class="profile-search-hint">Nenhum perfil encontrado.</div>';
+            resultados.hidden = false;
+            input.setAttribute('aria-expanded', 'true');
+        } catch (erro) {
+            if (erro.name !== 'AbortError') {
+                resultados.innerHTML = '<div class="profile-search-hint text-danger">Não foi possível pesquisar agora.</div>';
+                resultados.hidden = false;
+            }
+        } finally {
+            spinner.hidden = true;
+        }
+    }
+
+    input.addEventListener('input', () => {
+        clearTimeout(temporizador);
+        temporizador = setTimeout(pesquisar, 250);
+    });
+    input.addEventListener('focus', () => {
+        if (resultados.innerHTML) resultados.hidden = false;
+    });
+    busca.addEventListener('submit', event => {
+        event.preventDefault();
+        const primeiro = resultados.querySelector('a');
+        if (primeiro) window.location.href = primeiro.href;
+        else pesquisar();
+    });
+    document.addEventListener('click', event => {
+        if (!busca.contains(event.target)) fechar();
+    });
+}
+
+async function carregarPerfilPublico() {
+    const conteudo = document.getElementById('publicProfileContent');
+    if (!conteudo) return;
+    const carregando = document.getElementById('publicProfileLoading');
+    const erro = document.getElementById('publicProfileError');
+    const perfilId = new URLSearchParams(window.location.search).get('id');
+    try {
+        if (!/^\d+$/.test(perfilId || '')) throw new Error();
+        const resposta = await fetch(`./backend/perfis/publico.php?acao=detalhes&id=${perfilId}`);
+        if (!resposta.ok) throw new Error();
+        const dados = await resposta.json();
+        const perfil = dados.perfil;
+        document.title = `${perfil.nome} | Read & Swap`;
+        document.getElementById('publicProfilePhoto').src = perfil.foto;
+        document.getElementById('publicProfilePhoto').alt = `Foto de ${perfil.nome}`;
+        document.getElementById('publicProfileName').textContent = perfil.nome;
+        document.getElementById('publicProfileCity').innerHTML = `<i class="bi bi-geo-alt-fill"></i> ${escaparHtml(perfil.cidade || 'Cidade não informada')}`;
+        const plano = document.getElementById('publicProfilePlan');
+        plano.className = `membership-status ${perfil.premium ? 'is-premium' : 'is-free'}`;
+        plano.innerHTML = perfil.premium ? '<i class="bi bi-patch-check-fill"></i> Perfil Premium' : '<i class="bi bi-person-check-fill"></i> Plano gratuito';
+        document.getElementById('publicBooksOwner').textContent = perfil.nome;
+        document.getElementById('publicBooksCount').textContent = `${dados.livros.length} ${dados.livros.length === 1 ? 'livro' : 'livros'}`;
+        const grade = document.getElementById('publicBooksGrid');
+        grade.innerHTML = dados.livros.length ? dados.livros.map(livro => `
+            <article class="public-book-card">
+                <img src="${livro.foto}" alt="Capa de ${escaparHtml(livro.nome)}">
+                <div><span>${escaparHtml(livro.genero || 'Sem gênero')}</span><h3>${escaparHtml(livro.nome)}</h3><p>${escaparHtml(livro.autor || 'Autor não informado')}</p><small><i class="bi bi-book-half"></i> ${escaparHtml(livro.estado || 'Estado não informado')}</small></div>
+            </article>`).join('') : '<div class="public-books-empty"><i class="bi bi-bookshelf"></i><h3>Nenhum livro disponível</h3><p>Este usuário ainda não possui livros disponíveis para troca.</p></div>';
+        carregando.classList.add('d-none');
+        conteudo.classList.remove('d-none');
+    } catch (_) {
+        carregando.classList.add('d-none');
+        erro.classList.remove('d-none');
+    }
 }
 
 
@@ -171,10 +362,20 @@ document.addEventListener('DOMContentLoaded', async function() {
     });
 
     if (!(await autenticacaoPronta)) return;
+    await csrfPronto;
+    aplicarCsrfNosFormularios();
+    document.addEventListener('submit', event => {
+        if (event.target.matches('form[method="POST"], form[method="post"]') && !csrfToken) {
+            event.preventDefault();
+            alert('Não foi possível validar sua sessão. Atualize a página e tente novamente.');
+        }
+    });
     console.log('javascript.js carregado');
 
     
     atualizarNavbar();
+    iniciarBuscaPerfis();
+    carregarPerfilPublico();
 
    
     if (localStorage.getItem('theme') === 'dark') {
@@ -307,16 +508,14 @@ document.addEventListener('DOMContentLoaded', async function() {
     const logoutBtn = document.getElementById('logoutBtn');
     if (logoutBtn) {
         logoutBtn.addEventListener('click', () => {
-            window.location.href = 'backend/usuarios/logout.php';
+            enviarFormularioProtegido('backend/usuarios/logout.php');
         });
     }
     const deleteAccountBtn = document.getElementById('deleteAccountBtn');
     if (deleteAccountBtn) {
         deleteAccountBtn.addEventListener('click', () => {
             const confirmacao = confirm('Tem certeza que deseja excluir sua conta? Essa ação NÃO pode ser desfeita.');
-            if (confirmacao) {
-                window.location.href = 'backend/usuarios/excluir.php';
-            }
+            if (confirmacao) enviarFormularioProtegido('backend/usuarios/excluir.php');
         });
     }
 
@@ -340,10 +539,21 @@ document.addEventListener('DOMContentLoaded', async function() {
         let index = 0;
         let detalhesAbertos = false;
 
+        function mostrarAvisoMatch() {
+            document.querySelector('.match-toast')?.remove();
+            const aviso = document.createElement('div');
+            aviso.className = 'match-toast';
+            aviso.setAttribute('role', 'status');
+            aviso.innerHTML = '<i class="bi bi-chat-heart-fill"></i><div><strong>Deu match!</strong><span>Vocês gostaram de livros um do outro.</span></div><a href="matches.html">Conversar</a>';
+            document.body.appendChild(aviso);
+            requestAnimationFrame(() => aviso.classList.add('show'));
+            setTimeout(() => aviso.remove(), 6000);
+        }
+
         function renderDetalhes(livro) {
        
             detalhesConteudo.innerHTML = `
-                <div class="swap-genres">${livro.generos.map(g => `<span class="swap-genre-chip">${g}</span>`).join('')}</div>
+                <div class="swap-genres">${livro.generos.map(g => `<span class="swap-genre-chip">${escaparHtml(g)}</span>`).join('')}</div>
                 <p class="mt-2 mb-0"><strong>Dono:</strong> ${escaparHtml(livro.dono)}</p>
             `;
 
@@ -351,7 +561,7 @@ document.addEventListener('DOMContentLoaded', async function() {
             const generosHtml = livro.generos.map(g => `
                 <div class="genero-item">
                     <i class="bi bi-bookmark-fill"></i>
-                    <span>${g}</span>
+                    <span>${escaparHtml(g)}</span>
                 </div>
             `).join('');
 
@@ -375,6 +585,9 @@ document.addEventListener('DOMContentLoaded', async function() {
                 ownerPhoto.alt = `Foto de ${livro.dono || 'usuário'}`;
                 ownerName.textContent = livro.dono || 'Usuário';
                 ownerCity.innerHTML = `<i class="bi bi-geo-alt-fill"></i> ${escaparHtml(livro.cidade || 'Cidade não informada')}`;
+                const ownerLabel = ownerPanel.querySelector('span');
+                if (ownerLabel) ownerLabel.textContent = livro.interesseRecebido ? 'Curtiu um livro seu' : 'Livro de';
+                ownerPanel.classList.toggle('has-interest', Boolean(livro.interesseRecebido));
                 ownerPanel.hidden = false;
             }
             renderDetalhes(livro);
@@ -399,8 +612,10 @@ document.addEventListener('DOMContentLoaded', async function() {
             btnRecusar.disabled = true;
             try {
                 const dados = new URLSearchParams({ livro_id: livroAtual.id, gostou: direcao === 'like' ? 1 : 0 });
-                const resposta = await fetch('./backend/swaps/avaliar.php', { method: 'POST', headers: { 'Content-Type': 'application/x-www-form-urlencoded' }, body: dados });
+                const resposta = await fetch('./backend/swaps/avaliar.php', { method: 'POST', headers: { 'Content-Type': 'application/x-www-form-urlencoded', 'X-CSRF-Token': csrfToken }, body: dados });
                 if (!resposta.ok) throw new Error();
+                const resultado = await resposta.json();
+                if (resultado.match) mostrarAvisoMatch();
             } catch (_) {
                 btnCurtir.disabled = false;
                 btnRecusar.disabled = false;
@@ -441,7 +656,7 @@ document.addEventListener('DOMContentLoaded', async function() {
                     const generosHtml = livroAtual.generos.map(g => `
                         <div class="genero-item">
                             <i class="bi bi-bookmark-fill"></i>
-                            <span>${g}</span>
+                            <span>${escaparHtml(g)}</span>
                         </div>
                     `).join('');
                     detalhesLateral.innerHTML = `
@@ -548,8 +763,8 @@ document.addEventListener('DOMContentLoaded', async function() {
                                       ${estado ? `<span><i class="bi bi-shield-check"></i> ${estado}</span>` : ''}
                                     </div>
                                     <div class="library-book-actions">
-                                        <a href="backend/livros/trocados.php?id=${livro.idLivrosADMs}" class="btn btn-sm btn-danger" onclick="return confirm('${quest}')"><i class="bi bi-arrow-repeat"></i> ${troca}</a>
-                                        <a href="backend/livros/excluir.php?id=${livro.idLivrosADMs}" class="btn btn-sm btn-outline-secondary" onclick="return confirm('Remover este livro?')"><i class="bi bi-trash3"></i> Remover</a>
+                                        <form method="POST" action="backend/livros/trocados.php" class="library-action-form" onsubmit="return confirm('${quest}')"><input type="hidden" name="id" value="${livro.idLivrosADMs}"><input type="hidden" name="csrf_token" value="${escaparHtml(csrfToken)}"><button type="submit" class="btn btn-sm btn-danger library-action-btn"><i class="bi bi-arrow-repeat"></i><span>${troca}</span></button></form>
+                                        <form method="POST" action="backend/livros/excluir.php" class="library-action-form" onsubmit="return confirm('Remover este livro?')"><input type="hidden" name="id" value="${livro.idLivrosADMs}"><input type="hidden" name="csrf_token" value="${escaparHtml(csrfToken)}"><button type="submit" class="btn btn-sm btn-outline-danger library-action-btn library-remove-btn"><i class="bi bi-trash3"></i><span>Remover</span></button></form>
                                     </div>
                                 </div>
                             </article>

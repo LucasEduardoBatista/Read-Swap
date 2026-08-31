@@ -219,19 +219,13 @@
   <!-- Navbar -->
   <nav class="navbar navbar-expand-lg bg-light fixed-top" data-bs-theme="light">
     <div class="container-fluid">
-      <a class="navbar-brand" href="index.html"><img id="logoNav" src="./Imagens/logo_navbar.png" style="width: 8rem"></a>
+      <a class="navbar-brand" href="index.html" aria-label="Ir para a página inicial"><span id="logoNav">Read &amp; Swap</span></a>
       <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
       </button>
       <div class="collapse navbar-collapse" id="navbarSupportedContent">
         <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-          <li class="nav-item dropdown">
-            <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">Livros</a>
-            <ul class="dropdown-menu">
-              <li><a class="dropdown-item" href="biblioteca.html">Meus Livros</a></li>
-              <li><a class="dropdown-item" href="livros.html">Cadastro de Livros</a></li>
-            </ul>
-          </li>
+          <li class="nav-item"><a class="nav-link" href="biblioteca.html">Minha biblioteca</a></li>
           <li class="nav-item"><a class="nav-link" href="swaps.html">Swap</a></li>
           <li class="nav-item"><a class="nav-link" href="matches.html">Matches</a></li>
           <li class="nav-item"><a class="nav-link" href="premium.html">Premium</a></li>
@@ -239,7 +233,7 @@
 
         <ul class="navbar-nav mb-2 mb-lg-0">
           <li class="nav-item"><a href="login.html" class="nav-link entrar">Entrar</a></li>
-          <li class="nav-item"><a href="cadastro.html"><button class="btn btn-danger cadastrar">Cadastrar</button></a></li>
+          <li class="nav-item"><a href="cadastro.html" class="btn btn-danger cadastrar">Cadastrar</a></li>
           <li style="display:none;"><a href="perfil.html" class="nav-link perfil"><i class="bi bi-person-circle"></i></a></li>
           <li><button id="darkModeBtn" onclick="toggleDarkMode()" class="btn"><i class="bi bi-moon-fill"></i></button></li>
         </ul>
@@ -255,38 +249,37 @@
         <a href="perfil.html" class="btn btn-outline-danger"><i class="bi bi-arrow-left"></i> Voltar ao perfil</a>
       </div>
 
-      <div class="row g-4 align-items-stretch">
+      <div class="row g-4 align-items-start">
         <div class="col-12 col-lg-4">
-          <div class="edit-preview-box h-100">
-            <div class="perfil-header-edit">
-              <div class="perfil-foto-container mb-3">
+          <div class="edit-preview-box">
+            <div class="edit-profile-preview-hero">
+              <span class="preview-profile-label">Prévia do perfil</span>
+              <div class="preview-profile-identity">
+                <div class="perfil-foto-container">
                 <img id="previewFoto" src="./Imagens/default-profile.jpg" class="perfil-foto" alt="Prévia da foto">
-              </div>
-              <h3 class="fw-bold mb-1" id="previewNome">Ronaldo El Pepe</h3>
-              <p class="mb-3 text-white-50"><i class="bi bi-geo-alt"></i> <span id="previewCidade">Limeira - SP</span></p>
-
-              <div class="perfil-stats d-flex justify-content-center gap-3 mt-3">
-                <div class="stat-item">
-                  <div class="stat-icon bg-danger text-white">
-                    <i class="bi bi-book"></i>
-                  </div>
-                  <p class="stat-num" id="previewTotalLivros">0</p>
-                  <p class="stat-label">Livros</p>
                 </div>
-
-                <div class="stat-item">
-                  <div class="stat-icon bg-success text-white">
-                    <i class="bi bi-arrow-left-right"></i>
-                  </div>
-                  <p class="stat-num" id="previewTotalTrocas">0</p>
-                  <p class="stat-label">Trocas</p>
+                <div class="preview-profile-copy">
+                  <h3 id="previewNome">Ronaldo El Pepe</h3>
+                  <p><i class="bi bi-geo-alt-fill"></i> <span id="previewCidade">Limeira - SP</span></p>
+                  <p id="previewAssinatura" class="preview-membership"><i class="bi bi-person-check-fill"></i> Plano gratuito</p>
                 </div>
               </div>
             </div>
 
+            <div class="edit-profile-preview-body">
+              <div class="preview-stats-grid">
+                <div class="preview-stat"><span class="stat-icon stat-books"><i class="bi bi-journal-bookmark-fill"></i></span><div><strong id="previewTotalLivros">0</strong><small>livros cadastrados</small></div></div>
+                <div class="preview-stat"><span class="stat-icon stat-swaps"><i class="bi bi-arrow-left-right"></i></span><div><strong id="previewTotalTrocas">0</strong><small>livros trocados</small></div></div>
+              </div>
+
+              <div class="preview-genres-panel">
+                <div><span class="profile-eyebrow">Preferências</span><h4>Gêneros favoritos</h4></div>
+                <div id="previewGeneros" class="generos-preview"></div>
+              </div>
+            </div>
+
             <div class="edit-preview-footer">
-              <span>Visualização em tempo real</span>
-              <p class="mb-0" id="previewAssinatura"><i class="bi bi-person-check-fill"></i> Plano gratuito</p>
+              <i class="bi bi-eye-fill"></i> Visualização atualizada em tempo real
             </div>
           </div>
         </div>
@@ -300,7 +293,7 @@
                 <span><strong>Selecionar nova foto</strong><small>PNG ou JPG; você poderá ajustar o corte.</small></span>
                 <span class="btn btn-outline-danger btn-sm">Escolher arquivo</span>
               </label>
-              <input class="visually-hidden" type="file" id="fotoPerfil" name="fotoPerfil" accept="image/*">
+              <input class="visually-hidden" type="file" id="fotoPerfil" name="fotoPerfil" accept="image/jpeg,image/png,image/webp">
 
               <div class="edit-section-divider"></div>
               <div class="edit-section-heading"><span><i class="bi bi-person-vcard-fill"></i></span><div><h2>Informações pessoais</h2><p>Esses dados serão exibidos no seu perfil público.</p></div></div>
@@ -334,11 +327,6 @@
                     <label class="genero-chip"><input type="checkbox" name="generos[]" value="Clássicos">Clássicos</label>
                   </div>
                 </div>
-              </div>
-
-              <div class="selected-genres-preview mb-4">
-                <span class="form-label mb-0">Selecionados</span>
-                <div id="previewGeneros" class="generos-preview"></div>
               </div>
 
               <div class="edit-form-actions">

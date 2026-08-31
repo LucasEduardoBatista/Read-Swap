@@ -27,6 +27,7 @@ $destino = isset($destinosPermitidos[$retornoSolicitado])
 if ($email === '' || $senha === '') {
     responderErro('Preencha e-mail e senha.', '../../login.html');
 }
+exigirCsrf();
 if (!filter_var($email, FILTER_VALIDATE_EMAIL) || strlen($email) > 255) {
     responderErro('Digite um e-mail válido.', '../../login.html');
 }

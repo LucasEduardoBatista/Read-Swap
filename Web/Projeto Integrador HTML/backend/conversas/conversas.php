@@ -22,19 +22,23 @@ if ($acao === 'contatos') {
         SELECT p.idPerfis, p.Nome, p.Foto, c.conteudo, c.DataEnvio
         FROM PerfisADMs p
         INNER JOIN (
-            SELECT l.IdDono AS contatoId FROM SwapsADMs s
+            SELECT DISTINCT l.IdDono AS contatoId FROM SwapsADMs s
             INNER JOIN LivrosADMs l ON l.idLivrosADMs = s.idLivro
             WHERE s.idUsuario = ? AND s.Gostou = 1
-            UNION
-            SELECT IF(c.id1 = ?, c.id2, c.id1) FROM conversasADMs c
-            WHERE c.id1 = ? OR c.id2 = ?
+              AND EXISTS (
+                  SELECT 1 FROM SwapsADMs reciproco
+                  INNER JOIN LivrosADMs livro_reciproco ON livro_reciproco.idLivrosADMs = reciproco.idLivro
+                  WHERE reciproco.idUsuario = l.IdDono
+                    AND livro_reciproco.IdDono = ?
+                    AND reciproco.Gostou = 1
+              )
         ) contatos ON contatos.contatoId = p.idPerfis
         LEFT JOIN conversasADMs c
           ON c.id1 = LEAST(?, p.idPerfis) AND c.id2 = GREATEST(?, p.idPerfis) AND c.Statuscvs = 0
         WHERE p.Status = 0
         ORDER BY COALESCE(c.DataEnvio, '1970-01-01') DESC, p.Nome
     ");
-    $stmt->bind_param('iiiiii', $usuarioId, $usuarioId, $usuarioId, $usuarioId, $usuarioId, $usuarioId);
+    $stmt->bind_param('iiii', $usuarioId, $usuarioId, $usuarioId, $usuarioId);
     $stmt->execute();
     $contatos = [];
     foreach ($stmt->get_result() as $row) {
@@ -62,16 +66,21 @@ if (!$contatoId || $contatoId === $usuarioId) {
 
 $idMenor = min($usuarioId, (int)$contatoId);
 $idMaior = max($usuarioId, (int)$contatoId);
-$permissao = $conn->prepare('SELECT 1 FROM conversasADMs WHERE id1 = ? AND id2 = ? LIMIT 1');
-$permissao->bind_param('ii', $idMenor, $idMaior);
+$permissao = $conn->prepare('
+    SELECT 1
+    FROM SwapsADMs saida
+    INNER JOIN LivrosADMs livro_saida ON livro_saida.idLivrosADMs = saida.idLivro
+    WHERE saida.idUsuario = ? AND livro_saida.IdDono = ? AND saida.Gostou = 1
+      AND EXISTS (
+          SELECT 1 FROM SwapsADMs volta
+          INNER JOIN LivrosADMs livro_volta ON livro_volta.idLivrosADMs = volta.idLivro
+          WHERE volta.idUsuario = ? AND livro_volta.IdDono = ? AND volta.Gostou = 1
+      )
+    LIMIT 1
+');
+$permissao->bind_param('iiii', $usuarioId, $contatoId, $contatoId, $usuarioId);
 $permissao->execute();
 $podeConversar = (bool)$permissao->get_result()->fetch_row();
-if (!$podeConversar) {
-    $permissao = $conn->prepare('SELECT 1 FROM SwapsADMs s INNER JOIN LivrosADMs l ON l.idLivrosADMs = s.idLivro WHERE s.idUsuario = ? AND l.IdDono = ? AND s.Gostou = 1 LIMIT 1');
-    $permissao->bind_param('ii', $usuarioId, $contatoId);
-    $permissao->execute();
-    $podeConversar = (bool)$permissao->get_result()->fetch_row();
-}
 if (!$podeConversar) {
     http_response_code(403);
     echo json_encode(['erro' => 'Esta conversa não pertence aos seus matches.'], JSON_UNESCAPED_UNICODE);
@@ -97,6 +106,7 @@ if ($acao === 'mensagens') {
 }
 
 if ($acao === 'enviar' && $_SERVER['REQUEST_METHOD'] === 'POST') {
+    exigirCsrf();
     $texto = trim($_POST['conteudo'] ?? '');
     if ($texto === '' || tamanhoTexto($texto) > 2000) {
         http_response_code(422);

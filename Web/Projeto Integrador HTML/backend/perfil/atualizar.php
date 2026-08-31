@@ -7,15 +7,21 @@ if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
     header('Location: ../../editarPerfil.html');
     exit;
 }
+exigirCsrf();
 
 $id = (int)$_SESSION['usuario_id'];
 $nome = trim($_POST['nome'] ?? '');
 $cidade = trim($_POST['cidade'] ?? '');
-$generosSelecionados = $_POST['generos'] ?? [];
-$generosJson = json_encode(array_values(array_filter((array)$generosSelecionados)));
+$generosPermitidos = ['Fantasia', 'Romance', 'Aventura', 'Drama', 'Contos', 'Terror', 'Mistério', 'Suspense/Thriller', 'Ficção Científica', 'Biografia', 'HQ/Quadrinhos', 'Clássicos'];
+$generosRecebidos = is_array($_POST['generos'] ?? null) ? $_POST['generos'] : [];
+$generosSelecionados = array_values(array_unique(array_filter(
+    $generosRecebidos,
+    static fn($genero) => is_string($genero) && in_array($genero, $generosPermitidos, true)
+)));
+$generosJson = json_encode($generosSelecionados, JSON_UNESCAPED_UNICODE);
 
-if ($nome === '' || $cidade === '') {
-    responderErro('Preencha nome e cidade.', '../../editarPerfil.html');
+if (tamanhoTexto($nome) < 2 || tamanhoTexto($nome) > 50 || tamanhoTexto($cidade) < 2 || tamanhoTexto($cidade) > 60) {
+    responderErro('Informe um nome e uma cidade válidos.', '../../editarPerfil.html');
 }
 
 $usuarioAtual = usuarioAtual($conn);
@@ -24,8 +30,12 @@ if (!$usuarioAtual) {
 }
 
 $fotobin = null;
-if (isset($_FILES['fotoPerfil']) && $_FILES['fotoPerfil']['error'] === UPLOAD_ERR_OK && is_uploaded_file($_FILES['fotoPerfil']['tmp_name'])) {
-    $fotobin = file_get_contents($_FILES['fotoPerfil']['tmp_name']);
+if (isset($_FILES['fotoPerfil']) && ($_FILES['fotoPerfil']['error'] ?? UPLOAD_ERR_NO_FILE) !== UPLOAD_ERR_NO_FILE) {
+    try {
+        $fotobin = lerImagemUpload($_FILES['fotoPerfil']);
+    } catch (RuntimeException $erro) {
+        responderErro($erro->getMessage(), '../../editarPerfil.html');
+    }
 }
 
 if ($fotobin !== null) {

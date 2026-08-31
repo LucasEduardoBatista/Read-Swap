@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <script>if(localStorage.getItem('theme')==='dark')document.documentElement.classList.add('dark-mode')</script>
+  <title>Perfil público | Read &amp; Swap</title>
+  <link rel="icon" href="./Imagens/icon.png">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body class="d-flex flex-column min-vh-100 public-profile-body" id="top">
+  <nav class="navbar navbar-expand-lg bg-light fixed-top" data-bs-theme="light">
+    <div class="container-fluid">
+      <a class="navbar-brand" href="index.html" aria-label="Ir para a página inicial"><span id="logoNav">Read &amp; Swap</span></a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Abrir menu"><span class="navbar-toggler-icon"></span></button>
+      <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+          <li class="nav-item"><a class="nav-link" href="biblioteca.html">Minha biblioteca</a></li>
+          <li class="nav-item"><a class="nav-link" href="swaps.html">Swap</a></li>
+          <li class="nav-item"><a class="nav-link" href="matches.html">Matches</a></li>
+          <li class="nav-item"><a class="nav-link" href="premium.html">Premium</a></li>
+        </ul>
+        <ul class="navbar-nav mb-2 mb-lg-0">
+          <li class="nav-item"><a href="login.html" class="nav-link entrar">Entrar</a></li>
+          <li class="nav-item"><a href="cadastro.html" class="btn btn-danger cadastrar">Cadastrar</a></li>
+          <li style="display:none"><a href="perfil.html" class="nav-link perfil"><i class="bi bi-person-circle"></i></a></li>
+          <li><button id="darkModeBtn" onclick="toggleDarkMode()" class="btn" aria-label="Alternar tema"><i class="bi bi-moon-fill"></i></button></li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  <main class="public-profile-page">
+    <div id="publicProfileLoading" class="public-profile-state"><div class="spinner-border text-danger" role="status"></div><p>Carregando perfil...</p></div>
+    <div id="publicProfileError" class="public-profile-state d-none"><i class="bi bi-person-x-fill"></i><h1>Perfil não encontrado</h1><a href="index.html" class="btn btn-outline-danger">Voltar ao início</a></div>
+    <div id="publicProfileContent" class="d-none">
+      <section class="public-profile-hero">
+        <img id="publicProfilePhoto" src="./Imagens/default-profile.jpg" alt="Foto do perfil">
+        <div><span class="profile-eyebrow">Perfil da comunidade</span><h1 id="publicProfileName"></h1><p id="publicProfileCity"><i class="bi bi-geo-alt-fill"></i></p><span id="publicProfilePlan" class="membership-status"></span></div>
+      </section>
+      <section class="public-profile-section">
+        <div class="public-section-heading"><div><span class="profile-eyebrow">Disponíveis para troca</span><h2>Livros de <span id="publicBooksOwner"></span></h2></div><span id="publicBooksCount" class="library-view-label"></span></div>
+        <div id="publicBooksGrid" class="public-books-grid"></div>
+      </section>
+    </div>
+  </main>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="javascript.js"></script>
+</body>
+</html>

@@ -12,6 +12,7 @@ if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
     echo json_encode(['erro' => 'Método não permitido.'], JSON_UNESCAPED_UNICODE);
     exit;
 }
+exigirCsrf();
 
 $usuarioId = (int)$_SESSION['usuario_id'];
 $livroId = filter_input(INPUT_POST, 'livro_id', FILTER_VALIDATE_INT);
@@ -36,6 +37,21 @@ $stmt = $conn->prepare('INSERT INTO SwapsADMs (idUsuario, idLivro, Gostou) VALUE
 $stmt->bind_param('iii', $usuarioId, $livroId, $gostou);
 $stmt->execute();
 
+$houveMatch = false;
+if ($gostou === 1) {
+    $verificaReciprocidade = $conn->prepare('
+        SELECT 1
+        FROM SwapsADMs s
+        INNER JOIN LivrosADMs l ON l.idLivrosADMs = s.idLivro
+        WHERE s.idUsuario = ? AND l.IdDono = ? AND s.Gostou = 1
+        LIMIT 1
+    ');
+    $idDono = (int)$livro['IdDono'];
+    $verificaReciprocidade->bind_param('ii', $idDono, $usuarioId);
+    $verificaReciprocidade->execute();
+    $houveMatch = (bool)$verificaReciprocidade->get_result()->fetch_row();
+}
+
 if (!isset($_SESSION['livros_swap_passados']) || !is_array($_SESSION['livros_swap_passados'])) {
     $_SESSION['livros_swap_passados'] = [];
 }
@@ -43,4 +59,9 @@ if (!in_array((int)$livroId, $_SESSION['livros_swap_passados'], true)) {
     $_SESSION['livros_swap_passados'][] = (int)$livroId;
 }
 
-echo json_encode(['sucesso' => true, 'match' => $gostou === 1, 'idDono' => (int)$livro['IdDono']], JSON_UNESCAPED_UNICODE);
+echo json_encode([
+    'sucesso' => true,
+    'match' => $houveMatch,
+    'interesseEnviado' => $gostou === 1,
+    'idDono' => (int)$livro['IdDono']
+], JSON_UNESCAPED_UNICODE);

@@ -16,13 +16,21 @@ $livrosPassados = array_values(array_unique(array_map(
 $stmt = $conn->prepare("
     SELECT l.idLivrosADMs, l.Nome, l.Autor, l.Editora, l.AnoPublicacao,
            l.Genero, l.EstadoConservacao, l.Observacoes, l.Fotolivro,
-           p.idPerfis AS idDono, p.Nome AS nomeDono, p.Cidade, p.Foto AS fotoDono
+           p.idPerfis AS idDono, p.Nome AS nomeDono, p.Cidade, p.Foto AS fotoDono,
+           EXISTS (
+               SELECT 1
+               FROM SwapsADMs interesse
+               INNER JOIN LivrosADMs meu_livro ON meu_livro.idLivrosADMs = interesse.idLivro
+               WHERE interesse.idUsuario = l.IdDono
+                 AND meu_livro.IdDono = ?
+                 AND interesse.Gostou = 1
+           ) AS interesseRecebido
     FROM LivrosADMs l
     INNER JOIN PerfisADMs p ON p.idPerfis = l.IdDono
     WHERE l.IdDono <> ? AND l.Status = 0 AND p.Status = 0
-    ORDER BY l.idLivrosADMs DESC
+    ORDER BY interesseRecebido DESC, l.idLivrosADMs DESC
 ");
-$stmt->bind_param('i', $usuarioId);
+$stmt->bind_param('ii', $usuarioId, $usuarioId);
 $stmt->execute();
 $resultado = $stmt->get_result();
 $livros = [];
@@ -45,7 +53,8 @@ while ($row = $resultado->fetch_assoc()) {
         'idDono' => (int)$row['idDono'],
         'dono' => $row['nomeDono'] ?? '',
         'cidade' => $row['Cidade'] ?? '',
-        'fotoDono' => !empty($row['fotoDono']) ? blobParaDataUri($row['fotoDono']) : './Imagens/default-profile.jpg'
+        'fotoDono' => !empty($row['fotoDono']) ? blobParaDataUri($row['fotoDono']) : './Imagens/default-profile.jpg',
+        'interesseRecebido' => (bool)$row['interesseRecebido']
     ];
 }
 
