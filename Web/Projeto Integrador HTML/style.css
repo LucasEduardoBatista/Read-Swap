@@ -1227,6 +1227,25 @@ body.dark-mode main {
     transition: color 0.2s;
 }
 .chat-header-actions i:hover { color: #F08080; }
+.chat-options-button {
+    width: 38px;
+    height: 38px;
+    border: 0;
+    border-radius: 50%;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    color: inherit;
+    background: transparent;
+    transition: background-color .2s ease, color .2s ease;
+}
+.chat-options-button:hover:not(:disabled),
+.chat-options-button[aria-expanded="true"] { color: #F08080; background: rgba(240,128,128,.1); }
+.chat-options-button:disabled { cursor: default; opacity: .35; }
+.chat-options-menu .dropdown-item { display: flex; align-items: center; gap: 9px; }
+.chat-options-menu .dropdown-item i { font-size: 1rem; }
+.dark-mode .chat-options-button:hover:not(:disabled),
+.dark-mode .chat-options-button[aria-expanded="true"] { background: rgba(240,128,128,.16); }
 
 .messages {
     flex: 1;
@@ -1896,6 +1915,34 @@ body.swaps-page-body .swap-owner-panel {
     -webkit-backdrop-filter: blur(10px);
 }
 body.swaps-page-body .swap-owner-panel[hidden] { display: none !important; }
+body.swaps-page-body .swap-owner-panel.owner-enter {
+    animation: ownerEnter .32s ease-out both;
+}
+body.swaps-page-body .swap-owner-panel.owner-exit-right {
+    animation: ownerExitRight .4s ease-in both;
+    pointer-events: none;
+}
+body.swaps-page-body .swap-owner-panel.owner-exit-left {
+    animation: ownerExitLeft .4s ease-in both;
+    pointer-events: none;
+}
+@keyframes ownerEnter {
+    from { transform: translateY(-50%) scale(.86); opacity: 0; }
+    to { transform: translateY(-50%) scale(1); opacity: 1; }
+}
+@keyframes ownerExitRight {
+    from { transform: translateY(-50%) translateX(0) scale(1); opacity: 1; }
+    to { transform: translateY(-50%) translateX(90px) scale(.82); opacity: 0; }
+}
+@keyframes ownerExitLeft {
+    from { transform: translateY(-50%) translateX(0) scale(1); opacity: 1; }
+    to { transform: translateY(-50%) translateX(-90px) scale(.82); opacity: 0; }
+}
+@media (prefers-reduced-motion: reduce) {
+    body.swaps-page-body .swap-owner-panel.owner-enter,
+    body.swaps-page-body .swap-owner-panel.owner-exit-right,
+    body.swaps-page-body .swap-owner-panel.owner-exit-left { animation: none; }
+}
 body.swaps-page-body .swap-owner-panel > img {
     width: 68px;
     height: 68px;

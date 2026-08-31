@@ -168,6 +168,8 @@ async function iniciarChat() {
     const botao = document.getElementById('chatSend');
     const layout = document.querySelector('.chat-layout');
     const botaoVoltar = document.getElementById('chatBack');
+    const botaoOpcoes = document.getElementById('chatOptionsButton');
+    const botaoExcluir = document.getElementById('deleteConversationButton');
     if (!lista || !mensagensEl || !input || !botao) return;
     let contatoAtual = null;
     const formatarHora = data => data ? new Date(data.replace(' ', 'T')).toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' }) : '';
@@ -180,6 +182,7 @@ async function iniciarChat() {
         document.getElementById('chatUserName').textContent = contato.nome;
         document.getElementById('chatAvatar').src = contato.foto;
         input.disabled = botao.disabled = false;
+        if (botaoOpcoes) botaoOpcoes.disabled = false;
         mensagensEl.innerHTML = '<div class="text-muted text-center p-3">Carregando...</div>';
         const resposta = await fetch(`./backend/conversas/conversas.php?acao=mensagens&contato_id=${contato.id}`);
         const mensagens = await resposta.json();
@@ -224,7 +227,39 @@ async function iniciarChat() {
         await abrirContato({ id: contatoAtual, nome: document.getElementById('chatUserName').textContent, foto: document.getElementById('chatAvatar').src }, item);
         input.focus();
     }
+
+    async function excluirConversa() {
+        if (!contatoAtual) return;
+        const nomeContato = document.getElementById('chatUserName').textContent;
+        if (!confirm(`Excluir a conversa com ${nomeContato}? O histórico deixará de aparecer para os dois usuários.`)) return;
+
+        botaoExcluir.disabled = true;
+        try {
+            const dados = new URLSearchParams({ acao: 'excluir', contato_id: contatoAtual });
+            const resposta = await fetch('./backend/conversas/conversas.php', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/x-www-form-urlencoded', 'X-CSRF-Token': csrfToken },
+                body: dados
+            });
+            if (!resposta.ok) throw new Error();
+
+            contatoAtual = null;
+            document.getElementById('chatUserName').textContent = 'Selecione uma conversa';
+            document.getElementById('chatAvatar').src = './Imagens/default-profile.jpg';
+            mensagensEl.innerHTML = '<div class="text-muted text-center p-4">Conversa excluída.</div>';
+            input.value = '';
+            input.disabled = botao.disabled = true;
+            if (botaoOpcoes) botaoOpcoes.disabled = true;
+            if (layout) layout.classList.remove('chat-open');
+            await carregarContatos();
+        } catch (_) {
+            alert('Não foi possível excluir a conversa. Tente novamente.');
+        } finally {
+            botaoExcluir.disabled = false;
+        }
+    }
     botao.addEventListener('click', enviarMensagem);
+    if (botaoExcluir) botaoExcluir.addEventListener('click', excluirConversa);
     input.addEventListener('keydown', e => { if (e.key === 'Enter') { e.preventDefault(); enviarMensagem(); } });
     if (botaoVoltar) {
         botaoVoltar.addEventListener('click', () => {
@@ -259,6 +294,31 @@ function iniciarBuscaPerfis() {
     let temporizador;
     let requisicao;
 
+    function redirecionarParaLogin() {
+        const retorno = encodeURIComponent(
+            window.location.pathname.split('/').pop() + window.location.search + window.location.hash
+        );
+        window.location.assign(`login.html?retorno=${retorno}`);
+    }
+
+    async function usuarioPodePesquisar() {
+        try {
+            const resposta = await fetch('./backend/usuarios/sessao.php', {
+                headers: { 'Accept': 'application/json' },
+                cache: 'no-store'
+            });
+            if (!resposta.ok) throw new Error();
+            const dados = await resposta.json();
+            if (!dados.autenticado) throw new Error();
+            sessionStorage.setItem('logado', 'true');
+            return true;
+        } catch (_) {
+            sessionStorage.removeItem('logado');
+            redirecionarParaLogin();
+            return false;
+        }
+    }
+
     function fechar() {
         resultados.hidden = true;
         input.setAttribute('aria-expanded', 'false');
@@ -272,11 +332,16 @@ function iniciarBuscaPerfis() {
             input.setAttribute('aria-expanded', String(termo.length > 0));
             return;
         }
+        if (!(await usuarioPodePesquisar())) return;
         requisicao?.abort();
         requisicao = new AbortController();
         spinner.hidden = false;
         try {
             const resposta = await fetch(`./backend/perfis/publico.php?acao=buscar&q=${encodeURIComponent(termo)}`, { signal: requisicao.signal });
+            if (resposta.status === 401) {
+                redirecionarParaLogin();
+                return;
+            }
             if (!resposta.ok) throw new Error();
             const perfis = await resposta.json();
             resultados.innerHTML = perfis.length
@@ -299,6 +364,10 @@ function iniciarBuscaPerfis() {
         temporizador = setTimeout(pesquisar, 250);
     });
     input.addEventListener('focus', () => {
+        if (sessionStorage.getItem('logado') !== 'true') {
+            usuarioPodePesquisar();
+            return;
+        }
         if (resultados.innerHTML) resultados.hidden = false;
     });
     busca.addEventListener('submit', event => {
@@ -588,7 +657,10 @@ document.addEventListener('DOMContentLoaded', async function() {
                 const ownerLabel = ownerPanel.querySelector('span');
                 if (ownerLabel) ownerLabel.textContent = livro.interesseRecebido ? 'Curtiu um livro seu' : 'Livro de';
                 ownerPanel.classList.toggle('has-interest', Boolean(livro.interesseRecebido));
+                ownerPanel.classList.remove('owner-exit-left', 'owner-exit-right', 'owner-enter');
                 ownerPanel.hidden = false;
+                void ownerPanel.offsetWidth;
+                ownerPanel.classList.add('owner-enter');
             }
             renderDetalhes(livro);
             cardContainer.classList.remove("slide-in-left", "slide-in-right");
@@ -622,12 +694,20 @@ document.addEventListener('DOMContentLoaded', async function() {
                 alert('Não foi possível registrar sua escolha.');
                 return;
             }
+            if (ownerPanel && !ownerPanel.hidden) {
+                ownerPanel.classList.remove('owner-enter', 'owner-exit-left', 'owner-exit-right');
+                void ownerPanel.offsetWidth;
+                ownerPanel.classList.add(direcao === 'like' ? 'owner-exit-right' : 'owner-exit-left');
+            }
             cardContainer.classList.add(direcao === "like" ? "slide-out-right" : "slide-out-left");
             setTimeout(() => {
                 index++;
                 cardContainer.classList.remove("slide-out-right", "slide-out-left");
                 if (index >= livros.length) {
-                    if (ownerPanel) ownerPanel.hidden = true;
+                    if (ownerPanel) {
+                        ownerPanel.hidden = true;
+                        ownerPanel.classList.remove('owner-exit-left', 'owner-exit-right', 'owner-enter');
+                    }
                     cardTitle.textContent = "Fim dos livros!";
                     cardDesc.textContent = "Nenhum livro restante na sua região.";
                     cardImg.src = "./Imagens/sem_livros.png";

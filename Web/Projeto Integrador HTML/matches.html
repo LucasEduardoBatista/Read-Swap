@@ -64,7 +64,14 @@
         <strong id="chatUserName">Selecione uma conversa</strong>
       </div>
       <div class="chat-header-actions">
-        <i class="bi bi-three-dots-vertical"></i>
+        <div class="dropdown">
+          <button id="chatOptionsButton" class="chat-options-button" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Opções da conversa" disabled>
+            <i class="bi bi-three-dots-vertical"></i>
+          </button>
+          <ul class="dropdown-menu dropdown-menu-end chat-options-menu">
+            <li><button id="deleteConversationButton" class="dropdown-item text-danger" type="button"><i class="bi bi-trash3"></i> Excluir conversa</button></li>
+          </ul>
+        </div>
       </div>
     </div>
     <div class="messages" id="chatMessages"><div class="text-muted text-center p-4">Escolha um match para conversar.</div></div>

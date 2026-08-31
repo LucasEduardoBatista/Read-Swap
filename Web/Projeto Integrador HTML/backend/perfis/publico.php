@@ -6,6 +6,13 @@ header('Cache-Control: no-store');
 $acao = $_GET['acao'] ?? 'buscar';
 
 if ($acao === 'buscar') {
+    $usuario = usuarioAtual($conn);
+    if (!$usuario || (int)($usuario['Status'] ?? 1) !== 0) {
+        http_response_code(401);
+        echo json_encode(['erro' => 'Autenticação necessária.'], JSON_UNESCAPED_UNICODE);
+        exit;
+    }
+
     $termo = trim($_GET['q'] ?? '');
     if (tamanhoTexto($termo) < 2) {
         echo json_encode([], JSON_UNESCAPED_UNICODE);

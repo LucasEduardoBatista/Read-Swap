@@ -36,9 +36,15 @@ if ($acao === 'contatos') {
         LEFT JOIN conversasADMs c
           ON c.id1 = LEAST(?, p.idPerfis) AND c.id2 = GREATEST(?, p.idPerfis) AND c.Statuscvs = 0
         WHERE p.Status = 0
+          AND NOT EXISTS (
+              SELECT 1 FROM conversasADMs conversa_excluida
+              WHERE conversa_excluida.id1 = LEAST(?, p.idPerfis)
+                AND conversa_excluida.id2 = GREATEST(?, p.idPerfis)
+                AND conversa_excluida.Statuscvs = 1
+          )
         ORDER BY COALESCE(c.DataEnvio, '1970-01-01') DESC, p.Nome
     ");
-    $stmt->bind_param('iiii', $usuarioId, $usuarioId, $usuarioId, $usuarioId);
+    $stmt->bind_param('iiiiii', $usuarioId, $usuarioId, $usuarioId, $usuarioId, $usuarioId, $usuarioId);
     $stmt->execute();
     $contatos = [];
     foreach ($stmt->get_result() as $row) {
@@ -84,6 +90,19 @@ $podeConversar = (bool)$permissao->get_result()->fetch_row();
 if (!$podeConversar) {
     http_response_code(403);
     echo json_encode(['erro' => 'Esta conversa não pertence aos seus matches.'], JSON_UNESCAPED_UNICODE);
+    exit;
+}
+
+if ($acao === 'excluir' && $_SERVER['REQUEST_METHOD'] === 'POST') {
+    exigirCsrf();
+    $stmt = $conn->prepare("
+        INSERT INTO conversasADMs (id1, id2, conteudo, Statuscvs)
+        VALUES (?, ?, '[]', 1)
+        ON DUPLICATE KEY UPDATE Statuscvs = 1
+    ");
+    $stmt->bind_param('ii', $idMenor, $idMaior);
+    $stmt->execute();
+    echo json_encode(['sucesso' => true], JSON_UNESCAPED_UNICODE);
     exit;
 }
 
@@ -134,7 +153,7 @@ if ($acao === 'enviar' && $_SERVER['REQUEST_METHOD'] === 'POST') {
         $json = json_encode($historico, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES | JSON_THROW_ON_ERROR);
 
         if ($conversa) {
-            $stmt = $conn->prepare('UPDATE conversasADMs SET conteudo = ?, DataEnvio = CURRENT_TIMESTAMP WHERE idConversa = ?');
+            $stmt = $conn->prepare('UPDATE conversasADMs SET conteudo = ?, Statuscvs = 0, DataEnvio = CURRENT_TIMESTAMP WHERE idConversa = ?');
             $stmt->bind_param('si', $json, $conversa['idConversa']);
         } else {
             $stmt = $conn->prepare('INSERT INTO conversasADMs (id1, id2, conteudo, Statuscvs) VALUES (?, ?, ?, 0)');
