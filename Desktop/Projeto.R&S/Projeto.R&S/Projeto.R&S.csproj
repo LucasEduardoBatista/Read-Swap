@@ -195,6 +195,7 @@
       <DependentUpon>Conversas.cs</DependentUpon>
     </Compile>
     <Compile Include="Conversastable.cs" />
+    <Compile Include="CriptoHelper.cs" />
     <Compile Include="DAO_conexao.cs" />
     <Compile Include="Foto.cs">
       <SubType>Form</SubType>

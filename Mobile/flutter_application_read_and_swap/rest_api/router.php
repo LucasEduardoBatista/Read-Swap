@@ -26,6 +26,9 @@ function imageBlob(mixed $value): ?string {
     return $blob;
 }
 
+// Carrega o helper de criptografia compartilhado com o projeto Web
+require_once dirname(__DIR__, 3) . '/Web/Projeto Integrador HTML/backend/includes/cripto_helper.php';
+
 try {
     mysqli_report(MYSQLI_REPORT_ERROR | MYSQLI_REPORT_STRICT);
     $sharedConfigPath = dirname(__DIR__, 3) . '/Web/Projeto Integrador HTML/backend/includes/config.local.php';
@@ -130,8 +133,25 @@ if ($path === 'swaps' && $method === 'POST') {
 }
 if ($path === 'matches' && $method === 'GET') {
     $stmt=$db->prepare("SELECT p.idPerfis,p.Nome,p.Foto,c.conteudo,c.DataEnvio FROM PerfisADMs p JOIN (SELECT DISTINCT l.IdDono contato FROM SwapsADMs s JOIN LivrosADMs l ON l.idLivrosADMs=s.idLivro WHERE s.idUsuario=? AND s.Gostou=1 AND EXISTS(SELECT 1 FROM SwapsADMs r JOIN LivrosADMs lr ON lr.idLivrosADMs=r.idLivro WHERE r.idUsuario=l.IdDono AND lr.IdDono=? AND r.Gostou=1)) x ON x.contato=p.idPerfis LEFT JOIN conversasADMs c ON c.id1=LEAST(?,p.idPerfis) AND c.id2=GREATEST(?,p.idPerfis) AND c.Statuscvs=0 ORDER BY c.DataEnvio DESC,p.Nome"); $stmt->bind_param('iiii',$uid,$uid,$uid,$uid); $stmt->execute(); $items=[];
-    foreach($stmt->get_result() as $r){$msgs=json_decode($r['conteudo']??'[]',true)?:[];$last=$msgs?end($msgs):[];$items[]=['id'=>(int)$r['idPerfis'],'nome'=>$r['Nome'],'foto'=>imageUri($r['Foto']),'ultimaMensagem'=>$last['texto']??'','ultimaData'=>$last['data']??($r['DataEnvio']??'')];} out($items);
+    foreach($stmt->get_result() as $r) {
+        $msgs = json_decode($r['conteudo'] ?? '[]', true) ?: [];
+        // Descriptografa a última mensagem para exibir na prévia
+        $last = $msgs ? end($msgs) : [];
+        $ultimaTexto = isset($last['texto']) ? descriptografar((string)$last['texto']) : '';
+        $items[] = [
+            'id'             => (int)$r['idPerfis'],
+            'nome'           => $r['Nome'],
+            'foto'           => imageUri($r['Foto']),
+            'ultimaMensagem' => $ultimaTexto,
+            'ultimaData'     => $last['data'] ?? ($r['DataEnvio'] ?? '')
+        ];
+    }
+    out($items);
 }
+
+// ──────────────────────────────────────────────────────────────────
+// Rotas de conversas — com criptografia AES-256
+// ──────────────────────────────────────────────────────────────────
 if (preg_match('#^conversations/(\d+)$#',$path,$m) && ($method === 'GET' || $method === 'POST')) {
     $contato=(int)$m[1];
     if($contato===$uid) out(['erro'=>'Contato inválido.'],422);
@@ -142,14 +162,34 @@ if (preg_match('#^conversations/(\d+)$#',$path,$m) && ($method === 'GET' || $met
     $stmt=$db->prepare('SELECT conteudo FROM conversasADMs WHERE id1=? AND id2=? AND Statuscvs=0 LIMIT 1');
     $stmt->bind_param('ii',$id1,$id2);$stmt->execute();$row=$stmt->get_result()->fetch_assoc();
     $mensagens=$row?(json_decode($row['conteudo']?:'[]',true)?:[]):[];
-    if($method==='GET') out(array_values($mensagens));
+
+    if ($method === 'GET') {
+        // Descriptografa o texto de cada mensagem antes de retornar ao app
+        $resultado = [];
+        foreach (array_values($mensagens) as $mensagem) {
+            $resultado[] = [
+                'remetente' => $mensagem['remetente'] ?? null,
+                'texto'     => descriptografar((string)($mensagem['texto'] ?? '')),
+                'data'      => $mensagem['data'] ?? '',
+            ];
+        }
+        out($resultado);
+    }
+
+    // POST — enviar nova mensagem
     $d=body();$texto=trim((string)($d['texto']??''));
     $tamanho=function_exists('mb_strlen')?mb_strlen($texto):strlen($texto);
     if($texto===''||$tamanho>2000) out(['erro'=>'A mensagem deve ter entre 1 e 2000 caracteres.'],422);
-    $mensagem=['remetente'=>$uid,'texto'=>$texto,'data'=>gmdate('c')];$mensagens[]=$mensagem;
+
+    // Salva o texto CRIPTOGRAFADO no banco
+    $mensagem=['remetente'=>$uid,'texto'=>criptografar($texto),'data'=>gmdate('c')];
+    $mensagens[]=$mensagem;
     $conteudo=json_encode(array_values($mensagens),JSON_UNESCAPED_UNICODE|JSON_UNESCAPED_SLASHES);
     if($row){$save=$db->prepare('UPDATE conversasADMs SET conteudo=?,DataEnvio=NOW() WHERE id1=? AND id2=? AND Statuscvs=0');$save->bind_param('sii',$conteudo,$id1,$id2);}
     else{$save=$db->prepare('INSERT INTO conversasADMs(id1,id2,conteudo,DataEnvio,Statuscvs) VALUES(?,?,?,NOW(),0)');$save->bind_param('iis',$id1,$id2,$conteudo);}
-    $save->execute();out($mensagem,201);
+    $save->execute();
+
+    // Retorna a mensagem com o texto em CLARO para o app exibir imediatamente
+    out(['remetente'=>$uid,'texto'=>$texto,'data'=>$mensagem['data']],201);
 }
 out(['erro'=>'Rota não encontrada.'],404);

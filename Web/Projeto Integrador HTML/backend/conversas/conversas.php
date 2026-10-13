@@ -1,5 +1,7 @@
 <?php
 require_once __DIR__ . '/../includes/config.php';
+require_once __DIR__ . '/../includes/cripto_helper.php';
+
 header('Content-Type: application/json; charset=utf-8');
 header('Cache-Control: no-store');
 
@@ -9,9 +11,21 @@ if (!isset($_SESSION['usuario_id'])) {
     exit;
 }
 
+/**
+ * Decodifica o JSON do campo conteudo e descriptografa o texto de cada mensagem.
+ */
 function decodificarMensagens(?string $json): array {
     $mensagens = json_decode($json ?? '[]', true);
-    return is_array($mensagens) ? array_values($mensagens) : [];
+    if (!is_array($mensagens)) return [];
+
+    foreach ($mensagens as &$mensagem) {
+        if (isset($mensagem['texto'])) {
+            $mensagem['texto'] = descriptografar((string)$mensagem['texto']);
+        }
+    }
+    unset($mensagem);
+
+    return array_values($mensagens);
 }
 
 $usuarioId = (int)$_SESSION['usuario_id'];
@@ -51,11 +65,11 @@ if ($acao === 'contatos') {
         $historico = decodificarMensagens($row['conteudo'] ?? null);
         $ultima = $historico ? $historico[array_key_last($historico)] : null;
         $contatos[] = [
-            'id' => (int)$row['idPerfis'],
-            'nome' => $row['Nome'],
-            'foto' => !empty($row['Foto']) ? blobParaDataUri($row['Foto']) : './Imagens/default-profile.jpg',
+            'id'           => (int)$row['idPerfis'],
+            'nome'         => $row['Nome'],
+            'foto'         => !empty($row['Foto']) ? blobParaDataUri($row['Foto']) : './Imagens/default-profile.jpg',
             'ultimaMensagem' => $ultima['texto'] ?? '',
-            'ultimaData' => $ultima['data'] ?? ($row['DataEnvio'] ?? '')
+            'ultimaData'   => $ultima['data'] ?? ($row['DataEnvio'] ?? '')
         ];
     }
     echo json_encode($contatos, JSON_UNESCAPED_UNICODE);
@@ -114,10 +128,10 @@ if ($acao === 'mensagens') {
     $mensagens = [];
     foreach (decodificarMensagens($row['conteudo'] ?? null) as $indice => $mensagem) {
         $mensagens[] = [
-            'id' => (int)($mensagem['id'] ?? $indice + 1),
-            'tipo' => (int)($mensagem['remetente'] ?? 0) === $usuarioId ? 'sent' : 'received',
-            'texto' => (string)($mensagem['texto'] ?? ''),
-            'data' => (string)($mensagem['data'] ?? '')
+            'id'     => (int)($mensagem['id'] ?? $indice + 1),
+            'tipo'   => (int)($mensagem['remetente'] ?? 0) === $usuarioId ? 'sent' : 'received',
+            'texto'  => (string)($mensagem['texto'] ?? ''),
+            'data'   => (string)($mensagem['data'] ?? '')
         ];
     }
     echo json_encode($mensagens, JSON_UNESCAPED_UNICODE);
@@ -147,8 +161,17 @@ if ($acao === 'enviar' && $_SERVER['REQUEST_METHOD'] === 'POST') {
         $stmt->bind_param('ii', $idMenor, $idMaior);
         $stmt->execute();
         $conversa = $stmt->get_result()->fetch_assoc();
+
+        // Lê histórico descriptografando os textos existentes
         $historico = decodificarMensagens($conversa['conteudo'] ?? null);
-        $novaMensagem = ['id' => count($historico) + 1, 'remetente' => $usuarioId, 'texto' => $texto, 'data' => date('Y-m-d H:i:s')];
+
+        // Cria nova mensagem com o texto CRIPTOGRAFADO para salvar no banco
+        $novaMensagem = [
+            'id'        => count($historico) + 1,
+            'remetente' => $usuarioId,
+            'texto'     => criptografar($texto),
+            'data'      => date('Y-m-d H:i:s')
+        ];
         $historico[] = $novaMensagem;
         $json = json_encode($historico, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES | JSON_THROW_ON_ERROR);
 
@@ -161,7 +184,13 @@ if ($acao === 'enviar' && $_SERVER['REQUEST_METHOD'] === 'POST') {
         }
         $stmt->execute();
         $conn->commit();
-        echo json_encode(['sucesso' => true, 'id' => $novaMensagem['id']], JSON_UNESCAPED_UNICODE);
+
+        // Retorna a mensagem com o texto em CLARO (não criptografado) para o frontend
+        echo json_encode([
+            'sucesso' => true,
+            'id'      => $novaMensagem['id'],
+            'texto'   => $texto,
+        ], JSON_UNESCAPED_UNICODE);
     } catch (Throwable $e) {
         $conn->rollback();
         error_log('ReadSwap: falha ao salvar conversa: ' . $e->getMessage());

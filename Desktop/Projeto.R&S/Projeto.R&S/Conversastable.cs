@@ -1,10 +1,11 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using MySql.Data.MySqlClient;
+using Newtonsoft.Json;
 
 namespace Projeto.R_S
 {
@@ -144,27 +145,88 @@ namespace Projeto.R_S
             }
         }
 
+        /// <summary>
+        /// Lê uma linha do MySqlDataReader, descriptografa o campo conteudo
+        /// (JSON array de mensagens) e concatena todos os textos para exibição.
+        /// </summary>
         private ConversaRow LerLinha(MySqlDataReader r)
         {
+            string conteudoRaw = r.IsDBNull(1) ? "[]" : r.GetString(1);
+            string conteudoExibido = DescriptografarConteudo(conteudoRaw);
+
             return new ConversaRow
             {
-                Nome1 = r.GetString(0),
-                Conteudo = r.GetString(1),
-                Nome2 = r.GetString(2),
-                Status = r.GetUInt16(3) == 0 ? "Ativo" : "Inativo",
-                Id1 = r.GetInt32(4),
-                Id2 = r.GetInt32(5)
+                Nome1    = r.GetString(0),
+                Conteudo = conteudoExibido,
+                Nome2    = r.GetString(2),
+                Status   = r.GetUInt16(3) == 0 ? "Ativo" : "Inativo",
+                Id1      = r.GetInt32(4),
+                Id2      = r.GetInt32(5)
             };
         }
+
+        /// <summary>
+        /// Faz o parse do JSON de mensagens, descriptografa cada texto com AES
+        /// e concatena tudo no formato "[HH:mm] Remetente: texto".
+        /// Se o parse falhar, tenta descriptografar como string simples (fallback).
+        /// </summary>
+        private static string DescriptografarConteudo(string conteudoRaw)
+        {
+            if (string.IsNullOrWhiteSpace(conteudoRaw) || conteudoRaw == "[]")
+                return "(sem mensagens)";
+
+            try
+            {
+                // Tenta fazer parse como array JSON de mensagens
+                var mensagens = JsonConvert.DeserializeObject<List<MensagemJson>>(conteudoRaw);
+
+                if (mensagens == null || mensagens.Count == 0)
+                    return "(sem mensagens)";
+
+                var sb = new StringBuilder();
+                foreach (var msg in mensagens)
+                {
+                    string textoDecifrado = CriptoHelper.Descriptografar(msg.Texto ?? "");
+
+                    // Formata a hora se disponível
+                    string hora = "";
+                    if (DateTime.TryParse(msg.Data, out DateTime dt))
+                        hora = $"[{dt.ToLocalTime():HH:mm}] ";
+
+                    if (sb.Length > 0) sb.Append(" | ");
+                    sb.Append($"{hora}{textoDecifrado}");
+                }
+
+                return sb.ToString();
+            }
+            catch
+            {
+                // Fallback: não é JSON — tenta descriptografar como string simples
+                return CriptoHelper.Descriptografar(conteudoRaw);
+            }
+        }
+    }
+
+    /// <summary>Modelo auxiliar para desserializar cada mensagem do JSON.</summary>
+    internal class MensagemJson
+    {
+        [JsonProperty("remetente")]
+        public int Remetente { get; set; }
+
+        [JsonProperty("texto")]
+        public string Texto { get; set; }
+
+        [JsonProperty("data")]
+        public string Data { get; set; }
     }
 
     internal class ConversaRow
     {
-        public string Nome1 { get; set; }
+        public string Nome1    { get; set; }
         public string Conteudo { get; set; }
-        public string Nome2 { get; set; }
-        public string Status { get; set; }
-        public int Id1 { get; set; }
-        public int Id2 { get; set; }
+        public string Nome2    { get; set; }
+        public string Status   { get; set; }
+        public int    Id1      { get; set; }
+        public int    Id2      { get; set; }
     }
 }
