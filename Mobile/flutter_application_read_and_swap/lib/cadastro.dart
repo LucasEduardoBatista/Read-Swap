@@ -5,7 +5,7 @@ import 'api.dart';
 import 'mainpage.dart';
 
 class Cadastro extends StatefulWidget {
-  Cadastro({super.key});
+  const Cadastro({super.key});
 
   @override
   State<Cadastro> createState() => _CadastroState();

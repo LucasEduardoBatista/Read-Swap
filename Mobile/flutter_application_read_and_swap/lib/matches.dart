@@ -66,7 +66,7 @@ class _MatchesState extends State<Matches> {
           child: ListView.separated(
             padding: const EdgeInsets.fromLTRB(14, 8, 14, 24),
             itemCount: contatos.length,
-            separatorBuilder: (_, __) => const SizedBox(height: 8),
+            separatorBuilder: (_, _) => const SizedBox(height: 8),
             itemBuilder: (_, index) => _contato(contatos[index]),
           ),
         );

@@ -73,7 +73,7 @@ class Api {
   static Future<Usuario> atualizarPerfil(String nome, String cidade, List<String> generos, {String? foto}) async {
     final response = await _request('PUT', '/me', {
       'nome': nome, 'cidade': cidade, 'generos': generos,
-      if (foto != null) 'foto': foto,
+      'foto': ?foto,
     });
     return DadosApp.usuarioLogado = _usuario(Map<String, dynamic>.from(_decode(response)));
   }

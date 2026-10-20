@@ -110,7 +110,7 @@ class _PerfilState extends State<Perfil> {
 
               boxShadow: [
                 BoxShadow(
-                  color: Colors.black.withOpacity(0.07),
+                  color: Colors.black.withValues(alpha: 0.07),
                   blurRadius: 18,
                   offset: const Offset(0, 6),
                 ),
@@ -617,12 +617,12 @@ class _PerfilState extends State<Perfil> {
                   color: const Color(0xFFFFF5F5),
                   borderRadius: BorderRadius.circular(18),
                   border: Border.all(
-                    color: const Color(0xFFFF6B6B).withOpacity(0.35),
+                    color: const Color(0xFFFF6B6B).withValues(alpha: 0.35),
                     width: 1.3,
                   ),
                   boxShadow: [
                     BoxShadow(
-                      color: const Color(0xFFFF6B6B).withOpacity(0.10),
+                      color: const Color(0xFFFF6B6B).withValues(alpha: 0.10),
                       blurRadius: 10,
                       offset: const Offset(0, 3),
                     ),
@@ -1047,7 +1047,7 @@ class _PerfilState extends State<Perfil> {
 
       decoration: BoxDecoration(
         color: destaque
-            ? const Color(0xFFFF6B6B).withOpacity(0.15)
+            ? const Color(0xFFFF6B6B).withValues(alpha: 0.15)
             : const Color(0xFF242020),
 
         borderRadius: BorderRadius.circular(18),

@@ -211,7 +211,7 @@ class _EditarperfilState extends State<Editarperfil> {
                   boxShadow: [
                     BoxShadow(
                       color:
-                          Colors.black.withOpacity(0.10),
+                          Colors.black.withValues(alpha: 0.10),
                       blurRadius: 12,
                       offset: const Offset(0, 4),
                     ),
@@ -243,7 +243,7 @@ class _EditarperfilState extends State<Editarperfil> {
                   boxShadow: [
                     BoxShadow(
                       color:
-                          Colors.black.withOpacity(0.15),
+                          Colors.black.withValues(alpha: 0.15),
                       blurRadius: 8,
                       offset: const Offset(0, 3),
                     ),
@@ -387,7 +387,7 @@ class _EditarperfilState extends State<Editarperfil> {
         boxShadow: [
           BoxShadow(
             color:
-                Colors.black.withOpacity(0.08),
+                Colors.black.withValues(alpha: 0.08),
             blurRadius: 8,
             offset: const Offset(0, 3),
           ),
@@ -473,7 +473,7 @@ class _EditarperfilState extends State<Editarperfil> {
             boxShadow: [
               BoxShadow(
                 color:
-                    Colors.black.withOpacity(0.07),
+                    Colors.black.withValues(alpha: 0.07),
                 blurRadius: 18,
                 offset: const Offset(0, 6),
               ),
