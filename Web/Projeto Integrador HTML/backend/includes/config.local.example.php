@@ -1,8 +1,8 @@
 <?php
 return [
-    'host' => 'localhost',
-    'user' => 'usuario_mysql',
-    'password' => 'senha_mysql',
-    'database' => 'readswap',
+    'host' => '143.106.241.4',
+    'user' => 'cl204224',
+    'password' => 'cl*27102008',
+    'database' => 'cl204224',
     'port' => 3306
 ];
