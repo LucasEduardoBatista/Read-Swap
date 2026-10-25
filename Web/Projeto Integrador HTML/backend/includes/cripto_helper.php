@@ -8,7 +8,7 @@
  * para que o painel admin consiga ler as mensagens salvas pelo Web/Mobile.
  */
 
-define('CRIPTO_CHAVE', 'ReadSwap2025!CriptoKey#AES256BC'); // 32 bytes
+define('CRIPTO_CHAVE', 'ReadSwap2025!CriptoKey#AES256BCX'); // 32 bytes
 define('CRIPTO_IV',    'RS!IV16BytesXXXX');                 // 16 bytes
 
 /**

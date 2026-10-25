@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -146,65 +147,78 @@ namespace Projeto.R_S
         }
 
         /// <summary>
-        /// Lê uma linha do MySqlDataReader, descriptografa o campo conteudo
-        /// (JSON array de mensagens) e concatena todos os textos para exibição.
-        /// </summary>
-        private ConversaRow LerLinha(MySqlDataReader r)
-        {
-            string conteudoRaw = r.IsDBNull(1) ? "[]" : r.GetString(1);
-            string conteudoExibido = DescriptografarConteudo(conteudoRaw);
-
-            return new ConversaRow
-            {
-                Nome1    = r.GetString(0),
-                Conteudo = conteudoExibido,
-                Nome2    = r.GetString(2),
-                Status   = r.GetUInt16(3) == 0 ? "Ativo" : "Inativo",
-                Id1      = r.GetInt32(4),
-                Id2      = r.GetInt32(5)
-            };
-        }
-
-        /// <summary>
-        /// Faz o parse do JSON de mensagens, descriptografa cada texto com AES
-        /// e concatena tudo no formato "[HH:mm] Remetente: texto".
-        /// Se o parse falhar, tenta descriptografar como string simples (fallback).
-        /// </summary>
-        private static string DescriptografarConteudo(string conteudoRaw)
-        {
-            if (string.IsNullOrWhiteSpace(conteudoRaw) || conteudoRaw == "[]")
-                return "(sem mensagens)";
-
-            try
-            {
-                // Tenta fazer parse como array JSON de mensagens
-                var mensagens = JsonConvert.DeserializeObject<List<MensagemJson>>(conteudoRaw);
-
-                if (mensagens == null || mensagens.Count == 0)
-                    return "(sem mensagens)";
-
-                var sb = new StringBuilder();
-                foreach (var msg in mensagens)
+                /// Lê uma linha do MySqlDataReader, descriptografa o campo conteudo
+                /// (JSON array de mensagens) e concatena todos os textos para exibição.
+                /// </summary>
+                private ConversaRow LerLinha(MySqlDataReader r)
                 {
-                    string textoDecifrado = CriptoHelper.Descriptografar(msg.Texto ?? "");
+                    string conteudoRaw = r.IsDBNull(1) ? "[]" : r.GetString(1);
+                    Debug.WriteLine($"[Conversastable] Raw JSON (id1={r.GetInt32(4)}, id2={r.GetInt32(5)}): {conteudoRaw.Substring(0, Math.Min(200, conteudoRaw.Length))}...");
+                    string conteudoExibido;
+                    try
+                    {
+                        int id1 = r.GetInt32(4);
+                        int id2 = r.GetInt32(5);
+                        string nome1 = r.GetString(0);
+                        string nome2 = r.GetString(2);
+                        conteudoExibido = DescriptografarConteudo(conteudoRaw, id1, nome1, id2, nome2);
+                    }
+                    catch (Exception ex)
+                    {
+                        Console.WriteLine($"Erro ao descriptografar conversa (id1={r.GetInt32(4)}, id2={r.GetInt32(5)}): {ex.Message}");
+                        conteudoExibido = "[Erro ao descriptografar mensagens]";
+                    }
 
-                    // Formata a hora se disponível
-                    string hora = "";
-                    if (DateTime.TryParse(msg.Data, out DateTime dt))
-                        hora = $"[{dt.ToLocalTime():HH:mm}] ";
-
-                    if (sb.Length > 0) sb.Append(" | ");
-                    sb.Append($"{hora}{textoDecifrado}");
+                    return new ConversaRow
+                    {
+                        Nome1    = r.GetString(0),
+                        Conteudo = conteudoExibido,
+                        Nome2    = r.GetString(2),
+                        Status   = r.GetUInt16(3) == 0 ? "Ativo" : "Inativo",
+                        Id1      = r.GetInt32(4),
+                        Id2      = r.GetInt32(5)
+                    };
                 }
 
-                return sb.ToString();
-            }
-            catch
-            {
-                // Fallback: não é JSON — tenta descriptografar como string simples
-                return CriptoHelper.Descriptografar(conteudoRaw);
-            }
-        }
+                /// <summary>
+                /// Faz o parse do JSON de mensagens, descriptografa cada texto com AES
+                /// e concatena tudo no formato "[HH:mm] Nome: texto".
+                /// Se o parse falhar, lança exceção para diagnóstico (não mascara erro).
+                /// </summary>
+                private static string DescriptografarConteudo(string conteudoRaw, int id1, string nome1, int id2, string nome2)
+                {
+                    if (string.IsNullOrWhiteSpace(conteudoRaw) || conteudoRaw == "[]")
+                        return "(sem mensagens)";
+
+                    // Tenta fazer parse como array JSON de mensagens
+                    var mensagens = JsonConvert.DeserializeObject<List<MensagemJson>>(conteudoRaw);
+
+                    if (mensagens == null || mensagens.Count == 0)
+                        return "(sem mensagens)";
+
+                    Debug.WriteLine($"[Conversastable] Parsed {mensagens.Count} mensagens");
+                    var sb = new StringBuilder();
+                    foreach (var msg in mensagens)
+                    {
+                        Debug.WriteLine($"[Conversastable] Mensagem - Remetente: {msg.Remetente}, Texto (primeiros 50): {(msg.Texto ?? "").Substring(0, Math.Min(50, (msg.Texto ?? "").Length))}, Data: {msg.Data}");
+                        string textoDecifrado = CriptoHelper.Descriptografar(msg.Texto ?? "");
+
+                        // Formata a hora se disponível
+                        string hora = "";
+                        if (DateTime.TryParse(msg.Data, out DateTime dt))
+                            hora = $"[{dt.ToLocalTime():HH:mm}] ";
+
+                        // Mapeia remetente (id) para nome real
+                        string remetenteNome = msg.Remetente == id1 ? nome1 :
+                                               msg.Remetente == id2 ? nome2 :
+                                               $"User{msg.Remetente}";
+
+                        if (sb.Length > 0) sb.Append(" | ");
+                        sb.Append($"{hora}{remetenteNome}: {textoDecifrado}");
+                    }
+
+                    return sb.ToString();
+                }
     }
 
     /// <summary>Modelo auxiliar para desserializar cada mensagem do JSON.</summary>
