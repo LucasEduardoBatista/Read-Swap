@@ -12,10 +12,10 @@ class ApiException implements Exception {
 class Api {
   static const String _configuredBaseUrl = String.fromEnvironment('READSWAP_API_URL');
   static final String baseUrl = _configuredBaseUrl.isNotEmpty
-      ? _configuredBaseUrl
-      : (defaultTargetPlatform == TargetPlatform.android
-          ? 'http://10.0.2.2:8080'
-          : 'http://localhost:8080');
+        ? _configuredBaseUrl
+        : (defaultTargetPlatform == TargetPlatform.android
+            ? 'http://10.0.2.2:8081'
+            : 'http://localhost:8081');
   static final http.Client _client = http.Client();
   static String? _token;
 

@@ -146,10 +146,7 @@ namespace Projeto.R_S
             }
         }
 
-        /// <summary>
-                /// Lê uma linha do MySqlDataReader, descriptografa o campo conteudo
-                /// (JSON array de mensagens) e concatena todos os textos para exibição.
-                /// </summary>
+       
                 private ConversaRow LerLinha(MySqlDataReader r)
                 {
                     string conteudoRaw = r.IsDBNull(1) ? "[]" : r.GetString(1);
@@ -180,17 +177,13 @@ namespace Projeto.R_S
                     };
                 }
 
-                /// <summary>
-                /// Faz o parse do JSON de mensagens, descriptografa cada texto com AES
-                /// e concatena tudo no formato "[HH:mm] Nome: texto".
-                /// Se o parse falhar, lança exceção para diagnóstico (não mascara erro).
-                /// </summary>
+         
                 private static string DescriptografarConteudo(string conteudoRaw, int id1, string nome1, int id2, string nome2)
                 {
                     if (string.IsNullOrWhiteSpace(conteudoRaw) || conteudoRaw == "[]")
                         return "(sem mensagens)";
 
-                    // Tenta fazer parse como array JSON de mensagens
+         
                     var mensagens = JsonConvert.DeserializeObject<List<MensagemJson>>(conteudoRaw);
 
                     if (mensagens == null || mensagens.Count == 0)
@@ -203,12 +196,12 @@ namespace Projeto.R_S
                         Debug.WriteLine($"[Conversastable] Mensagem - Remetente: {msg.Remetente}, Texto (primeiros 50): {(msg.Texto ?? "").Substring(0, Math.Min(50, (msg.Texto ?? "").Length))}, Data: {msg.Data}");
                         string textoDecifrado = CriptoHelper.Descriptografar(msg.Texto ?? "");
 
-                        // Formata a hora se disponível
+              
                         string hora = "";
                         if (DateTime.TryParse(msg.Data, out DateTime dt))
                             hora = $"[{dt.ToLocalTime():HH:mm}] ";
 
-                        // Mapeia remetente (id) para nome real
+
                         string remetenteNome = msg.Remetente == id1 ? nome1 :
                                                msg.Remetente == id2 ? nome2 :
                                                $"User{msg.Remetente}";
@@ -221,7 +214,7 @@ namespace Projeto.R_S
                 }
     }
 
-    /// <summary>Modelo auxiliar para desserializar cada mensagem do JSON.</summary>
+  
     internal class MensagemJson
     {
         [JsonProperty("remetente")]
